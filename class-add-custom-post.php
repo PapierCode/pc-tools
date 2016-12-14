@@ -158,8 +158,6 @@ class PC_Add_Custom_Post {
 			    $taxArgs
 			);
 
-			//pc_display_var($this->postTypeLabels['singular_name']);
-
 
     	    /*----------  Création/ajout  ----------*/
     	    
