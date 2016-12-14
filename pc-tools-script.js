@@ -1,13 +1,12 @@
 /**
 *
+* [PC] Tools : fonctions javascript pour l'admin WP
+*
 * * Images upload
 * * Pdf upload
 * * Date Picker
 *
-*
 **/
-
-// 24/11/16 : format image thumbnail
 
 
 jQuery(document).ready(function($){

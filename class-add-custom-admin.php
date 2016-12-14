@@ -2,82 +2,9 @@
 
 /**
 *
-* Création d'une page d'administration
+* [PC] Tools : création d'une page d'administration
 *
 **/
-
-// 29/11/16 : ajout condition sur la description d'une section
-// 03/10/16 : suppression du paramétre pour settings_errors()
-// 08/09/16 : Création
-
-/*=====================================
-=            Mode d'emploi            =
-=====================================*/
-/*
-
-// si la class existe
-if ( class_exists('PC_Add_Admin_Page') ) {
-
-	// si un champ de type wysiwig
-	// tinyMce custom options, plugin [PC] Project WP config
-	$tinymceDefault = get_option( 'pc-settings-option' );
-
-	// contenu de la page
-	$xxxContent = array ( // liste des sections
-		array( // répéter pour chaque section
-			'title'     => [obligatoire] titre de la section, texte libre,
-	        'id'        => [obligatoire] id de la section, tiret pour séparer les mots, sans caractères spéciaux ni majuscules,
-	        'desc'      => description de la section, html libre,
-	        'prefix'    => [obligatoire] préfix des champs, un mot sans caractères spéciaux ni majuscules,
-	        'fields'    => array( liste des champs dans cette section
-	            array( répéter pour chaque champ
-	                'type'      => [obligatoire] 'text', 'checkbox', 'radio', 'select', 'textarea', 'wysiwyg', 'img', 'pdf'
-	                'label_for' => [obligatoire] attribut for du label et id du champ, tiret pour séparer les mots, sans caractères spéciaux ni majuscules, 
-	                'label'     => [obligatoire] label du champ, texte libre,
-	                'desc'      => description du champ, texte libre sans html (balise p générée automatiquement),
-	                'attr'      => attribut du champ : class, data,...,
-	                'css'       => inline css,
-	                'options'	=> 
-	                [obligatoire] pour les types select et radio : 
-	                	array('Valeur A' => 'a', ... )
-	                [obligatoire] pour le type wysiwyg, la config générale (voir plugin [PC] Project WP config) ou à personnaliser : 
-	                	array(
-		                    'media_buttons'                     => (isset($tinymceDefault['tinymce-media']) ? true : false),
-		                    'quicktags'                         => (isset($tinymceDefault['tinymce-quicktags']) ? true : false),
-		                    'textarea_rows'                     => $tinymceDefault['tinymce-rows'],
-		                    'tinymce'                           => array (
-		                        'toolbar1'                      	=> $tinymceDefault['tinymce-toolbar1'],
-		                        'toolbar2'                      	=> $tinymceDefault['tinymce-toolbar2'],
-		                        'block_formats'                 	=> $tinymceDefault['tinymce-block'],
-		                        'visualblocks_default_state'    	=> (isset($tinymceDefault['tinymce-visualblocks']) ? true : false),
-		                        'paste_as_text'                 	=> (isset($tinymceDefault['tinymce-paste']) ? true : false)
-	                    )
-	                [obligatoire] pour les types img et pdf
-	                	array('btnremove' => true/false)
-                ),
-                ...
-	        ) // FIN liste des champs
-		),
-		...
-	);
-
-	// création
-	$xxx = new PC_Add_Admin_Page(
-		[obligatoire] titre de la page, texte libre,
-		[obligatoire] slug de la page parent ou vide si menu de premier niveau,
-		[obligatoire] nom de l'item dans le menu, texte libre,
-		[obligatoire] slug de la page créée, sans caractères spéciaux ni majuscules, tiret pour séparer les mots,
-		[obligatoire] contenu de la page, voir $xxxContent ci-dessus,
-		droits d'accès : 'editor' (éditeur et administrateur, défaut) ou 'admin' (administrateur seulement)
-		position de l'item dans le menu si de premier niveau, nombre entre 0 et 99 (default),
-		icône de l'item si de premier niveau (defaut 'dashicons-clipboard')
-	);
-
-
-} // FIN if class_exists('PC_Add_Admin_Page')
-
-*/
-/*=====  FIN Mode d'emploi  ======*/
 
 
 class PC_Add_Admin_Page {

@@ -8,21 +8,12 @@ Version: 1.1.0
 Author: Papier Codé
 */
 
-// 02/12/16 : ajout fonctions pagination
-// 28/11/16 : pc_wp_wysiwyg() echo remplace return
-// 07/09/16 : class en include
-// 07/09/16 : suppression de pc_save_custom_post_field() & pc_save_taxonomy_field()
-// 26/08/16 : admin fields, ajout argument css (input & textearea) & lines (textarea)
-// 23/08/16 : Ajout pc_clean_txt() => 1.1.0
-// 22/08/16 : Création
-
 /**
 * 
 * * Includes
 * * Textes
 * * Traitements
 * * Pagination
-*
 *
 **/
 

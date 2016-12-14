@@ -1,67 +1,10 @@
 <?php
+
 /**
 *
-* Ajout de champs aux taxonomies
+* [PC] Tools : ajout de champs aux taxonomies
 *
 **/
-
-// 07/09/16 : Création
-
-/*=====================================
-=            Mode d'emploi            =
-=====================================*/
-/*
-
-if ( class_exists('PC_add_field_to_tax') ) {
-
-	// si un champ de type wysiwig
-	// tinyMce custom options, plugin [PC] Project WP config
-	$tinymceDefault = get_option( 'pc-settings-option' );
-
-	// contenu de la metabox
-	$xxxContent = array(	    
-        'title'     => [obligatoire] titre de la section libre,
-        'desc'      => description de la metabox, html libre,
-        'prefix'    => [obligatoire] préfix des champs, tiret pour séparer les mots, sans caractères spéciaux ni majuscules,
-        'fields'    => array( liste des champs dans cette metabox
-            array( répéter pour chaque champ
-                'type'      => [obligatoire] 'text', 'checkbox', 'radio', 'select', 'textarea', 'wysiwyg'
-                'id' 		=> [obligatoire] attribut for du label et id du champ, tiret pour séparer les mots, sans caractères spéciaux ni majuscules, 
-                'label'     => [obligatoire] label du champ, texte libre,
-                'desc'      => description du champ, texte libre sans html (balise p générée automatiquement),
-                'attr'      => attribut du champ : class, data,...,
-                'css'       => inline css,
-                'options'	=> 
-                [obligatoire] pour les types select et radio : 
-                	array('Valeur A' => 'a', ... )
-                [obligatoire] pour le type wysiwyg, la config générale (voir plugin [PC] Project WP config) ou à personnaliser : 
-                	array(
-	                    'media_buttons'                     => (isset($tinymceDefault['tinymce-media']) ? true : false),
-	                    'quicktags'                         => (isset($tinymceDefault['tinymce-quicktags']) ? true : false),
-	                    'textarea_rows'                     => $tinymceDefault['tinymce-rows'],
-	                    'tinymce'                           => array (
-	                        'toolbar1'                      	=> $tinymceDefault['tinymce-toolbar1'],
-	                        'toolbar2'                      	=> $tinymceDefault['tinymce-toolbar2'],
-	                        'block_formats'                 	=> $tinymceDefault['tinymce-block'],
-	                        'visualblocks_default_state'    	=> (isset($tinymceDefault['tinymce-visualblocks']) ? true : false),
-	                        'paste_as_text'                 	=> (isset($tinymceDefault['tinymce-paste']) ? true : false)
-                    )
-            ),
-            ...
-        ) // FIN liste des champs
-	);
-
-	// création
-	$xxx = new PC_add_field_to_tax(
-		[obligatoire] slug de la tax,
-		[obligatoire] contenu de la page, voir $xxxContent ci-dessus
-	);
-
-
-} // FIN if(class_exists('PC_add_field_to_tax'))
-
-*/
-/*=====  FIN Mode d'emploi  ======*/
 
 
 class PC_add_field_to_tax {

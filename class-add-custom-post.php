@@ -2,87 +2,9 @@
 
 /**
 *
-* Création d'un custom post
+* [PC] Tools : création d'un custom post
 *
 **/
-
-// 04/10/16 : singular_name en paramètre de register_taxonomy
-// 04/10/16 : ajout de show_admin_column dans la déclaration de la taxonomy
-// 07/09/16 : Création
-
-/*=====================================
-=            Mode d'emploi            =
-=====================================*/
-/*
-
-if ( class_exists('PC_Add_Custom_Post') ) {
-
-	// nom tableau en camelCase : nom custom post . 'Labels'
-	// valeurs : https://codex.wordpress.org/Function_Reference/register_post_type
-	$customPostLabels = array (
-	    'name'                  => 'Articles',
-	    'singular_name'         => 'Article',
-	    'menu_name'             => 'Articles',
-	    'add_new'               => 'Ajouter un article', 
-	    'add_new_item'          => 'Ajouter un article',
-	    'new_item'              => 'Ajouter un article',
-	    'edit_item'             => 'Modifier l\'article',
-	    'all_items'             => 'Tous les articles',
-	    'not_found'             => 'Aucun article',
-	    'featured_image'        => 'Visuel'
-	);
-
-	// nom tableau en camelCase : nom custom post . 'Args'
-	// valeurs : https://codex.wordpress.org/Function_Reference/register_post_type
-	$customPostArgs = array(
-	    'menu_position'     => 26,
-	    'menu_icon'         => 'dashicons-megaphone',
-	    'supports'          => array( 'title', 'author', 'thumbnail', 'editor', 'revisions' ),
-	    'rewrite'           => array( 'slug' => 'articles' ),
-	    'public'            => true,
-	    'has_archive'       => true
-	);
-
-	// nom tableau en camelCase : nom custom post . nom custom tax . 'Labels'
-	// valeurs : https://codex.wordpress.org/Function_Reference/register_taxonomy
-	$customPostCustomTaxLabels = array(
-	    'name'                          => 'Catégories',
-	    'singular_name'                 => 'Catégorie',
-	    'menu_name'                     => 'Catégories',
-	    'all_items'                     => 'Toutes les catégories',
-	    'edit_item'                     => 'Modifier la catégorie',
-	    'view_item'                     => 'Voir la catégorie',
-	    'update_item'                   => 'Mettre à jour la catégorie',
-	    'add_new_item'                  => 'Ajouter une catégorie',
-	    'new_item_name'                 => 'Ajouter une catégorie',
-	    'search_items'                  => 'Rechercher une catégorie',
-	    'popular_items'                 => 'Catégories les plus utilisées',
-	    'separate_items_with_commas'    => 'Séparer les catégories avec une virgule',
-	    'add_or_remove_items'           => 'Ajout/supprimer une catégorie',
-	    'choose_from_most_used'         => 'Choisir parmis les plus utilisées',
-	    'not_found'                     => 'Aucune catégorie définie'
-	);
-
-	// nom tableau en camelCase : nom custom post . nom custom tax . 'Args'
-	// valeurs : https://codex.wordpress.org/Function_Reference/register_taxonomy
-	$customPostCustomTaxArgs = array(
-	    'hierarchical'      => true,                        
-	    'query_var'         => true,
-	    'rewrite'           => array('slug' => 'categories' )
-	);
-	
-	// nom objet en camelCase : slug du custom post
-	// paramètre : 'customPost' => slug en camelCase
-	$customPost = new PC_Add_Custom_Post( 'customPost', $customPostLabels, $customPostArgs );
-
-	// nom objet en camelCase : slug de la custom tax
-	// paramètre : 'customTax' => slug en camelCase
-	$customPost->add_custom_tax('customTax', $customPostCustomTaxLabels, $customPostCustomTaxArgs);
-
-}
-
-*/
-/*=====  FIN Mode d'emploi  ======*/
 
 
 class PC_Add_Custom_Post {
