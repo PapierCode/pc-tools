@@ -166,14 +166,14 @@ class PC_Add_Custom_Post {
     	    	// si la tax n'existe pas
         		if ( !taxonomy_exists( $taxName ) ) {
 
-			        register_taxonomy( $taxName, $this->postTypeLabels['singular_name'], $args );
+			        register_taxonomy( $taxName, $this->postTypeSlug, $args );
 
 				}
 				// si la tax existe
 				else {
 
 					// = tax partagée
-					register_taxonomy_for_object_type( $taxName, $this->postTypeLabels['singular_name'] );		    
+					register_taxonomy_for_object_type( $taxName, $this->postTypeSlug );		    
 
 				}
 
