@@ -15,17 +15,30 @@ class PC_Add_Metabox {
     /*====================================
     =            Constructeur            =
     ====================================*/
-    
-    public function __construct( $posts, $title, $id, $content, $context = 'normal', $priority = 'high' ) {
 
-	    /*----------  variables de la class  ----------*/
+    /*
+    *
+    * * [array]		$post 		: slugs des custom posts concernés
+    * * [string]	$title 		: titre de la metabox
+    * * [string]	$id 		: identifiant de la metabox
+    * * [array]		$content 	: contenu de la metabox
+    * * [string]	$position 	: position dans l'interface, "normal" (defaut) ou "aside"
+    * * [string]	$priority 	: priorité d'affichage, "high" (defaut) ou "low"
+    *
+    * cf. https://developer.wordpress.org/reference/functions/add_meta_box/
+    *
+    */
+    
+    public function __construct( $posts, $title, $id, $content, $position = 'normal', $priority = 'high' ) {
+
+	    /*----------  Variables de la class  ----------*/
 	    
 	    $this->id = $id;
 
-		// toutes les propriétés sont fusionnées avec celles par défaut
-		// pour éviter une erreur si les non obligatoires sont absentes à la création
+	    // fusion du contenu avec des valeurs vides
+	    // évite une erreur en cas d'omission
 	    $content = array_merge(
-	    	// defaut
+	    	// défaut
 	    	array(
 	    		'desc' 		=> '',
 	    		'prefix' 	=> '',
@@ -39,14 +52,14 @@ class PC_Add_Metabox {
 
 		/*----------  Création  ----------*/
 
-        add_action( 'admin_init', function() use( $id, $title, $posts, $context, $priority, $content ) {
+        add_action( 'admin_init', function() use( $posts, $title, $id, $content, $position, $priority ) {
 
         	add_meta_box(	        		
 	            $id,									// $id
 	            $title,									// $title
 	            array( $this, 'add_metabox_fields' ),	// $callback
 	            $posts,									// $screen
-	            $context,								// $context
+	            $position,								// $position
 	            $priority,								// $priority
 	            $content 								// $callback_args
 	        );
@@ -57,6 +70,28 @@ class PC_Add_Metabox {
 	    /*----------  Sauvegarde  ----------*/
 	    
     	add_action( 'save_post', array( $this, 'save_metabox_fields' ) );
+
+
+    	/*----------  Scripts & styles supplémentaires ----------*/
+    	
+    	foreach ($content['fields'] as $field ) {
+
+    		// champ de type date
+    		if ( $field['type'] == 'date' ) {
+
+	    		add_action( 'admin_enqueue_scripts', function () {
+
+	    			// chargement de jQuery DatePicker
+		    		wp_enqueue_script( 'jquery-ui-datepicker' );
+		    		wp_enqueue_style( 'admin-datepicker-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
+
+				});
+
+				break;
+
+			} // FIN if type=date
+
+    	} // FIN foreach($content[fields])
 
 
 	} // FIN __construct()
@@ -81,8 +116,8 @@ class PC_Add_Metabox {
 		// champs
 		foreach ( $datas['args']['fields'] as $field ) {
 
-			// toutes les propriétés sont fusionnées avec celles par défaut
-			// pour éviter une erreur si les non obligatoires sont absentes à la création
+			// fusion du propriétés du champ avec des valeurs vides
+	    	// évite une erreur en cas d'omission
 			$field = array_merge(
 				// defaut
 				array(
@@ -149,15 +184,6 @@ class PC_Add_Metabox {
 					break;
 
 				case 'img':
-					// btn de suppression
-					$dataRemove = '';
-					$btnRemove 	= '';
-					if ( $field['options']['btnremove'] == true ) {
-						$dataRemove		= 'data-remove="active"';
-						if ( isset($savedValue) && '' != $savedValue ) {
-							$btnRemove 	= '<input class="button pc-media-remove" type="button" value="Supprimer"/>';
-						}
-					}
 					// label
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
 					// si une valeur en bdd
@@ -168,8 +194,30 @@ class PC_Add_Metabox {
 					}
 					// champs
 					echo '<input type="hidden" id="'.$field['id'].'" class="pc-media-id" name="'.$field['id'].'" value="'.$savedValue.'" />';
-					echo '<input class="button pc-img-select" type="button" value="Sélectionner une image" '.$dataRemove.' />';
-					echo ' '.$btnRemove;
+					echo '<input class="button pc-img-select" type="button" value="Sélectionner une image" ';
+					// si btn de suppression activé
+					if ( $field['options']['btnremove'] == true ) {
+						echo 'data-remove="active" />';
+						// affiche le btn si une image est déjà enregistrée
+						if ( isset($savedValue) && '' != $savedValue ) {
+							echo ' <input class="button pc-media-remove" type="button" value="Supprimer"/>';
+						}
+					} else { echo ' />'; }
+					break;
+
+				case 'date':
+
+					// recherche de l'attibut class
+					// pour ajouter la classe nécessaire au javascript
+					$dateAttr = strpos($field['attr'], 'class="');
+					if ($dateAttr !== false) {
+					    $dateAttr = str_replace('class="', 'class="pc-date-picker ', $field['attr']);
+					} else {
+					    $dateAttr = 'class="pc-date-picker" '.$field['attr'];
+					}
+
+					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					echo '<input type="text" id="'.$field['id'].'" '.$dateAttr.' style="'.$field['css'].'" name="'.$field['id'].'" value="'.pc_date_bdd_to_admin($savedValue).'" />';
 					break;
 
 			} // FIN switch($field['type'])
@@ -208,6 +256,9 @@ class PC_Add_Metabox {
 				// valeur en bdd
 				$fieldSave = get_post_meta( $post_ID, $id, true );
 
+				// si champ de type date -> changement de format
+				if ( $field['type'] == 'date' ) { $fieldTemp = pc_date_admin_to_bdd($fieldTemp); }
+
 				// si une valeur arrive & si rien en bdd
 				if ( $fieldTemp && '' == $fieldSave ) {
 					add_post_meta( $post_ID, $id, $fieldTemp, true );
@@ -231,5 +282,3 @@ class PC_Add_Metabox {
 	/*=====  FIN Sauvegarde  ======*/	
 	
 }
-
-?>

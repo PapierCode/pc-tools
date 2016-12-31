@@ -195,5 +195,3 @@ class PC_add_field_to_tax {
 	/*=====  FIN Sauvegarde  ======*/	
 	
 }
-
-?>

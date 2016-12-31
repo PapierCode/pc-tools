@@ -418,5 +418,3 @@ class PC_Add_Admin_Page {
     /*=====  FIN Rendu des champs  ======*/
     	
 }
-
-?>

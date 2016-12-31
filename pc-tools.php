@@ -13,6 +13,7 @@ Author: Papier Codé
 * * Includes
 * * Textes
 * * Traitements
+* * Slug pour custom post
 * * Pagination
 *
 **/
@@ -118,6 +119,41 @@ function pc_wp_wysiwyg($txt) {
 
 }
 
+/*----------  Date  ----------*/
+
+$monthsList		= array('janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre');
+
+// convertion date bdd -> affichage admin
+function pc_date_bdd_to_admin($dateFn) {
+
+	global $monthsList; // mois en FR
+
+	$date 		= new DateTime($dateFn); // création objet date avec la valeur en BDD
+
+	$dayNumber 	= $date->format('d'); // jour
+	$month 		= $date->format('n'); // mois
+	$year 		= $date->format('Y'); // année
+
+	// retourne ex : 15 juin 2016
+	return $dayNumber.' '.$monthsList[$month-1].' '.$year;
+
+}
+
+// convertion date affichage -> bdd
+function pc_date_admin_to_bdd($dateFn) {
+
+	global $monthsList; // mois en FR
+
+	$exploDate 	= explode(' ', $dateFn); // valeur BDD explosée en tableau
+
+	$monthNum 	= array_search($exploDate[1], $monthsList) + 1; // associe nom du mois au numéro de mois (index tableau)
+	if (strlen($monthNum) < 2) { $monthNum = '0'.$monthNum;	} // préfixe avec 0 si numéro de mois < 10
+
+	// retourne ex : 2016-06-15
+	return $exploDate[2].'-'.$monthNum.'-'.$exploDate[0];
+
+}
+
 
 /*=====  End of Traitements  ======*/
 
@@ -136,6 +172,82 @@ function pc_display_var($var, $margin = false) {
 
 
 /*=====  FIN Dev  ======*/
+
+/*=============================================
+=            Slug pour custom post            =
+=============================================*/
+
+/*
+*
+* Génération d'un slug pour custom post en fonction du menu de navigation
+*
+* * $custom : nom du custom post déclaré avec la class PC_Add_Custom_Post
+* * $level 	: nombre de niveaux à prendre en compte (1 ou 2) 
+* * $alt 	: alternative si aucune correspondance dans le menu
+*
+*/
+
+function pc_get_slug_for_custom_post( $custom, $level, $alt ) {
+
+	// Options Papier Codé où sera sauvegardé le slug
+	$pcSettings = get_option( 'pc-settings-option' );
+	// class WP pour les requêtes sql
+	global $wpdb;
+	// slug final
+	$postSlug = '';
+	// identifiant de l'option enrgistrée en base
+	$postSlugId = $postSlug.'Slug';
+
+	// recherche des items de menu qui publient des archives
+	$results = $wpdb->get_results( 'SELECT post_id FROM preform_postmeta WHERE meta_value = "post_type_archive"' );
+
+	// pour chaque item
+	foreach ($results as $result) {
+
+		// propriété de l'item
+		$itemMenu = get_post_meta($result->post_id);
+		// si l'item publie les customs recherché
+		if ( $itemMenu['_menu_item_object'][0] == $custom ) {
+
+			// formate son titre pour en faire le slug
+			$postSlug = sanitize_title( get_the_title($result->post_id) );
+			
+			// si l'item a un parent
+			if ( $level == 2 && $itemMenu['_menu_item_menu_item_parent'][0] != 0 ) {
+
+				// ajoute le nom du parent formaté en slug
+				$postSlug = sanitize_title(get_the_title($itemMenu['_menu_item_menu_item_parent'][0])).'/'.$postSlug;
+				
+			} // FIN if $level = 2 & l'item a un parent
+
+		} else { 
+
+			// pas de publication dans le menu de navigation
+			// utilisation de l'alternative
+			$postSlug = $alt;
+
+		} // FIN if $itemMenu['_menu_item_object']
+
+	} // FIN foreach item
+
+	// le slug est enregistré en base
+	// si c'est la première fois ou si le nouveau slug est différent
+	if ( !isset($pcSettings[$postSlugId]) || $pcSettings[$postSlugId] != $postSlug ) {
+
+		// ajoute ou modifie la valeur dans le tableau créé en début de ce fichier
+		$pcSettings[$postSlugId] = $postSlug;
+		// mise à jour de la base
+		update_option( 'pc-settings-option', $pcSettings ,'', 'no');
+		// regénération des permaliens
+		flush_rewrite_rules();
+
+	} // FIN test/comparaison du slug en Base
+
+	return $postSlug;
+	
+} // FIN get_slug_for_custom_post()
+
+/*=====  FIN Slug pour custom post  ======*/
 
 /*==================================
 =            Pagination            =
@@ -233,5 +345,3 @@ function pc_post_navigation($prevTxt = '<span>Article </span>Précédent', $next
 
 
 /*=====  FIN Pagination  ======*/
-
-?>

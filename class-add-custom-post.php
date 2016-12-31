@@ -17,19 +17,33 @@ class PC_Add_Custom_Post {
     /*====================================
     =            Constructeur            =
     ====================================*/
-    
+
+    /*
+    *
+    * * [string] $slug 		: identifiant du custom
+    * * [array]  $labels 	: textes de l'interface
+    * * [array]  $arg 		: paramètres du custom post
+	*
+   	* cf. https://codex.wordpress.org/Function_Reference/register_post_type
+	*
+	*/
+
     public function __construct( $slug, $labels = array(), $args = array() ) {
 
-	    /*----------  variables de la class  ----------*/
+	    /*----------  Variables de la class  ----------*/
 	    
 	    $this->postTypeSlug     = $slug;
 	    $this->postTypeLabels	= $labels;
 	    $this->postTypeArgs     = $args;
 	     
 
-	    /*----------  création  ----------*/
+	    /*----------  Création  ----------*/
 	    
-	    if ( !post_type_exists( $this->postTypeSlug ) ) { add_action( 'init', array( $this, 'add_custom_post' ) ); }
+	    if ( !post_type_exists( $this->postTypeSlug ) ) { 
+
+	    	add_action( 'init', array( $this, 'add_custom_post' ) ); 
+
+	    } // FIN if !post_type_exists
 
 	}
 
@@ -42,7 +56,7 @@ class PC_Add_Custom_Post {
 	
 	public function add_custom_post() {
 
-	    /*----------  Variables  ----------*/
+	    /*----------  Fusion des textes & paramètres avec les valeurs par défaut  ----------*/
 	    
 	    // textes de l'interface
 	    $labels = array_merge(	     
@@ -95,7 +109,7 @@ class PC_Add_Custom_Post {
 	    if ( in_array( 'thumbnail', $args['supports'] ) ) {	add_theme_support( 'post-thumbnails', array( $this->postTypeSlug ) ); }	   
 
 
-	    /*----------  no metabox identifiant  ----------*/
+	    /*----------  Désactivation metabox identifiant  ----------*/
 
 		add_action( 'admin_menu', function() { remove_meta_box( 'slugdiv', $this->postTypeSlug, 'normal' ); } ); 
 
@@ -107,13 +121,23 @@ class PC_Add_Custom_Post {
 
 	/*=================================
 	=            Taxonomie            =
-	=================================*/
+	=================================*/	
+
+    /*
+    *
+    * * [string] $name 		: identifiant de la taxonomie
+    * * [array]  $labels 	: textes de l'interface
+    * * [array]  $arg 		: paramètre de la taxonomie
+	*
+   	* cf. https://codex.wordpress.org/Function_Reference/register_taxonomy
+	*
+	*/
 	
 	public function add_custom_tax( $name, $labels = array(), $args = array() ) {
 
 	    if ( !empty( $name ) ) {
 	    		 
-			/*----------  Variables  ----------*/
+			/*----------  Fusion des textes & paramètres avec les valeurs par défaut  ----------*/
 
 	        // variables
 	        $taxName     	= $name;
@@ -188,5 +212,3 @@ class PC_Add_Custom_Post {
 	/*=====  FIN Taxonomie  ======*/
 	
 }
-
-?>
