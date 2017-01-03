@@ -237,7 +237,7 @@ class PC_Add_Custom_Post {
 		$postSlugId = $this->postType.'Slug';
 
 		// recherche des items de menu qui publient des archives
-		$results = $wpdb->get_results( 'SELECT post_id FROM preform_postmeta WHERE meta_value = "post_type_archive"' );
+		$results = $wpdb->get_results( 'SELECT post_id FROM '.$wpdb->prefix.'postmeta WHERE meta_value = "post_type_archive"' );
 
 		// pour chaque item
 		foreach ($results as $result) {
