@@ -19,6 +19,24 @@ class PC_Add_Admin_Page {
     /*====================================
     =            Constructeur            =
     ====================================*/
+
+    /*
+    *
+    * * [string] 	$title      	: titre de la page
+    * * [string] 	$parent    		: slug de la page parent ou vide si menu de premier niveau
+    * * [string] 	$menuLabel  	: texte du menu
+    * * [string] 	$slug    		: slug de la page, sans caractères spéciaux ni majuscules, tiret pour séparer les mots
+    * * [array] 	$content    	: sections et champs
+    * * [string] 	$capability    	: droits d'accès, "editor" (defaut) ou "admin"
+    * * [number] 	$position    	: position dans le menu
+    * * [string] 	$icon    		: icône dans le menu
+    *
+    * cf. https://developer.wordpress.org/reference/functions/add_menu_page/
+    * cf. https://developer.wordpress.org/reference/functions/add_submenu_page/
+    * cf. https://developer.wordpress.org/resource/dashicons/
+    * cf. https://codex.wordpress.org/Creating_Options_Pages
+    *
+    */
     
     public function __construct( $title, $parent, $menuLabel, $slug = '', $content, $capability = 'editor', $position = '99', $icon = 'dashicons-clipboard' ) {
 
@@ -285,7 +303,7 @@ class PC_Add_Admin_Page {
 		$radioIndex = 0; // <br/> à partir de 1
 		foreach ($datas['options'] as $radioKey => $radioValue) {
 			if ( $radioIndex > 0 ) { echo '<br/>'; }
-			echo '<input type="radio" id="'.$id.'-'.$radioIndex.'" '.$datas['attr'].' style="'.$datas['css'].'" name="'.$datas['name'].'" value="'.$radioValue.'" '.checked($radioValue, $value, false).'/>';
+			echo '<input type="radio" id="'.$id.'-'.$radioIndex.'" '.$datas['attr'].' name="'.$datas['name'].'" value="'.$radioValue.'" '.checked($radioValue, $value, false).'/>';
 			echo '<label for="'.$id.'-'.$radioIndex.'">'.$radioKey.'</label>';
 			$radioIndex++;
 		}

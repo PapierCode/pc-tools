@@ -29,6 +29,7 @@ include 'class-add-custom-post.php';
 include 'class-add-metabox.php';
 include 'class-add-field-to-tax.php';
 include 'class-add-custom-admin.php';
+include 'class-add-recaptcha.php';
 
 
 /*----------  JS & CSS  ----------*/
@@ -42,31 +43,6 @@ add_action( 'admin_enqueue_scripts', function () {
 
 
 /*=====  End of Includes  ======*/
-
-/*==============================
-=            Textes            =
-==============================*/
-
-/*----------  Blabla  ----------*/
-
-function pc_txt($quoi) {
-
-	switch ($quoi) {
-
-		case 'seoIntro':
-			return '<p>Ces deux champs sont utiles au référencement et s\'affichent dans les résultats des moteurs de recherche, par exemple dans Google : le <em>Titre</em> correspond à la ligne de texte bleue, la <em>Description</em> aux 2 lignes en noir en dessous. <strong>Nombre de signes maximum conseillés : respectivement 70 et 200.</strong></p>';
-			break;
-		
-		default:
-			return;
-			break;
-
-	}
-
-}
-
-
-/*=====  End of Textes  ======*/
 
 /*===================================
 =            Traitements            =
@@ -121,7 +97,7 @@ function pc_wp_wysiwyg($txt) {
 
 /*----------  Date  ----------*/
 
-$monthsList		= array('janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre');
+$monthsList = array('janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre');
 
 // convertion date bdd -> affichage admin
 function pc_date_bdd_to_admin($dateFn) {
@@ -163,7 +139,7 @@ function pc_date_admin_to_bdd($dateFn) {
 
 /*----------  Afficher un tableau ou un objet  ----------*/
 
-function pc_display_var($var, $margin = false) {
+function pc_var($var, $margin = false) {
 
 	$margin == true ? $style = 'style="margin-left:200px"' : $style = '';
 	echo '<pre '.$style.'>'.print_r($var,true).'</pre>';
@@ -172,82 +148,6 @@ function pc_display_var($var, $margin = false) {
 
 
 /*=====  FIN Dev  ======*/
-
-/*=============================================
-=            Slug pour custom post            =
-=============================================*/
-
-/*
-*
-* Génération d'un slug pour custom post en fonction du menu de navigation
-*
-* * $custom : nom du custom post déclaré avec la class PC_Add_Custom_Post
-* * $level 	: nombre de niveaux à prendre en compte (1 ou 2) 
-* * $alt 	: alternative si aucune correspondance dans le menu
-*
-*/
-
-function pc_get_slug_for_custom_post( $custom, $level, $alt ) {
-
-	// Options Papier Codé où sera sauvegardé le slug
-	$pcSettings = get_option( 'pc-settings-option' );
-	// class WP pour les requêtes sql
-	global $wpdb;
-	// slug final
-	$postSlug = '';
-	// identifiant de l'option enrgistrée en base
-	$postSlugId = $postSlug.'Slug';
-
-	// recherche des items de menu qui publient des archives
-	$results = $wpdb->get_results( 'SELECT post_id FROM preform_postmeta WHERE meta_value = "post_type_archive"' );
-
-	// pour chaque item
-	foreach ($results as $result) {
-
-		// propriété de l'item
-		$itemMenu = get_post_meta($result->post_id);
-		// si l'item publie les customs recherché
-		if ( $itemMenu['_menu_item_object'][0] == $custom ) {
-
-			// formate son titre pour en faire le slug
-			$postSlug = sanitize_title( get_the_title($result->post_id) );
-			
-			// si l'item a un parent
-			if ( $level == 2 && $itemMenu['_menu_item_menu_item_parent'][0] != 0 ) {
-
-				// ajoute le nom du parent formaté en slug
-				$postSlug = sanitize_title(get_the_title($itemMenu['_menu_item_menu_item_parent'][0])).'/'.$postSlug;
-				
-			} // FIN if $level = 2 & l'item a un parent
-
-		} else { 
-
-			// pas de publication dans le menu de navigation
-			// utilisation de l'alternative
-			$postSlug = $alt;
-
-		} // FIN if $itemMenu['_menu_item_object']
-
-	} // FIN foreach item
-
-	// le slug est enregistré en base
-	// si c'est la première fois ou si le nouveau slug est différent
-	if ( !isset($pcSettings[$postSlugId]) || $pcSettings[$postSlugId] != $postSlug ) {
-
-		// ajoute ou modifie la valeur dans le tableau créé en début de ce fichier
-		$pcSettings[$postSlugId] = $postSlug;
-		// mise à jour de la base
-		update_option( 'pc-settings-option', $pcSettings ,'', 'no');
-		// regénération des permaliens
-		flush_rewrite_rules();
-
-	} // FIN test/comparaison du slug en Base
-
-	return $postSlug;
-	
-} // FIN get_slug_for_custom_post()
-
-/*=====  FIN Slug pour custom post  ======*/
 
 /*==================================
 =            Pagination            =
@@ -266,7 +166,7 @@ function pc_post_pager($prevTxt = '<span>Page </span><span>précédente</span>',
     // configuration
     // cf. https://codex.wordpress.org/Function_Reference/paginate_links
     $pagination = array(
-        'total' 				=> $query->max_num_pages,						// nombre total de page
+        'total' 				=> $wp_query->max_num_pages,						// nombre total de page
         'current' 				=> $current,										// index de la page courante
         'mid_size'				=> 0,												// nombre de liens autour de la page courante
         'prev_text' 			=> $prevTxt,										// contenu lien "page précédente"

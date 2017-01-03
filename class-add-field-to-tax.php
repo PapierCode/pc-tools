@@ -15,6 +15,14 @@ class PC_add_field_to_tax {
     /*====================================
     =            Constructeur            =
     ====================================*/
+
+    /*
+    *
+    * * [string]	$tax 		: nom de la taxonomie
+    * * [array]		$content	: champs à intégrer
+    *
+    *
+    */
     
     public function __construct( $tax, $content ) {
 
@@ -22,8 +30,9 @@ class PC_add_field_to_tax {
 	    
 	    $this->tax = $tax;
 
-		// toutes les propriétés sont fusionnées avec celles par défaut
-		// pour éviter une erreur si les non obligatoires sont absentes à la création
+
+		/*----------  Fusion du contenu avec les valeurs par défaut  ----------*/
+
 	    $content = array_merge(
 	    	// defaut
 	    	array(
@@ -59,20 +68,21 @@ class PC_add_field_to_tax {
 	
 	public function add_field_to_tax( $term ) {
 
+		// contenu enregistré dans la class
 		$content = $this->content;
 
-		echo '</table>';
-		
+		// fermeture du tableau html existant
+		echo '</table>';		
 		// input hidden de vérification pour la sauvegarde
 		wp_nonce_field( basename( __FILE__ ), $content['prefix'].'-'.'nonce' );
-
+		// titre de l'ensemble
 		echo '<h2>'.$content['title'].'</h2>'.$content['desc'].'<table class="form-table">';
 
 		// champs
 		foreach ($content['fields'] as $field) {
 
-			// toutes les propriétés sont fusionnées avec celles par défaut
-			// pour éviter une erreur si les non obligatoires sont absentes à la création
+			// fusion du propriétés du champ avec des valeurs vides
+	    	// évite une erreur en cas d'omission
 			$field = array_merge(
 				// defaut
 				array(
@@ -91,7 +101,7 @@ class PC_add_field_to_tax {
 
 			// id prefixé
 			$field['id'] = $content['prefix'].'-'.$field['id'];
-
+			// valeur en bdd
 			$savedValue = get_term_meta( $term->term_id, $field['id'], true );
 
 			echo '<tr class="form-field term-group-wrap"><th scope="row">';

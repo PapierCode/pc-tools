@@ -9,6 +9,7 @@
 
 class PC_Add_Custom_Post {
 
+	public $postType;
 	public $postTypeSlug;
     public $postTypeArgs;
     public $postTypeLabels;
@@ -28,18 +29,20 @@ class PC_Add_Custom_Post {
 	*
 	*/
 
-    public function __construct( $slug, $labels = array(), $args = array() ) {
+    public function __construct( $postType, $labels = array(), $args = array() ) {
 
 	    /*----------  Variables de la class  ----------*/
 	    
-	    $this->postTypeSlug     = $slug;
+	    $this->postType     	= $postType;
 	    $this->postTypeLabels	= $labels;
 	    $this->postTypeArgs     = $args;
+
+	    $this->postTypeSlug		= $this->get_slug();
 	     
 
 	    /*----------  Création  ----------*/
 	    
-	    if ( !post_type_exists( $this->postTypeSlug ) ) { 
+	    if ( !post_type_exists( $this->postType ) ) { 
 
 	    	add_action( 'init', array( $this, 'add_custom_post' ) ); 
 
@@ -79,7 +82,7 @@ class PC_Add_Custom_Post {
 	        // labels passés lors de la création
 	        $this->postTypeLabels	         
 	    );
-	    
+
 	    // configuration du custom post
 	    $args = array_merge(	     
 	        // défaut
@@ -100,18 +103,18 @@ class PC_Add_Custom_Post {
 
 	    /*----------  Création  ----------*/
 	    
-	    register_post_type( $this->postTypeSlug, $args );
+	    register_post_type( $this->postType, $args );
 
 	    
 	    /*----------  Thumbnail  ----------*/
 
 	    // si demandé
-	    if ( in_array( 'thumbnail', $args['supports'] ) ) {	add_theme_support( 'post-thumbnails', array( $this->postTypeSlug ) ); }	   
+	    if ( in_array( 'thumbnail', $args['supports'] ) ) {	add_theme_support( 'post-thumbnails', array( $this->postType ) ); }	   
 
 
 	    /*----------  Désactivation metabox identifiant  ----------*/
 
-		add_action( 'admin_menu', function() { remove_meta_box( 'slugdiv', $this->postTypeSlug, 'normal' ); } ); 
+		add_action( 'admin_menu', function() { remove_meta_box( 'slugdiv', $this->postType, 'normal' ); } ); 
 
 
 	} // FIN add_custom_post()
@@ -125,7 +128,7 @@ class PC_Add_Custom_Post {
 
     /*
     *
-    * * [string] $name 		: identifiant de la taxonomie
+    * * [string] $name 		: nom de la taxonomie
     * * [array]  $labels 	: textes de l'interface
     * * [array]  $arg 		: paramètre de la taxonomie
 	*
@@ -176,7 +179,8 @@ class PC_Add_Custom_Post {
 			        'labels'            => $args,
 			        'hierarchical'      => true,				        
 			        'query_var'         => true,
-			        'rewrite'           => array( $taxName )
+			        'rewrite'           => array( 'slug' => $this->postTypeSlug.'/'.sanitize_title($args['name']) ),
+			        'show_in_nav_menus' => false
 			    ),
 			    // arguments passés lors de la déclaration
 			    $taxArgs
@@ -190,14 +194,14 @@ class PC_Add_Custom_Post {
     	    	// si la tax n'existe pas
         		if ( !taxonomy_exists( $taxName ) ) {
 
-			        register_taxonomy( $taxName, $this->postTypeSlug, $args );
+			        register_taxonomy( $taxName, $this->postType, $args );
 
 				}
 				// si la tax existe
 				else {
 
 					// = tax partagée
-					register_taxonomy_for_object_type( $taxName, $this->postTypeSlug );		    
+					register_taxonomy_for_object_type( $taxName, $this->postType );		    
 
 				}
 
@@ -210,5 +214,88 @@ class PC_Add_Custom_Post {
 
 	
 	/*=====  FIN Taxonomie  ======*/
+
+	/*=============================================
+	=            Slug pour custom post            =
+	=============================================*/
+
+	/*
+	*
+	* Génération d'un slug pour le custom post en fonction du menu de navigation
+	*
+	*/
+
+	public function get_slug() {
+
+		// réglages projet où sera sauvegardé le slug
+		$pcSettings = get_option( 'pc-settings-option' );
+		// class WP pour les requêtes sql
+		global $wpdb;
+		// slug final
+		$postSlug = '';
+		// identifiant de l'option enrgistrée en base
+		$postSlugId = $this->postType.'Slug';
+
+		// recherche des items de menu qui publient des archives
+		$results = $wpdb->get_results( 'SELECT post_id FROM preform_postmeta WHERE meta_value = "post_type_archive"' );
+
+		// pour chaque item
+		foreach ($results as $result) {
+
+			// propriété de l'item
+			$item = get_post_meta($result->post_id);
+			// si l'item publie les customs recherché
+			if ( $item['_menu_item_object'][0] == $this->postType ) {
+
+				// formate son titre pour en faire le slug
+				$postSlug = sanitize_title( get_the_title($result->post_id) );
+				
+				// si l'item a un parent
+				if ( $item['_menu_item_menu_item_parent'][0] != 0 ) {
+
+					// le titre de l'item parent lui est associé 
+					if ( get_the_title($item['_menu_item_menu_item_parent'][0]) != '' ) {
+
+						$postSlug = sanitize_title(get_the_title($item['_menu_item_menu_item_parent'][0])).'/'.$postSlug;
+
+					// le titre de l'item parent est emprunté au contenu associé
+					} else {
+
+						$itemParent = get_post_meta($item['_menu_item_menu_item_parent'][0]);
+						$postSlug = sanitize_title(get_the_title($itemParent['_menu_item_object_id'][0])).'/'.$postSlug;
+
+					}
+					
+				} // FIN if l'item a un parent
+
+			} else { 
+
+				// pas de publication dans le menu de navigation
+				// utilisation du type
+				$postSlug = $this->postType;
+
+			} // FIN if $itemMenu['_menu_item_object']
+
+		} // FIN foreach item
+
+		// le slug est enregistré en base
+		// si c'est la première fois ou si il est différent
+		if ( !isset($pcSettings[$postSlugId]) || $pcSettings[$postSlugId] != $postSlug ) {
+
+			// ajoute ou modifie la valeur dans le tableau créé en début de ce fichier
+			$pcSettings[$postSlugId] = $postSlug;
+			// mise à jour de la base
+			update_option( 'pc-settings-option', $pcSettings ,'', 'no');
+			// regénération des permaliens
+			flush_rewrite_rules();
+
+		} // FIN test/comparaison du slug en Base
+
+		return $postSlug;
+		
+	} // FIN get_slug_for_custom_post()
+
+
+	/*=====  FIN Slug pour custom post  ======*/
 	
 }

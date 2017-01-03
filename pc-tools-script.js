@@ -253,9 +253,7 @@ if ( $('.pc-pdf-select').length > 0 ) {
 =            Date Picker            =
 ===================================*/
 
-// cf. functions.php pour inclure Jquery UI
-
-if ( typeof datepicker == 'function' ) {
+if ( $('.pc-date-picker').length > 0 ) {
 
     $('.pc-date-picker').datepicker({
 
