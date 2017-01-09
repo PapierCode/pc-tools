@@ -279,5 +279,59 @@ if ( $('.pc-date-picker').length > 0 ) {
 
 
 /*=====  End of Date Picker  ======*/
+
+/*=================================
+=            Compteurs            =
+=================================*/
+
+// ajouter au champ : class="pc-counter" data-max-length="XXX" data-counter-type="signs/words"
+
+if ( $('.pc-counter').length > 0 ) {
+
+    function counterResult(type,txt) {
+
+        var result;
+
+        switch(type) {
+            case 'signs' :
+                result = txt.length;
+                break;
+            case 'words' :
+                result = txt.trim().split(' ').length;
+                break;
+        }
+
+        return result;
+
+    }
+
+    $('.pc-counter').each(function() {
+
+        var maxLength = $(this).data('max-length'),
+            savedLength = counterResult( $(this).data('counter-type'), $(this).val() ),
+            descAttr = savedLength > maxLength ? 'style="color:red"' : 'style="color:green"';
+
+        $(this).after('<p class="description" '+ descAttr +'><span class="pc-counter">'+ savedLength +'</span> / '+ maxLength +' mots affichés.</p>');
+
+        $(this).on('keyup mouseout', function() {
+            var current = counterResult( $(this).data('counter-type'), $(this).val() ),
+                $message = $(this).next();
+
+            if ( current > maxLength ) {
+                $message.css('color', 'red');
+            } else {
+                $message.css('color', 'green');
+            }
+
+            $(this).next().children().text( current );
+
+        });
+        
+    });
+
+}
+
+
+/*=====  FIN Compteurs  ======*/
 	
 }); // End document.ready
