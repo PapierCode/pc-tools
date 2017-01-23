@@ -95,12 +95,16 @@ function pc_wp_wysiwyg($txt) {
 
 }
 
+
 /*----------  Date  ----------*/
 
 $monthsList = array('janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre');
 
 // convertion date bdd -> affichage admin
 function pc_date_bdd_to_admin($dateFn) {
+
+	// si pas de date en paramètres, stop here !
+	if ( !$dateFn ) { return; }
 
 	global $monthsList; // mois en FR
 
@@ -117,6 +121,9 @@ function pc_date_bdd_to_admin($dateFn) {
 
 // convertion date affichage -> bdd
 function pc_date_admin_to_bdd($dateFn) {
+
+	// si pas de date en paramètres, stop here !
+	if ( !$dateFn ) { return; }
 
 	global $monthsList; // mois en FR
 
