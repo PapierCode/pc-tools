@@ -248,11 +248,14 @@ class PC_Add_Metabox {
     	if ( isset($_POST[$this->id.'-'.'nonce']) && wp_verify_nonce( $_POST[$this->id.'-'.'nonce'], basename( __FILE__ ) ) ) {
 
 			foreach ($content['fields'] as $field) {
-
 				// id préfixé
 				$id = $content['prefix'].'-'.$field['id'];
 				// valeur renvoyé par le form
 				$fieldTemp = $_POST[$id];
+				// nettoyage
+				if ( $field['type'] == 'text' || $field['type'] == 'textarea' ) {
+					$fieldTemp = sanitize_text_field( $fieldTemp );
+				}
 				// valeur en bdd
 				$fieldSave = get_post_meta( $post_ID, $id, true );
 

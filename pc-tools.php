@@ -4,7 +4,7 @@
 Plugin Name: [PC] Tools
 Plugin URI: www.papier-code.fr
 Description: Boite à outils Papier Codé
-Version: 0.1
+Version: 0.2
 Author: Papier Codé
 */
 
@@ -47,20 +47,6 @@ add_action( 'admin_enqueue_scripts', function () {
 /*===================================
 =            Traitements            =
 ===================================*/
-
-/*----------  Nettoyage de texte  ----------*/
-
-function pc_clean_txt($txt) {
-
-	$txt = strip_tags($txt);						// Supprime les balises HTML et PHP d'une chaîne
-	$txt = preg_replace('#\n|\t|\r#',' ',$txt);		// Supprime les sauts de ligne et paragraphe
-	$txt = htmlspecialchars($txt);					// Convertit les caractère spéciaux en HTML
-	$txt = preg_replace('#«|»#','&quot;',$txt);		// Convertit les guillemets en HTML
-
-	return $txt;
-
-}
-
 
 /*----------  Limite du nombre de mots  ----------*/
 

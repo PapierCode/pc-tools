@@ -179,6 +179,10 @@ class PC_add_field_to_tax {
 				$id = $content['prefix'].'-'.$field['id'];
 				// valeur renvoyé par le form
 				$fieldTemp = $_POST[$id];
+				// nettoyage
+				if ( $field['type'] == 'text' || $field['type'] == 'textarea' ) {
+					$fieldTemp = sanitize_text_field( $fieldTemp );
+				}
 				// valeur en bdd
 				$fieldSave = get_term_meta( $term_id, $id, true );
 
