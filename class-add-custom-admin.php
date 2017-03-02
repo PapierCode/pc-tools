@@ -177,7 +177,7 @@ class PC_Add_Admin_Page {
 		                'type'      => '',
 						'name'		=> '',
 		                'label'     => '',
-		                'desc'      => '',
+		                'help'      => '',
 		                'attr'      => '',
 		                'css'       => '',
 		                'options'   => array()
@@ -272,7 +272,7 @@ class PC_Add_Admin_Page {
 
 		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].'/>';
 
-		$this->display_desc( $datas['desc'] );
+		$this->display_desc( $datas['help'] );
 	    
 	}
     
@@ -287,7 +287,7 @@ class PC_Add_Admin_Page {
 
 		echo '<input type="checkbox" name="'.$datas['name'].'" id="'.$id.'" value="1"' .$checked. ' '.$datas['attr'].'/>';
 
-		$this->display_desc( $datas['desc'] );		
+		$this->display_desc( $datas['help'] );		
 	    
 	}
     
@@ -308,7 +308,7 @@ class PC_Add_Admin_Page {
 			$radioIndex++;
 		}
 
-		$this->display_desc( $datas['desc'] );		
+		$this->display_desc( $datas['help'] );		
 	    
 	}
     
@@ -330,7 +330,7 @@ class PC_Add_Admin_Page {
 
 	    echo $select;
 
-	    $this->display_desc( $datas['desc'] );	
+	    $this->display_desc( $datas['help'] );	
 	    
 	}
     
@@ -345,7 +345,7 @@ class PC_Add_Admin_Page {
 
 		echo '<textarea name="'.$datas['name'].'" id="'.$id.'" '.$datas['attr'].' style="'.$datas['css'].'" />'.$value.'</textarea>';
 
-		$this->display_desc( $datas['desc'] );
+		$this->display_desc( $datas['help'] );
 	    
 	}
     
@@ -360,7 +360,7 @@ class PC_Add_Admin_Page {
 
 		wp_editor( $value, $id, $datas['options'] );
 
-		$this->display_desc( $datas['desc'] );
+		$this->display_desc( $datas['help'] );
 	    
 	}
     
@@ -394,7 +394,7 @@ class PC_Add_Admin_Page {
 		echo '<input class="button pc-img-select" type="button" value="Sélectionner une image" '.$dataRemove.' />';
 		echo $btnRemove;
 
-		$this->display_desc( $datas['desc'] );
+		$this->display_desc( $datas['help'] );
 	    
 	}
     
@@ -428,7 +428,7 @@ class PC_Add_Admin_Page {
 		echo '<input class="button pc-pdf-select" type="button" value="Sélectionner un pdf" '.$dataRemove.' />';
 		echo $btnRemove;
 
-		$this->display_desc( $datas['desc'] );
+		$this->display_desc( $datas['help'] );
 	    
 	}
 
