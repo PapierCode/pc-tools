@@ -178,7 +178,8 @@ class PC_add_field_to_tax {
 				// id préfixé
 				$id = $content['prefix'].'-'.$field['id'];
 				// valeur renvoyé par le form
-				$fieldTemp = $_PO
+				$fieldTemp = $_POST[$id];
+				// nettoyage
 				switch ($field['type']) {
 					case 'text':
 						$fieldTemp = sanitize_text_field( $fieldTemp );
