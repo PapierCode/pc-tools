@@ -24,6 +24,7 @@ function pc_media_remove(btn){
     // supprime l'image et le btn de suppression après animation
     btn.prevAll('.pc-media-preview').slideUp('500', function() {
         $(this).remove();
+        btn.prev('.button').val('Ajouter');
         btn.remove();
     });
 
@@ -33,49 +34,32 @@ function pc_media_remove(btn){
 $('.pc-media-remove').each(function() { $(this).click(function() { pc_media_remove( $(this) ); }); });
 
 
-/*----------  IMG upload  ----------*/
+/*----------  Image upload  ----------*/
 
 if ( $('.pc-img-select').length > 0 ) {
-
-    /*----------  sélection  ----------*/  
-
-    var imgUploader; // modale (objet)
 
     $('.pc-img-select').each(function() {
 
         $(this).click(function() {
 
-            var $btnSelect      = $(this),                          // bouton ajouter/modifier
-                $container      = $(this).parent(),                 // conteneur direct
-                $hiddenField    = $container.find('.pc-media-id');    // champ caché qui transmet à la bdd
+            var $btnSelect      = $(this),                              // bouton ajouter/modifier
+                $container      = $(this).parent(),                     // conteneur parent
+                $hiddenField    = $container.find('.pc-media-id');      // champ caché qui transmet à la bdd
 
-            // si la modal a déjà été ouverte : réutilisation et sortie de la fonction
+            // si la modal est déjà active
             if ( imgUploader ) { imgUploader.open(); return; }
 
 
             /*----------  Création de l'objet modale  ----------*/
             
-            var imgUploader = new wp.media.view.MediaFrame.Select({
+            var imgUploader = wp.media({
 
-                // titre de la modal
                 title: 'Insérer une image',
-                // caractéristiques
-                library: {
-                    // order : 'ASC', 'DESC'
-                    order: 'DESC',
-                    // orderby : 'name', 'author', 'date', 'title', 'modified', 'uploadedTo', 'id', 'post__in', 'menuOrder'
-                    orderby: 'date',
-                    // type mime
-                    type: 'image'
-                },
-                button: {
-                    // texte du bouton de la modal
-                    text: 'Insérer une image'
-                },
-                // droit de sélectionner plusieurs images
+                library: { type: 'image' },
+                button: { text: 'Insérer une image' },
                 multiple: false
 
-            }); // FIN new wp.media
+            }); // FIN wp.media
 
 
             /*----------  Au clic sur le bouton de validation de la modal  ----------*/
@@ -85,45 +69,34 @@ if ( $('.pc-img-select').length > 0 ) {
                 // datas de l'image sélectionnée
                 var imgDatas = imgUploader.state().get('selection').first().toJSON();
 
-                // si format valide
-                if ( imgDatas.subtype === 'jpeg' || imgDatas.subtype === 'jpg' || imgDatas.subtype === 'png' ) {
+                // mise à jour du champ caché
+                $hiddenField.val(imgDatas.id);
 
-	                // mise à jour du champ caché
-	                $hiddenField.val(imgDatas.id);
+                // si une preview existe déjà
+                if ( $container.find('.pc-media-preview').length > 0 ) {
 
-                    // si une preview existe déjà
-	                if ( $container.find('.pc-media-preview').length > 0 ) {
+                    // modification de la preview
+                    $container.find('.pc-media-preview').html('<div class="pc-media-preview-item" style="background-image:url('+imgDatas.sizes.thumbnail.url+');"></div>');
 
-                        // modification de l'attribut src
-	                    $container.find('.pc-media-preview').attr('src', imgDatas.sizes.thumbnail.url);
+                // si pas encore de preview
+                } else {
 
-                    // si pas de preview
-	                } else {
+                    // ajoute la preview
+                	$container.prepend('<div class="pc-media-preview"><div class="pc-media-preview-item" style="background-image:url('+imgDatas.sizes.thumbnail.url+');"></div></div>');
+                    // texte du bouton
+                    $btnSelect.val('Modifier');
 
-                        // ajoute la preview
-	                	$container.prepend('<img class="pc-media-preview" src="'+imgDatas.sizes.thumbnail.url+'" />');
+                    // si suppression autorisée
+                    if ( $btnSelect.data('remove') == 'active') {
 
-                        // si suppression autorisée
-                        if ( $btnSelect.data('remove') == 'active') {
+                        // ajoute le btn
+ 	                	$btnSelect.after('<input class="button pc-media-remove" data-cible="image" type="button" value="Supprimer"/>');
+                        // au clic sur le nouveau btn de suppression
+	                	$container.find('.pc-media-remove').click(function() { pc_media_remove( $(this) ); });
 
-                            // ajoute le btn
-     	                	$container.append('<input class="button pc-media-remove" type="button" value="Supprimer"/>');
-                            // au clic sur le nouveau btn de suppression
-    	                	$container.find('.pc-media-remove').click(function() { pc_media_remove( $(this) ); });
+                    } // FIN if btn suppression
 
-                        } // FIN if btn suppression
-
-	                } // FIN if preview 
-
-	                // si erreur affichée précédemment
-	                $container.find('p').remove();
-
-                // si format non valide
-	            } else {
-
-	            	$container.append('<p style="color:red">Le format de fichier est invalide</p>');
-
-	            } // FIN if format
+                } // FIN if preview 
 
             }); // FIN imgUploader.on(select)
 
@@ -140,13 +113,120 @@ if ( $('.pc-img-select').length > 0 ) {
 } // FIN if $('.pc-img-select')
 
 
+/*----------  Gallerie upload  ----------*/
+
+if ( $('.pc-gallery-select').length > 0 ) {
+
+    $('.pc-gallery-select').each(function() {
+
+        $(this).click(function() {
+
+            var $btnSelect      = $(this),                                      // bouton ajouter/modifier
+                $container      = $(this).parent(),                             // conteneur parent
+                $hiddenField    = $container.find('.pc-media-id'),            // champ caché qui transmet à la bdd
+                imgIds          = $hiddenField.val();                           // contenu du champ caché
+                gallery_state   = imgIds ? 'gallery-edit' : 'gallery-library';  // menu activé par défaut dans la modal (modifier ou créer)
+
+            // si la modal a déjà été ouverte : réutilisation et sortie de la fonction
+            if ( galleryUploader ) { galleryUploader.open(); return; }
+
+
+            /*----------  Création de l'objet modal  ----------*/
+            
+            var galleryUploader = wp.media({
+
+                title: 'Insérer une gallerie',
+                button: { text: 'Insérer une gallerie' },
+                library: { type: 'image' },
+                frame: "post",
+                state: gallery_state,
+                multiple: true,
+
+            }); // FIN wp.media
+
+
+            /*----------  À l'ouverture de la modal  ----------*/
+            
+            galleryUploader.on( 'open', function() {
+                
+                // contenu du champ caché
+                imgIds = $hiddenField.val();
+                // si vide on sort de la fonction
+                if ( !imgIds ) { return; }
+
+                // conversion en tableau
+                imgIds = imgIds.split( ',' );
+                // récupère la propriété "librairie" de la modal qui s'ouvre
+                var library = galleryUploader.state().get('library');
+
+                // ajoute chaque image à la modal qui va regénérer une gallerie modifiable               
+                imgIds.forEach( function( id ) {
+                    // là je pige pas...
+                    attachment = wp.media.attachment(id);
+                    attachment.fetch();
+                    library.add( attachment ? [ attachment ] : [] );
+                } );
+
+            } );
+
+
+            /*----------  Au clic sur le bouton de validation de la modal  ----------*/
+
+            galleryUploader.on('update', function() {
+
+                // récupère les données renvoyées par la modal
+                // un tableau d'objets
+                var galleryDatas = galleryUploader.state().get('library').toJSON();
+
+                // mise à jour du champ caché
+                var imgIdsToSave = [],
+                    galleryPreview = '';
+                for (var i = 0; i < galleryDatas.length; i++) {
+                    imgIdsToSave.push(galleryDatas[i]['id']);
+                    galleryPreview += '<div class="pc-media-preview-item" style="background-image:url('+galleryDatas[i]['url']+');"></div>';
+                }
+                $hiddenField.val(imgIdsToSave.join());
+
+                // si une preview existe déjà
+                if ( $container.find('.pc-media-preview').length > 0 ) {
+
+                    $container.find('.pc-media-preview').html(galleryPreview);
+
+                // si pas encore de preview
+                } else {
+
+                    // ajoute la preview
+                    $container.prepend('<div class="pc-media-preview">'+galleryPreview+'</div>');
+                    // texte du bouton
+                    $btnSelect.val('Modifier');
+
+                    // si suppression autorisée
+                    if ( $btnSelect.data('remove') == 'active') {
+
+                        // ajoute le btn
+                        $btnSelect.after('<input class="button pc-media-remove" data-cible="gallery" type="button" value="Supprimer"/>');
+                        // au clic sur le nouveau btn de suppression
+                        $container.find('.pc-media-remove').click(function() { pc_media_remove( $(this) ); });
+
+                    } // FIN if btn suppression
+
+                }
+
+            }); // FIN galleryUploader.on(select)
+
+            galleryUploader.open();
+
+
+        }); // FIN $(this).click()
+
+    }); // FIN $('.pc-gallery-select').each()
+
+} // FIN if $('.pc-gallery-select')
+
+
 /*----------  PDF upload  ----------*/
 
 if ( $('.pc-pdf-select').length > 0 ) {
-
-    /*----------  sélection  ----------*/  
-
-    var pdfUploader; // modale (objet)
 
     $('.pc-pdf-select').each(function() {
 
@@ -162,27 +242,14 @@ if ( $('.pc-pdf-select').length > 0 ) {
 
             /*----------  création de l'objet modale  ----------*/
 
-            var pdfUploader = new wp.media.view.MediaFrame.Select({
+            var pdfUploader = wp.media({
 
-                // titre de la modal
                 title: 'Insérer un pdf',
-                // caractéristiques
-                library: {
-                    // order : 'ASC', 'DESC'
-                    order: 'DESC',
-                    // orderBy : 'name', 'author', 'date', 'title', 'modified', 'uploadedTo', 'id', 'post__in', 'menuOrder'
-                    orderby: 'date',
-                    // type mime
-                    type: 'application/pdf'
-                },
-                button: {
-                    // texte du bouton de la modale
-                    text: 'Insérer un pdf'
-                },
-                // droit de sélectionner plusieurs images
+                library: { type: 'application/pdf' },
+                button: { text: 'Insérer un pdf' },
                 multiple: false 
 
-            }); // FIN new wp.media
+            }); // FIN wp.media
 
             
             /*----------  Au clic sur le bouton de validation de la modal  ----------*/
@@ -192,45 +259,37 @@ if ( $('.pc-pdf-select').length > 0 ) {
                 // datas de l'image sélectionnée
                 var pdfDatas = pdfUploader.state().get('selection').first().toJSON();
 
-                // si format valide
-                if ( pdfDatas.subtype === 'pdf' ) {
+                // mise à jour du champ caché
+                $hiddenField.val(pdfDatas.id);
 
-                    // mise à jour du champ caché
-                    $hiddenField.val(pdfDatas.id);
+                // si une preview existe déjà
+                if ( $container.find('.pc-pdf-preview').length > 0 ) {
 
-                    // si une preview existe déjà
-                    if ( $container.find('.pc-media-preview').length > 0 ) {
+                    // modification de l'attribut src
+                    $container.find('.pc-pdf-preview').attr('href', pdfDatas.url);
 
-                        // modification de l'attribut src
-                        $container.find('.pc-media-preview').attr('href', pdfDatas.url);
-
-                    // si pas de preview
-                    } else {
-
-                        // ajoute la preview
-                        $container.prepend('<a class="pc-media-preview" href="'+pdfDatas.url+'" target="_blank">Voir le fichier actuel</a>');
-
-                        // si suppression autorisée
-                        if ( $btnSelect.data('remove') == 'active') {
-
-                            // ajoute le btn
-                            $container.append('<input class="button pc-media-remove" type="button" value="Supprimer"/>');
-                            // au clic sur le nouveau btn de suppression
-                            $container.find('.pc-media-remove').click(function() { pc_media_remove( $(this) ); });
-
-                        } // FIN if btn suppression
-
-                    } // FIN if preview 
-
-                    // si erreur affichée précédemment
-                    $container.find('p').remove();
-
-                // si format non valide
+                // si pas de preview
                 } else {
 
-                    $container.append('<p style="color:red">Le format de fichier est invalide</p>');
+                    // ajoute la preview
+                    $container.prepend('<div class="pc-media-preview"><a class="pc-pdf-preview" href="'+pdfDatas.url+'" target="_blank">Voir le fichier actuel</a></div>');
+                    // texte du bouton
+                    $btnSelect.val('Modifier');
 
-                } // FIN if format
+                    // si suppression autorisée
+                    if ( $btnSelect.data('remove') == 'active') {
+
+                        // ajoute le btn
+                        $btnSelect.after('<input class="button pc-media-remove" type="button" value="Supprimer"/>');
+                        // au clic sur le nouveau btn de suppression
+                        $container.find('.pc-media-remove').click(function() { pc_media_remove( $(this) ); });
+
+                    } // FIN if btn suppression
+
+                } // FIN if preview 
+
+                // si erreur affichée précédemment
+                $container.find('p').remove();
 
             }); // FIN pdfUploader.on(select)
 

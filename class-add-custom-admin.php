@@ -177,7 +177,7 @@ class PC_Add_Admin_Page {
 		                'type'      => '',
 						'name'		=> '',
 		                'label'     => '',
-		                'help'      => '',
+		                'desc'      => '',
 		                'attr'      => '',
 		                'css'       => '',
 		                'options'   => array()
@@ -223,6 +223,10 @@ class PC_Add_Admin_Page {
 						$type = 'display_img';
 						break;
 
+					case 'gallery':
+						$type = 'display_gallery';
+						break;
+
 					case 'pdf':
 						$type = 'display_pdf';
 						break;
@@ -253,7 +257,7 @@ class PC_Add_Admin_Page {
     =            Rendu des champs            =
     ========================================*/
 
-    /*----------  help (commun à tous les champs)  ----------*/
+    /*----------  desc (commun à tous les champs)  ----------*/
 
     public function display_desc( $msg ) {
 
@@ -272,7 +276,7 @@ class PC_Add_Admin_Page {
 
 		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].'/>';
 
-		$this->display_desc( $datas['help'] );
+		$this->display_desc( $datas['desc'] );
 	    
 	}
     
@@ -287,7 +291,7 @@ class PC_Add_Admin_Page {
 
 		echo '<input type="checkbox" name="'.$datas['name'].'" id="'.$id.'" value="1"' .$checked. ' '.$datas['attr'].'/>';
 
-		$this->display_desc( $datas['help'] );		
+		$this->display_desc( $datas['desc'] );		
 	    
 	}
     
@@ -308,7 +312,7 @@ class PC_Add_Admin_Page {
 			$radioIndex++;
 		}
 
-		$this->display_desc( $datas['help'] );		
+		$this->display_desc( $datas['desc'] );		
 	    
 	}
     
@@ -330,7 +334,7 @@ class PC_Add_Admin_Page {
 
 	    echo $select;
 
-	    $this->display_desc( $datas['help'] );	
+	    $this->display_desc( $datas['desc'] );	
 	    
 	}
     
@@ -345,7 +349,7 @@ class PC_Add_Admin_Page {
 
 		echo '<textarea name="'.$datas['name'].'" id="'.$id.'" '.$datas['attr'].' style="'.$datas['css'].'" />'.$value.'</textarea>';
 
-		$this->display_desc( $datas['help'] );
+		$this->display_desc( $datas['desc'] );
 	    
 	}
     
@@ -360,7 +364,7 @@ class PC_Add_Admin_Page {
 
 		wp_editor( $value, $id, $datas['options'] );
 
-		$this->display_desc( $datas['help'] );
+		$this->display_desc( $datas['desc'] );
 	    
 	}
     
@@ -369,17 +373,19 @@ class PC_Add_Admin_Page {
     
     public function display_img( $datas ) {
 
-		$id 		= $datas['label_for']; 	// id du champ
-		$value 		= '';					// valeur en bdd
-		$dataRemove = '';					// signale l'activation du btn remove au javascript
-		$btnRemove 	= '';					// btn remove (html)
+		$id 		= $datas['label_for']; 		// id du champ
+		$value 		= '';						// valeur en bdd
+		$dataRemove = '';						// signale l'activation du btn remove au javascript
+		$btnRemove 	= '';						// btn remove (html)
+		$btnTxt		= 'Ajouter';				// texte du bouton qui ouvre la modal
 		
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) && '' != $datas['inBdd'][$id] ) {
-			$value = $datas['inBdd'][$id];
-			// affichage image
-			$img = wp_get_attachment_image_src($value,'medium');
-        	echo '<img class="pc-media-preview" src="'.$img[0].'" />';
+			$btnTxt = 'Modifier';
+			$value = $datas['inBdd'][$id];			
+			echo '<div class="pc-media-preview">';
+			echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($value,'thumbnail')[0].');"></div>';
+			echo '</div>';
 		}
 
 		// btn de suppression
@@ -391,10 +397,50 @@ class PC_Add_Admin_Page {
 		}
 
 		echo '<input type="hidden" name="'.$datas['name'].'" id="'.$id.'" class="pc-media-id" value="'.$value.'" />';
-		echo '<input class="button pc-img-select" type="button" value="Sélectionner une image" '.$dataRemove.' />';
+		echo '<input class="button pc-img-select" type="button" value="'.$btnTxt.'" '.$dataRemove.' />';
 		echo $btnRemove;
 
-		$this->display_desc( $datas['help'] );
+		$this->display_desc( $datas['desc'] );
+	    
+	}
+    
+    
+    /*----------  Gallerie  ----------*/
+    
+    public function display_gallery( $datas ) {
+
+		$id 		= $datas['label_for']; 		// id du champ
+		$value 		= '';						// valeur en bdd
+		$dataRemove = '';						// signale l'activation du btn remove au javascript
+		$btnRemove 	= '';						// btn remove (html)
+		$btnTxt		= 'Ajouter';				// texte du bouton qui ouvre la modal
+		
+		// si une valeur en bdd
+		if ( isset($datas['inBdd'][$id]) && '' != $datas['inBdd'][$id] ) {
+			$btnTxt = 'Modifier';
+			$value = $datas['inBdd'][$id];
+			$imgIds = explode(',', $value);
+			
+			echo '<div class="pc-media-preview">';
+			foreach ($imgIds as $imgId) {
+				echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($imgId,'thumbnail')[0].');"></div>';
+			}
+			echo '</div>';
+		}
+
+		// btn de suppression
+		if ( $datas['options']['btnremove'] == true ) {
+			$dataRemove		= 'data-remove="active"';
+			if ( isset($datas['inBdd'][$id]) && '' != $datas['inBdd'][$id] ) {
+				$btnRemove 	= '<input class="button pc-media-remove" type="button" value="Supprimer"/>';
+			}
+		}
+
+		echo '<input type="hidden" name="'.$datas['name'].'" id="'.$id.'" class="pc-media-id" value="'.$value.'" />';
+		echo '<input class="button pc-gallery-select" type="button" value="'.$btnTxt.'" '.$dataRemove.' />';
+		echo $btnRemove;
+
+		$this->display_desc( $datas['desc'] );
 	    
 	}
     
@@ -403,17 +449,19 @@ class PC_Add_Admin_Page {
     
     public function display_pdf( $datas ) {
 
-		$id 		= $datas['label_for']; 	// id du champ
-		$value 		= '';					// valeur en bdd
-		$dataRemove = '';					// signale l'activation du btn remove au javascript
-		$btnRemove 	= '';					// btn remove (html)
+		$id 		= $datas['label_for']; 		// id du champ
+		$value 		= '';						// valeur en bdd
+		$dataRemove = '';						// signale l'activation du btn remove au javascript
+		$btnRemove 	= '';						// btn remove (html)
+		$btnTxt		= 'Ajouter';				// texte du bouton qui ouvre la modal
 		
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) && '' != $datas['inBdd'][$id] ) {
+			$btnTxt = 'Modifier';
 			$value = $datas['inBdd'][$id];
 			// affichage image
 			$pdfUrl = wp_get_attachment_url($value);
-        	echo '<a class="pc-media-preview" href="'.$pdfUrl.'" target="_blank">Voir le fichier actuel</a>';
+        	echo '<div class="pc-media-preview"><a class="pc-pdf-preview" href="'.$pdfUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a></div>';
 		}
 
 		// btn de suppression
@@ -425,10 +473,10 @@ class PC_Add_Admin_Page {
 		}
 
 		echo '<input type="hidden" name="'.$datas['name'].'" id="'.$id.'" class="pc-media-id" value="'.$value.'" />';
-		echo '<input class="button pc-pdf-select" type="button" value="Sélectionner un pdf" '.$dataRemove.' />';
+		echo '<input class="button pc-pdf-select" type="button" value="'.$btnTxt.'" '.$dataRemove.' />';
 		echo $btnRemove;
 
-		$this->display_desc( $datas['help'] );
+		$this->display_desc( $datas['desc'] );
 	    
 	}
 

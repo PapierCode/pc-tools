@@ -184,17 +184,48 @@ class PC_Add_Metabox {
 					break;
 
 				case 'img':
+					$btnTxt = 'Ajouter';
 					// label
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
 					// si une valeur en bdd
 					if ( isset($savedValue) && '' != $savedValue ) {
-						// affichage image
-						$img = wp_get_attachment_image_src($savedValue,'thumbnail');
-			        	echo '<img class="pc-media-preview" src="'.$img[0].'" />';
+						$btnTxt = 'Modifier';
+						// affichage image		
+						echo '<div class="pc-media-preview">';
+						echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($savedValue,'thumbnail')[0].');"></div>';
+						echo '</div>';
 					}
 					// champs
 					echo '<input type="hidden" id="'.$field['id'].'" class="pc-media-id" name="'.$field['id'].'" value="'.$savedValue.'" />';
-					echo '<input class="button pc-img-select" type="button" value="Sélectionner une image" ';
+					echo '<input class="button pc-img-select" type="button" value="'.$btnTxt.'" ';
+					// si btn de suppression activé
+					if ( $field['options']['btnremove'] == true ) {
+						echo 'data-remove="active" />';
+						// affiche le btn si une image est déjà enregistrée
+						if ( isset($savedValue) && '' != $savedValue ) {
+							echo ' <input class="button pc-media-remove" type="button" value="Supprimer"/>';
+						}
+					} else { echo ' />'; }
+					break;
+
+				case 'gallery':
+					$btnTxt = 'Ajouter';
+					// label
+					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					// si une valeur en bdd
+					if ( isset($savedValue) && '' != $savedValue ) {
+						$btnTxt = 'Modifier';
+						// affichage images
+						$imgIds = explode(',', $savedValue);						
+						echo '<div class="pc-media-preview">';
+						foreach ($imgIds as $imgId) {
+							echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($imgId,'thumbnail')[0].');"></div>';
+						}
+						echo '</div>';
+					}
+					// champs
+					echo '<input type="hidden" id="'.$field['id'].'" class="pc-media-id" name="'.$field['id'].'" value="'.$savedValue.'" />';
+					echo '<input class="button pc-gallery-select" type="button" value="'.$btnTxt.'" ';
 					// si btn de suppression activé
 					if ( $field['options']['btnremove'] == true ) {
 						echo 'data-remove="active" />';

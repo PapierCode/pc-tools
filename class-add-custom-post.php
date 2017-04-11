@@ -13,6 +13,7 @@ class PC_Add_Custom_Post {
     public $postTypeSlug;
     public $postTypeArgs;
     public $postTypeLabels;
+    public $pcSettings;
 
 
     /*====================================
@@ -38,6 +39,9 @@ class PC_Add_Custom_Post {
         $this->postTypeArgs     = $args;
 
         $this->postTypeSlug     = $this->get_slug();
+
+        // PC réglages (cf. widget [PC] Custom WP)
+        $this->pcSettings       = get_option( 'pc-settings-option' );
          
 
         /*----------  Création  ----------*/
@@ -114,7 +118,7 @@ class PC_Add_Custom_Post {
 
         /*----------  Désactivation metabox identifiant  ----------*/
 
-        add_action( 'admin_menu', function() { remove_meta_box( 'slugdiv', $this->postType, 'normal' ); } ); 
+        if ( !isset($this->pcSettings['seo-rewrite-url']) ) { add_action( 'admin_menu', function() { remove_meta_box( 'slugdiv', $this->postType, 'normal' ); } ); } 
 
 
     } // FIN add_custom_post()
