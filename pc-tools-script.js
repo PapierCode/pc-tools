@@ -182,8 +182,8 @@ if ( $('.pc-gallery-select').length > 0 ) {
                 var imgIdsToSave = [],
                     galleryPreview = '';
                 for (var i = 0; i < galleryDatas.length; i++) {
-                    imgIdsToSave.push(galleryDatas[i]['id']);
-                    galleryPreview += '<div class="pc-media-preview-item" style="background-image:url('+galleryDatas[i]['url']+');"></div>';
+                    imgIdsToSave.push(galleryDatas[i].id);
+                    galleryPreview += '<div class="pc-media-preview-item" style="background-image:url('+galleryDatas[i].sizes.thumbnail.url+');"></div>';
                 }
                 $hiddenField.val(imgIdsToSave.join());
 
