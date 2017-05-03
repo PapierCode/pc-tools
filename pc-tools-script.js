@@ -2,9 +2,7 @@
 *
 * [PC] Tools : fonctions javascript pour l'admin WP
 *
-* * Images upload
-* * Gallery Upload
-* * Pdf upload
+* * Medias upload
 * * Date Picker
 * * Compteur
 *
@@ -13,9 +11,9 @@
 
 jQuery(document).ready(function($){
 
-/*====================================
-=            media upload            =
-====================================*/
+/*=====================================
+=            Medias upload            =
+=====================================*/
 
 /*----------  Communs  ----------*/
     
@@ -310,7 +308,7 @@ if ( $('.pc-pdf-select').length > 0 ) {
 } // FIN if $('.pc-pdf-select')
 
 
-/*=====  End of media upload  ======*/
+/*=====  End of Medias upload  ======*/
 
 /*===================================
 =            Date Picker            =
