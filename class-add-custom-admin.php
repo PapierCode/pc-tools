@@ -30,6 +30,7 @@ class PC_Add_Admin_Page {
     * * [string] 	$capability    	: droits d'accès, "editor" (defaut) ou "admin"
     * * [number] 	$position    	: position dans le menu
     * * [string] 	$icon    		: icône dans le menu
+    * * [fucntion] 	$sanitize  		: fonction de traitement des données
     *
     * cf. https://developer.wordpress.org/reference/functions/add_menu_page/
     * cf. https://developer.wordpress.org/reference/functions/add_submenu_page/
@@ -38,7 +39,7 @@ class PC_Add_Admin_Page {
     *
     */
     
-    public function __construct( $title, $parent, $menuLabel, $slug = '', $content, $capability = 'editor', $position = '99', $icon = 'dashicons-clipboard' ) {
+    public function __construct( $title, $parent, $menuLabel, $slug = '', $content, $capability = 'editor', $position = '99', $icon = 'dashicons-clipboard', $sanitize ='' ) {
 
     	/*----------  variables de la class  ----------*/
     	
@@ -47,6 +48,7 @@ class PC_Add_Admin_Page {
     	$this->content 		= $content;
     	$this->optionName 	= $slug.'-option';
     	$this->capability 	= $capability;
+    	$this->sanitize 	= $sanitize;
 	    
 
 	    /*----------  Insertion dans le menu  ----------*/
@@ -134,9 +136,9 @@ class PC_Add_Admin_Page {
     	
     	register_setting(
 	    	$this->slug.'-settings', 	// $option_group
-	    	$this->optionName			// $option_name
+	    	$this->optionName,			// $option_name
+	    	$this->sanitize				// $sanitize
 	    );
-
 
     	/*----------  autorisation de sauvegarder pour les éditeurs  ----------*/
     	
@@ -229,6 +231,11 @@ class PC_Add_Admin_Page {
 
 					case 'pdf':
 						$type = 'display_pdf';
+						break;
+
+					case 'file':
+						$type = 'display_input_file';
+						$datasFields['name'] = $datasFields['label_for'];
 						break;
 
 				} // FIN switch($datasFields['type'])
@@ -475,6 +482,21 @@ class PC_Add_Admin_Page {
 		echo '<input type="hidden" name="'.$datas['name'].'" id="'.$id.'" class="pc-media-id" value="'.$value.'" />';
 		echo '<input class="button pc-pdf-select" type="button" value="'.$btnTxt.'" '.$dataRemove.' />';
 		echo $btnRemove;
+
+		$this->display_desc( $datas['desc'] );
+	    
+	}
+    
+    
+    /*----------  Input text  ----------*/
+    
+    public function display_input_file( $datas ) {
+
+		$id = $datas['label_for'];
+		// si une valeur en bdd
+		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+
+		echo '<input type="file" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].'/>';
 
 		$this->display_desc( $datas['desc'] );
 	    
