@@ -488,7 +488,7 @@ class PC_Add_Admin_Page {
 	}
     
     
-    /*----------  Input text  ----------*/
+    /*----------  Input file  ----------*/
     
     public function display_input_file( $datas ) {
 
