@@ -22,7 +22,7 @@ class PC_Add_Metabox {
     * * [string]	$title 		: titre de la metabox
     * * [string]	$id 		: identifiant de la metabox
     * * [array]		$content 	: contenu de la metabox
-    * * [string]	$position 	: position dans l'interface, "normal" (defaut) ou "aside"
+    * * [string]	$position 	: position dans l'interface, "normal" (defaut) ou "side"
     * * [string]	$priority 	: priorité d'affichage, "high" (defaut) ou "low"
     *
     * cf. https://developer.wordpress.org/reference/functions/add_meta_box/
