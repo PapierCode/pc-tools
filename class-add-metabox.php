@@ -129,7 +129,6 @@ class PC_Add_Metabox {
 		            'css'		=> '',
 		            'options'	=> '',
 		            'clean'		=> true
-
 		        ),
 				// arguments passés lors de la création 
 				$field
@@ -285,7 +284,7 @@ class PC_Add_Metabox {
 				// valeur renvoyé par le form
 				$fieldTemp = $_POST[$id];
 				// nettoyage
-				if ( $field['clean'] ) {}
+				if ( $field['clean'] ) {
 					switch ($field['type']) {
 						case 'text':
 							$fieldTemp = sanitize_text_field( $fieldTemp );
