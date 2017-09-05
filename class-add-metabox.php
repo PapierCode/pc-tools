@@ -127,7 +127,8 @@ class PC_Add_Metabox {
 		            'id'    	=> '',
 		            'attr' 		=> '',
 		            'css'		=> '',
-		            'options'	=> ''
+		            'options'	=> '',
+		            'clean'		=> true
 
 		        ),
 				// arguments passés lors de la création 
@@ -284,13 +285,15 @@ class PC_Add_Metabox {
 				// valeur renvoyé par le form
 				$fieldTemp = $_POST[$id];
 				// nettoyage
-				switch ($field['type']) {
-					case 'text':
-						$fieldTemp = sanitize_text_field( $fieldTemp );
-						break;
-					case 'textarea':
-						$fieldTemp = sanitize_textarea_field( $fieldTemp );
-						break;
+				if ( $field['clean'] ) {}
+					switch ($field['type']) {
+						case 'text':
+							$fieldTemp = sanitize_text_field( $fieldTemp );
+							break;
+						case 'textarea':
+							$fieldTemp = sanitize_textarea_field( $fieldTemp );
+							break;
+					}
 				}
 				// valeur en bdd
 				$fieldSave = get_post_meta( $post_ID, $id, true );
