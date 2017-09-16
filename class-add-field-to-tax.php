@@ -148,6 +148,31 @@ class PC_add_field_to_tax {
 					wp_editor( $savedValue, $field['id'], $field['options'] );
 					break;
 
+				case 'img':
+					$btnTxt = 'Ajouter';
+					// label
+					echo '<label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					// si une valeur en bdd
+					if ( isset($savedValue) && '' != $savedValue ) {
+						$btnTxt = 'Modifier';
+						// affichage image		
+						echo '<div class="pc-media-preview">';
+						echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($savedValue,'thumbnail')[0].');"></div>';
+						echo '</div>';
+					}
+					// champs
+					echo '<input type="hidden" id="'.$field['id'].'" class="pc-media-id" name="'.$field['id'].'" value="'.$savedValue.'" />';
+					echo '<input class="button pc-img-select" type="button" value="'.$btnTxt.'" ';
+					// si btn de suppression activé
+					if ( $field['options']['btnremove'] == true ) {
+						echo 'data-remove="active" />';
+						// affiche le btn si une image est déjà enregistrée
+						if ( isset($savedValue) && '' != $savedValue ) {
+							echo ' <input class="button pc-media-remove" type="button" value="Supprimer"/>';
+						}
+					} else { echo ' />'; }
+					break;
+
 			} // FIN switch($field['type'])
 
 			if ( !empty($field['desc']) ) { echo '<p class="description">'.$field['desc'].'</p>'; }
