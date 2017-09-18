@@ -144,8 +144,32 @@ class PC_add_field_to_tax {
 					break;
 
 				case 'wysiwyg':
+					// configuration wysiwyg par défaut
+					$pcSettings = get_option( 'pc-settings-option' );
+					$buttonsDefault = array(
+			            'media_buttons'		=> true,
+					    'quicktags'    		=> true,
+					    'textarea_rows'		=> 6,
+					    'tinymce'      		=> array (
+					        'toolbar1'                  	=> $pcSettings['tinymce-toolbar1'],
+					        'toolbar2'                  	=> $pcSettings['tinymce-toolbar2'],
+					        'block_formats'             	=> $pcSettings['tinymce-block'],
+					        'visualblocks_default_state'	=> true,
+					        'paste_as_text'             	=> true,
+					        'media_alt_source'          	=> false,
+					        'media_poster'              	=> false
+					    )
+			        );
+			        // si une configuration est passé dans les arguments
+					if ( $field['options'] != '' ) {
+						// configuration wysiwyg = fusion défaut/nouvelle
+						$buttons = pc_array_multi_merge($buttonsDefault,$field['options']);
+					} else {
+						// configuration wysiwyg = defaut
+						$buttons = $buttonsDefault;
+					}
 					echo $field['label'].'</th><td>';
-					wp_editor( $savedValue, $field['id'], $field['options'] );
+					wp_editor( $savedValue, $field['id'], $buttons );
 					break;
 
 				case 'img':

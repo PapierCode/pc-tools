@@ -4,7 +4,7 @@
 Plugin Name: [PC] Tools
 Plugin URI: www.papier-code.fr
 Description: Boite à outils Papier Codé
-Version: 0.8.0
+Version: 0.8.1
 Author: Papier Codé
 */
 
@@ -125,6 +125,33 @@ function pc_date_admin_to_bdd($dateFn) {
 
 	// retourne ex : 2016-06-15
 	return $exploDate[2].'-'.$monthNum.'-'.$exploDate[0];
+
+}
+
+
+/*----------  Fusion de tableau multidimensionnel  ----------*/
+
+function pc_array_multi_merge( $default, $new ) {
+
+	// pour chaque entrée du nouveau tableau
+    foreach ($new as $key => $value) {
+        
+        // si c'est un tableau imbriqué
+        if ( is_array($new[$key]) ) {
+
+        	// fusion des entrées
+            $default[$key] = array_merge($default[$key],$new[$key]);
+
+        } else {
+
+        	// nouvelle entrée
+            $default[$key] = $new[$key];
+
+        }
+
+    }
+
+    return $default;
 
 }
 

@@ -369,7 +369,32 @@ class PC_Add_Admin_Page {
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) ) { $value = $datas['inBdd'][$id]; } else { $value = ''; }
 
-		wp_editor( $value, $id, $datas['options'] );
+		// configuration wysiwyg par défaut
+		$pcSettings = get_option( 'pc-settings-option' );
+		$buttonsDefault = array(
+            'media_buttons'		=> true,
+		    'quicktags'    		=> true,
+		    'textarea_rows'		=> 6,
+		    'tinymce'      		=> array (
+		        'toolbar1'                  	=> $pcSettings['tinymce-toolbar1'],
+		        'toolbar2'                  	=> $pcSettings['tinymce-toolbar2'],
+		        'block_formats'             	=> $pcSettings['tinymce-block'],
+		        'visualblocks_default_state'	=> true,
+		        'paste_as_text'             	=> true,
+		        'media_alt_source'          	=> false,
+		        'media_poster'              	=> false
+		    )
+        );
+        // si une configuration est passé dans les arguments
+		if ( $datas['options'] != '' ) {
+			// configuration wysiwyg = fusion défaut/nouvelle
+			$buttons = pc_array_multi_merge($buttonsDefault,$datas['options']);
+		} else {
+			// configuration wysiwyg = defaut
+			$buttons = $buttonsDefault;
+		}
+
+		wp_editor( $value, $id, $buttons );
 
 		$this->display_desc( $datas['desc'] );
 	    
