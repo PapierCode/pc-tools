@@ -30,7 +30,7 @@ class PC_Add_Admin_Page {
     * * [string] 	$capability    	: droits d'accès, "editor" (defaut) ou "admin"
     * * [number] 	$position    	: position dans le menu
     * * [string] 	$icon    		: icône dans le menu
-    * * [fucntion] 	$sanitize  		: fonction de traitement des données
+    * * [function] 	$sanitize  		: fonction de traitement des données
     *
     * cf. https://developer.wordpress.org/reference/functions/add_menu_page/
     * cf. https://developer.wordpress.org/reference/functions/add_submenu_page/
