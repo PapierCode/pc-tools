@@ -4,7 +4,7 @@
 Plugin Name: [PC] Tools
 Plugin URI: www.papier-code.fr
 Description: Boite à outils Papier Codé
-Version: 0.8.3
+Version: 0.8.4
 Author: Papier Codé
 */
 
@@ -31,6 +31,14 @@ include 'class-add-metabox.php';
 include 'class-add-field-to-tax.php';
 include 'class-add-custom-admin.php';
 include 'class-add-recaptcha.php';
+
+
+/*----------  Tests  ----------*/
+
+// include 'examples/ex_add-custom-post.php';
+// include 'examples/ex_add-metabox.php';
+// include 'examples/ex_add-field-to-tax.php';
+// include 'examples/ex_add-custom-admin.php';
 
 
 /*----------  JS & CSS  ----------*/
