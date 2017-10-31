@@ -92,7 +92,8 @@ class PC_add_field_to_tax {
 		            'id'    	=> '',
 		            'attr' 		=> '',
 		            'css'		=> '',
-		            'options'	=> ''
+		            'options'	=> '',
+		            'required'	=> false
 
 		        ),
 				// arguments passés lors de la création 
@@ -103,6 +104,13 @@ class PC_add_field_to_tax {
 			$field['id'] = $content['prefix'].'-'.$field['id'];
 			// valeur en bdd
 			$savedValue = get_term_meta( $term->term_id, $field['id'], true );
+			// champ obligatoire
+			if ( $field['required'] ) {
+				$required = 'required';
+				$field['label'] = $field['label'].'<span class="label-required"> *</span>';
+			} else {
+				$required = '';
+			}
 
 			echo '<tr class="form-field term-group-wrap"><th scope="row">';
 
@@ -110,7 +118,7 @@ class PC_add_field_to_tax {
 
 				case 'text':
 					echo '<label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="text" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$savedValue.'" />';
+					echo '<input type="text" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'  />';
 					break;
 
 				case 'checkbox':
@@ -123,7 +131,7 @@ class PC_add_field_to_tax {
 					$radioIndex = 0;
 					foreach ($field['options'] as $radioKey => $radioValue) {
 						if ( $radioIndex > 0 ) { echo '<br/>'; }
-						echo '<input type="radio" id="'.$field['id'].'-'.$radioIndex.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$radioValue.'" '.checked($radioValue, $savedValue, false).'/>';
+						echo '<input type="radio" id="'.$field['id'].'-'.$radioIndex.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$radioValue.'" '.checked($radioValue, $savedValue, false).' '.$required.' />';
 						echo '<label for="'.$field['id'].'-'.$radioIndex.'">'.$radioKey.'</label>';
 						$radioIndex++;
 					}
@@ -131,7 +139,7 @@ class PC_add_field_to_tax {
 
 				case 'select':
 					echo '<label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<select id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'"><option value=""></option>';
+					echo '<select id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" '.$required.' ><option value=""></option>';
 					foreach ($field['options'] as $optionsKey => $optionValue) {
 						echo '<option value="'.$optionValue.'" '.selected($savedValue,$optionValue,false).'>'.$optionsKey.'</option>';
 					}
@@ -140,7 +148,7 @@ class PC_add_field_to_tax {
 
 				case 'textarea':
 					echo '<label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<textarea name="'.$field['id'].'" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'">'.get_term_meta( $term->term_id, $field['id'], true ).'</textarea>';
+					echo '<textarea name="'.$field['id'].'" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" '.$required.' >'.get_term_meta( $term->term_id, $field['id'], true ).'</textarea>';
 					break;
 
 				case 'wysiwyg':

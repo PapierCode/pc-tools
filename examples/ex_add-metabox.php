@@ -28,7 +28,8 @@ $customMetaboxContent = array(
             'desc'      => 'Aide ou description du champ',
             'attr'      => 'class="" data-attr=""',
             'css'       => 'width:100%;',
-            'clean'     => true
+            'clean'     => true,
+            'required'  => false
         ),
         array(
             'type'      => 'textarea',                      // obligatoire
@@ -37,7 +38,8 @@ $customMetaboxContent = array(
             'desc'      => 'Aide ou description du champ',
             'attr'      => 'class="" data-attr=""',
             'css'       => 'width:100%;',
-            'clean'     => true
+            'clean'     => true,
+            'required'  => false
         ),
         array(
             'type'      => 'checkbox',                      // obligatoire
@@ -53,6 +55,7 @@ $customMetaboxContent = array(
             'desc'      => 'Aide ou description du champ',
             'attr'      => 'class="" data-attr=""',
             'css'       => '',
+            'required'  => false,
             'options'   => array(                           // obligatoire
                 'Valeur A' => 'a',
                 'Valeur B' => 'b',
@@ -66,6 +69,7 @@ $customMetaboxContent = array(
             'desc'      => 'Aide ou description du champ',
             'attr'      => 'class="" data-attr=""',
             'css'       => '',
+            'required'  => false,
             'options'   => array(                           // obligatoire
                 'Valeur A' => 'a',
                 'Valeur B' => 'b',
@@ -94,7 +98,8 @@ $customMetaboxContent = array(
             'type'      => 'date',                          // obligatoire
             'id'        => 'date',                          // obligatoire
             'label'     => 'Custom date',                   // obligatoire
-            'desc'      => 'Aide ou description du champ'
+            'desc'      => 'Aide ou description du champ',
+            'required'  => false
         ),
         array(
             'type'      => 'wysiwyg',                       // obligatoire

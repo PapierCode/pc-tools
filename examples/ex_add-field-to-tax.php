@@ -28,7 +28,8 @@ $fieldToTaxContent = array(
             'label'     => 'Custom input txt',              // obligatoire
             'desc'      => 'Aide ou description du champ',
             'attr'      => 'class="" data-attr=""',
-            'css'       => 'width:100%;'
+            'css'       => 'width:100%;',
+            'required'  => false
         ),
         array(
             'type'      => 'textarea',                      // obligatoire
@@ -36,7 +37,8 @@ $fieldToTaxContent = array(
             'label'     => 'Custom textarea',               // obligatoire
             'desc'      => 'Aide ou description du champ',
             'attr'      => 'class="" data-attr=""',
-            'css'       => 'width:100%;'
+            'css'       => 'width:100%;',
+            'required'  => false
         ),
         array(
             'type'      => 'checkbox',                      // obligatoire
@@ -53,6 +55,7 @@ $fieldToTaxContent = array(
             'desc'      => 'Aide ou description du champ',
             'attr'      => 'class="" data-attr=""',
             'css'       => '',
+            'required'  => true,
             'options'   => array(                           // obligatoire
                 'Valeur A' => 'a',
                 'Valeur B' => 'b',
@@ -66,6 +69,7 @@ $fieldToTaxContent = array(
             'desc'      => 'Aide ou description du champ',
             'attr'      => 'class="" data-attr=""',
             'css'       => '',
+            'required'  => false,
             'options'   => array(                           // obligatoire
                 'Valeur A' => 'a',
                 'Valeur B' => 'b',

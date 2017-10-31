@@ -182,6 +182,7 @@ class PC_Add_Admin_Page {
 		                'desc'      => '',
 		                'attr'      => '',
 		                'css'       => '',
+		                'required'	=> false,
 		                'options'   => array()
 		            ),
 		            // arguments passés lors de la création
@@ -192,6 +193,8 @@ class PC_Add_Admin_Page {
 				$datasFields['label_for'] = $sectionDatas['prefix'].'-'.$datasFields['label_for'];
 				// construction du name
 				$datasFields['name'] = $this->optionName.'['.$datasFields['label_for'].']';
+				// champ obligatoire
+				if ( $datasFields['required'] ) { $datasFields['label'] = $datasFields['label'].'<span class="label-required"> *</span>'; }
 
 				// type
 				switch ( $datasFields['type'] ) {
@@ -280,8 +283,10 @@ class PC_Add_Admin_Page {
 		$id = $datas['label_for'];
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+		// champ obligatoire
+		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
-		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].'/>';
+		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].' '.$required.' />';
 
 		$this->display_desc( $datas['desc'] );
 	    
@@ -310,11 +315,13 @@ class PC_Add_Admin_Page {
 		$id = $datas['label_for'];
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+		// champ obligatoire
+		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 	
 		$radioIndex = 0; // <br/> à partir de 1
 		foreach ($datas['options'] as $radioKey => $radioValue) {
 			if ( $radioIndex > 0 ) { echo '<br/>'; }
-			echo '<input type="radio" id="'.$id.'-'.$radioIndex.'" '.$datas['attr'].' name="'.$datas['name'].'" value="'.$radioValue.'" '.checked($radioValue, $value, false).'/>';
+			echo '<input type="radio" id="'.$id.'-'.$radioIndex.'" '.$datas['attr'].' name="'.$datas['name'].'" value="'.$radioValue.'" '.checked($radioValue, $value, false).' '.$required.' />';
 			echo '<label for="'.$id.'-'.$radioIndex.'">'.$radioKey.'</label>';
 			$radioIndex++;
 		}
@@ -331,8 +338,10 @@ class PC_Add_Admin_Page {
 		$id = $datas['label_for'];
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) ) { $selected = esc_attr( $datas['inBdd'][$id] ); } else { $selected = ''; }
+		// champ obligatoire
+		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
-		$select = '<select id="'.$id.'" name="'.$datas['name'].'" '.$datas['attr'].'>';
+		$select = '<select id="'.$id.'" name="'.$datas['name'].'" '.$datas['attr'].' '.$required.' >';
 	    $select .= '<option value=""></option>';
 	    foreach($datas['options'] as $cle => $value) {
 	        $select .= '<option value="'.$value.'"' . selected( $selected, $value, false) . '>'.$cle.'</option>';
@@ -353,8 +362,10 @@ class PC_Add_Admin_Page {
 		$id = $datas['label_for'];
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+		// champ obligatoire
+		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
-		echo '<textarea name="'.$datas['name'].'" id="'.$id.'" '.$datas['attr'].' style="'.$datas['css'].'" />'.$value.'</textarea>';
+		echo '<textarea name="'.$datas['name'].'" id="'.$id.'" '.$datas['attr'].' style="'.$datas['css'].'" '.$required.' />'.$value.'</textarea>';
 
 		$this->display_desc( $datas['desc'] );
 	    
@@ -520,8 +531,10 @@ class PC_Add_Admin_Page {
 		$id = $datas['label_for'];
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+		// champ obligatoire
+		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
-		echo '<input type="file" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].'/>';
+		echo '<input type="file" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].' '.$required.' />';
 
 		$this->display_desc( $datas['desc'] );
 	    

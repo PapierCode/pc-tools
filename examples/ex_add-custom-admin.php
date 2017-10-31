@@ -27,10 +27,11 @@ $customAdminContent = array(
             array(
                 'type'      => 'text',                          // obligatoire
                 'label_for' => 'input-txt',                     // obligatoire
-                'label'     => 'Custom input txt',              // obligatoire
+                'label'     => 'Custom input txts',              // obligatoire
                 'desc'      => 'Aide ou description du champ',
                 'attr'      => 'class="" data-attr=""',
-                'css'       => 'width:100%;'
+                'css'       => 'width:100%;',
+                'required'  => false
             ),
             array(
                 'type'      => 'checkbox',                      // obligatoire
@@ -45,6 +46,7 @@ $customAdminContent = array(
                 'label'     => 'Custom radio',                  // obligatoire
                 'desc'      => 'Aide ou description du champ',
                 'attr'      => 'class="" data-attr=""',
+                'required'  => false,
                 'options'   => array(                           // obligatoire
                     'Valeur A' => 'a',
                     'Valeur B' => 'b',
@@ -58,6 +60,7 @@ $customAdminContent = array(
                 'desc'      => 'Aide ou description du champ',
                 'attr'      => 'class="" data-attr=""',
                 'css'       => '',
+                'required'  => false,
                 'options'   => array(                           // obligatoire
                     'Valeur A' => 'a',
                     'Valeur B' => 'b',

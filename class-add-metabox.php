@@ -125,6 +125,7 @@ class PC_Add_Metabox {
 		            'label' 	=> '',
 		            'desc'  	=> '',
 		            'id'    	=> '',
+		            'required'	=> false,
 		            'attr' 		=> '',
 		            'css'		=> '',
 		            'options'	=> '',
@@ -138,6 +139,13 @@ class PC_Add_Metabox {
 			$field['id'] = $datas['args']['prefix'].'-'.$field['id'];
 			// valeurs en bdd
 			$savedValue = get_post_meta( $post->ID, $field['id'], true );
+			// champ obligatoire
+			if ( $field['required'] ) {
+				$required = 'required';
+				$field['label'] = $field['label'].'<span class="label-required"> *</span>';
+			} else {
+				$required = '';
+			}
 
 			echo '<tr>';
 
@@ -145,7 +153,7 @@ class PC_Add_Metabox {
 
 				case 'text':
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="text" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$savedValue.'" />';
+					echo '<input type="text" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'  />';
 					break;
 
 				case 'checkbox':
@@ -158,7 +166,7 @@ class PC_Add_Metabox {
 					$radioIndex = 0;
 					foreach ($field['options'] as $radioKey => $radioValue) {
 						if ( $radioIndex > 0 ) { echo '<br/>'; }
-						echo '<input type="radio" id="'.$field['id'].'-'.$radioIndex.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$radioValue.'" '.checked($radioValue, $savedValue, false).'/>';
+						echo '<input type="radio" id="'.$field['id'].'-'.$radioIndex.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$radioValue.'" '.checked($radioValue, $savedValue, false).' '.$required.' />';
 						echo '<label for="'.$field['id'].'-'.$radioIndex.'">'.$radioKey.'</label>';
 						$radioIndex++;
 					}
@@ -166,12 +174,12 @@ class PC_Add_Metabox {
 
 				case 'textarea':
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<textarea id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'">'.$savedValue.'</textarea>';
+					echo '<textarea id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" '.$required.' >'.$savedValue.'</textarea>';
 					break;
 
 				case 'select':
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<select id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'"><option value=""></option>';
+					echo '<select id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" '.$required.' ><option value=""></option>';
 					foreach ($field['options'] as $optionsKey => $optionValue) {
 						echo '<option value="'.$optionValue.'" '.selected($savedValue,$optionValue,false).'>'.$optionsKey.'</option>';
 					}
@@ -220,7 +228,7 @@ class PC_Add_Metabox {
 						echo '</div>';
 					}
 					// champs
-					echo '<input type="hidden" id="'.$field['id'].'" class="pc-media-id" name="'.$field['id'].'" value="'.$savedValue.'" />';
+					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id" name="'.$field['id'].'" value="'.$savedValue.'"/>';
 					echo '<input class="button pc-img-select" type="button" value="'.$btnTxt.'" ';
 					// si btn de suppression activé
 					if ( $field['options']['btnremove'] == true ) {
@@ -272,7 +280,7 @@ class PC_Add_Metabox {
 					}
 
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="text" id="'.$field['id'].'" '.$dateAttr.' style="'.$field['css'].'" name="'.$field['id'].'" value="'.pc_date_bdd_to_admin($savedValue).'" />';
+					echo '<input type="text" id="'.$field['id'].'" '.$dateAttr.' style="'.$field['css'].'" name="'.$field['id'].'" value="'.pc_date_bdd_to_admin($savedValue).'"  '.$required.' />';
 					break;
 
 			} // FIN switch($field['type'])
