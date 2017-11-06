@@ -228,7 +228,7 @@ class PC_Add_Metabox {
 						echo '</div>';
 					}
 					// champs
-					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id" name="'.$field['id'].'" value="'.$savedValue.'"/>';
+					echo '<input type="hidden" id="'.$field['id'].'" class="pc-media-id" name="'.$field['id'].'" value="'.$savedValue.'"/>';
 					echo '<input class="button pc-img-select" type="button" value="'.$btnTxt.'" ';
 					// si btn de suppression activé
 					if ( $field['options']['btnremove'] == true ) {
