@@ -283,6 +283,12 @@ class PC_Add_Metabox {
 					echo '<input type="text" id="'.$field['id'].'" '.$dateAttr.' style="'.$field['css'].'" name="'.$field['id'].'" value="'.pc_date_bdd_to_admin($savedValue).'"  '.$required.' />';
 					break;
 
+				case 'url':
+					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td><div style="display:flex;">';
+					echo '<div style="flex-grow:1;margin-right:10px;"><input type="url" id="'.$field['id'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.' style="width:100%" /></div><div><button type="button" class="button pc-link-select" data-cible="'.$field['id'].'">Sélectionner</button></div>';
+					echo '</div>';
+					break;
+
 			} // FIN switch($field['type'])
 
 			// description du champ
@@ -319,6 +325,9 @@ class PC_Add_Metabox {
 				if ( $field['clean'] ) {
 					switch ($field['type']) {
 						case 'text':
+							$fieldTemp = sanitize_text_field( $fieldTemp );
+							break;
+						case 'url':
 							$fieldTemp = sanitize_text_field( $fieldTemp );
 							break;
 						case 'textarea':
