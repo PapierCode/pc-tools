@@ -221,6 +221,7 @@ class PC_Add_Admin_Page {
 
 					case 'wysiwyg':
 						$type = 'display_wysiwyg';
+						// paramètre pour wp_editor
 						$datasFields['options']['textarea_name'] = $datasFields['name'];
 						break;
 
@@ -238,6 +239,7 @@ class PC_Add_Admin_Page {
 
 					case 'file':
 						$type = 'display_input_file';
+						// attribut name simplifié
 						$datasFields['name'] = $datasFields['label_for'];
 						break;
 
@@ -523,7 +525,7 @@ class PC_Add_Admin_Page {
 		if ( isset($datas['inBdd'][$id]) && '' != $datas['inBdd'][$id] ) {
 			$btnTxt = 'Modifier';
 			$value = $datas['inBdd'][$id];
-			// affichage image
+			// affichage lien pdf
 			$pdfUrl = wp_get_attachment_url($value);
         	echo '<div class="pc-media-preview"><a class="pc-pdf-preview" href="'.$pdfUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a></div>';
 		}

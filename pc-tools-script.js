@@ -261,7 +261,7 @@ $body.on( 'click', '.pc-pdf-select', function() {
         } else {
 
             // ajoute la preview
-            $container.prepend('<div class="pc-media-preview"><a class="pc-pdf-preview" href="'+pdfDatas.url+'" target="_blank">Voir le fichier actuel</a></div>');
+            $container.prepend('<div class="pc-media-preview"><a class="pc-pdf-preview" href="'+pdfDatas.url+'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a></div>');
             // texte du bouton
             $btnSelect.val('Modifier');
 
