@@ -94,37 +94,6 @@ class PC_Add_Admin_Page {
 	    add_action( 'admin_init', array( $this, 'add_admin_fields') );
 
 
-    	/*----------  Scripts & styles supplémentaires ----------*/
-    	
-    	$setBreak = false;
-
-    	foreach ($content as $set ) {
-    		
-    		foreach ($set['fields'] as $field ) {
-
-	    		// champ de type date
-	    		if ( $field['type'] == 'date' ) {
-
-		    		add_action( 'admin_enqueue_scripts', function () {
-
-		    			// chargement de jQuery DatePicker
-			    		wp_enqueue_script( 'jquery-ui-datepicker' );
-			    		wp_enqueue_style( 'admin-datepicker-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
-
-					});
-
-					break;
-					$setBreak = true;
-
-				} // FIN if type=date
-
-			} //foreach($set['fields'])
-
-			if ( $setBreak == true ) { break; }
-
-    	} // FIN foreach($content[])
-
-
 	} // FIN __construct()
 
 
@@ -276,10 +245,17 @@ class PC_Add_Admin_Page {
 
 					case 'url':
 						$type = 'display_input_url';
+						// chargement des scripts de l'éditeur	
+						wp_enqueue_editor();
 						break;
 
 					case 'date':
 						$type = 'display_input_date';
+						// chargement de jQuery DatePicker	
+						add_action( 'admin_enqueue_scripts', function () {
+				    		wp_enqueue_script( 'jquery-ui-datepicker' );
+				    		wp_enqueue_style( 'admin-datepicker-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
+						});
 						break;
 
 				} // FIN switch($datasFields['type'])

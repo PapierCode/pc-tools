@@ -87,9 +87,15 @@ class PC_Add_Metabox {
 
 				});
 
-				break;
-
 			} // FIN if type=date
+
+    		// champ de type url
+    		if ( $field['type'] == 'url' ) {
+
+    			// chargement des scripts de l'éditeur
+	    		wp_enqueue_editor();
+
+			} // FIN if type=url
 
     	} // FIN foreach($content[fields])
 
