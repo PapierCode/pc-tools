@@ -120,7 +120,7 @@ class PC_Add_Admin_Page {
 
 			} //foreach($set['fields'])
 
-			if ( isset($setBreak) ) { break; }
+			if ( $setBreak == true ) { break; }
 
     	} // FIN foreach($content[])
 
