@@ -4,7 +4,7 @@
 Plugin Name: [PC] Tools
 Plugin URI: www.papier-code.fr
 Description: Boite à outils Papier Codé
-Version: 0.11.4
+Version: 0.12.0
 Author: Papier Codé
 */
 
@@ -152,6 +152,18 @@ function pc_array_multi_merge( $default, $new ) {
     }
 
     return $default;
+
+}
+
+
+/*----------  Téléphone  ----------*/
+
+function pc_phone($tel) {
+
+	$tel = str_replace( ' ', '', $tel );
+	$tel = '+33'.substr( $tel, 1, strlen($tel) );
+
+	return $tel;
 
 }
 
