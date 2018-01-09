@@ -4,12 +4,12 @@
 Plugin Name: [PC] Tools
 Plugin URI: www.papier-code.fr
 Description: Boite à outils Papier Codé
-Version: 0.12.0
+Version: 0.12.1
 Author: Papier Codé
 */
 
 /**
-* 
+*
 * * Includes
 * * Textes
 * * Traitements
@@ -51,7 +51,7 @@ add_action( 'admin_enqueue_scripts', function () {
 
 /*----------  Limite du nombre de mots  ----------*/
 
-function pc_words_limit($txt, $limit) {  
+function pc_words_limit($txt, $limit) {
 
     $stringLength = mb_strlen($txt,'utf-8');
 
@@ -135,7 +135,7 @@ function pc_array_multi_merge( $default, $new ) {
 
 	// pour chaque entrée du nouveau tableau
     foreach ($new as $key => $value) {
-        
+
         // si c'est un tableau imbriqué
         if ( is_array($new[$key]) ) {
 
@@ -193,7 +193,7 @@ function pc_var($var, $margin = false) {
 /*----------  pager  ----------*/
 
 function pc_post_pager($prevTxt = '<span>Page </span><span>précédente</span>', $nextTxt = '<span>Page </span><span>suivante</span>') {
-   
+
    	// globale WP
    	global $wp_query;
 
@@ -217,7 +217,7 @@ function pc_post_pager($prevTxt = '<span>Page </span><span>précédente</span>',
     // classes pour les liens
     $pagerOldClass = array('page-numbers', 'prev', 'current', 'dots', 'next');
     $pagerNewClass = array('pager-link', 'pager-link-prev', 'is-active', 'pager-dots', 'pager-link-next');
-	
+
 	// affichage
     if ( count($pagesList) > 0 ) {
 
@@ -240,7 +240,7 @@ function pc_post_pager($prevTxt = '<span>Page </span><span>précédente</span>',
 // filtres pour changer les classes des liens
 add_filter('next_post_link', 'post_link_attributes');
 add_filter('previous_post_link', 'post_link_attributes');
- 
+
 	function post_link_attributes($datas) {
 	    $class = 'class="the-class"';
 	    return str_replace('<a href=', '<a '.$class.' href=', $datas);
@@ -274,7 +274,7 @@ function pc_post_navigation($prevTxt = '<span>Article </span>Précédent', $next
 		$pagination 	.= '<li class="pager-item">'.$nextLink.'</li>';
 
 	}
-	
+
 	$pagination .= '</ul>';
 	echo $pagination;
 
@@ -293,7 +293,7 @@ function pc_svg( $index, $color = false, $hidden = true ) {
 	$svg = $sprite[$index];
 
 	// no print
-	$svg = str_replace('<svg', '<svg class="no-print"', $svg); 
+	$svg = str_replace('<svg', '<svg class="no-print"', $svg);
 
 	// couleur
 	if ( $color ) {	$svg = str_replace('fill="#fff"', 'fill="'.$color.'"', $svg); }

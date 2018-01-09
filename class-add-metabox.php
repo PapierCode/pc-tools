@@ -28,87 +28,121 @@ class PC_Add_Metabox {
     * cf. https://developer.wordpress.org/reference/functions/add_meta_box/
     *
     */
-    
-    public function __construct( $posts, $title, $id, $content, $position = 'normal', $priority = 'high' ) {
 
-	    /*----------  Variables de la class  ----------*/
-	    
-	    $this->id = $id;
+   public function __construct( $posts, $title, $id, $content, $position = 'normal', $priority = 'high' ) {
 
-	    // fusion du contenu avec des valeurs vides
-	    // évite une erreur en cas d'omission
-	    $content = array_merge(
+
+		/*----------  Vérifcation des données  ----------*/
+
+		// pour les valeurs relatives à définition de la metabox
+	   // fusion du contenu avec des valeurs vides
+	   // évite une erreur en cas d'omission
+	   $content = array_merge(
 	    	// défaut
 	    	array(
 	    		'desc' 		=> '',
 	    		'prefix' 	=> '',
 	    		'fields' 	=> array()
 	    	),
-	    	// arguments passés lors de la création 
+	    	// arguments passés lors de la création
 	    	$content
-	    );
-	    $this->content = $content;
+	   );
+
+		// pour les valeurs relatives à chaque champ défini
+    	foreach ($content['fields'] as $key => $field ) {
+
+			// fusion du propriétés du champ avec des valeurs vides
+	    	// évite une erreur en cas d'omission
+			$content['fields'][$key] = array_merge(
+				// defaut
+				array(
+		            'type'  		=> '',
+		            'label' 		=> '',
+		            'desc'  		=> '',
+		            'id'    		=> '',
+		            'required'	=> false,
+		            'attr' 		=> '',
+		            'css'			=> '',
+		            'options'	=> '',
+		            'clean'		=> true
+		      ),
+				// arguments passés lors de la création
+				$content['fields'][$key]
+			);
+
+    	} // FIN foreach($content[fields])
+
+
+	   /*----------  Variables de la class  ----------*/
+
+	   $this->id = $id;
+	   $this->content = $content;
 
 
 		/*----------  Création  ----------*/
 
-        add_action( 'admin_init', function() use( $posts, $title, $id, $content, $position, $priority ) {
+		add_action( 'admin_init', function() use( $posts, $title, $id, $content, $position, $priority ) {
 
-        	add_meta_box(	        		
-	            $id,									// $id
-	            $title,									// $title
-	            array( $this, 'add_metabox_fields' ),	// $callback
-	            $posts,									// $screen
-	            $position,								// $position
-	            $priority,								// $priority
-	            $content 								// $callback_args
-	        );
+			add_meta_box(
+		      $id,										// $id
+		      $title,									// $title
+		      array( $this, 'add_metabox_fields' ),	// $callback
+		      $posts,									// $screen
+		      $position,								// $position
+		      $priority,								// $priority
+		      $content 								// $callback_args
+		  	);
 
-        } );
+		} );
 
 
-	    /*----------  Sauvegarde  ----------*/
-	    
+	   /*----------  Sauvegarde  ----------*/
+
     	add_action( 'save_post', array( $this, 'save_metabox_fields' ) );
 
 
-    	/*----------  Scripts & styles supplémentaires ----------*/
-    	
-    	foreach ($content['fields'] as $field ) {
+		/*----------  Scripts & styles supplémentaires  ----------*/
 
-    		// champ de type date
-    		if ( $field['type'] == 'date' ) {
+		// pour chaque champ défini
+		foreach ($content['fields'] as  $field ) {
 
-	    		add_action( 'admin_enqueue_scripts', function () {
+			// Scripts & styles supplémentaires : type date
+			if ( $field['type'] == 'date' ) {
 
-	    			// chargement de jQuery DatePicker
-		    		wp_enqueue_script( 'jquery-ui-datepicker' );
-		    		wp_enqueue_style( 'admin-datepicker-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
+				add_action( 'admin_enqueue_scripts', function () {
+
+					// chargement de jQuery DatePicker
+					wp_enqueue_script( 'jquery-ui-datepicker' );
+					wp_enqueue_style( 'admin-datepicker-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
 
 				});
 
 			} // FIN if type=date
 
-    		// champ de type url
-    		if ( $field['type'] == 'url' ) {
+			// Scripts & styles supplémentaires : type url
+			if ( $field['type'] == 'url' ) {
 
-    			// chargement des scripts de l'éditeur
-	    		wp_enqueue_editor();
+				add_action( 'admin_enqueue_scripts', function () {
+
+					// chargement des scripts de l'éditeur
+					wp_enqueue_editor();
+
+				});
 
 			} // FIN if type=url
 
-    	} // FIN foreach($content[fields])
+		} // FIN foreach($content[fields])
 
 
 	} // FIN __construct()
 
 
-    /*=====  FIN Constructeur  ======*/
+   /*=====  FIN Constructeur  ======*/
 
 	/*==============================
 	=            Champs            =
 	==============================*/
-	
+
 	public function add_metabox_fields( $post, $datas ) {
 
 		// description
@@ -121,25 +155,6 @@ class PC_Add_Metabox {
 
 		// champs
 		foreach ( $datas['args']['fields'] as $field ) {
-
-			// fusion du propriétés du champ avec des valeurs vides
-	    	// évite une erreur en cas d'omission
-			$field = array_merge(
-				// defaut
-				array(
-		            'type'  	=> '',
-		            'label' 	=> '',
-		            'desc'  	=> '',
-		            'id'    	=> '',
-		            'required'	=> false,
-		            'attr' 		=> '',
-		            'css'		=> '',
-		            'options'	=> '',
-		            'clean'		=> true
-		        ),
-				// arguments passés lors de la création 
-				$field
-			);
 
 			// id prefixé
 			$field['id'] = $datas['args']['prefix'].'-'.$field['id'];
@@ -228,7 +243,7 @@ class PC_Add_Metabox {
 					// si une valeur en bdd
 					if ( isset($savedValue) && '' != $savedValue ) {
 						$btnTxt = 'Modifier';
-						// affichage image		
+						// affichage image
 						echo '<div class="pc-media-preview">';
 						echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($savedValue,'thumbnail')[0].');"></div>';
 						echo '</div>';
@@ -252,7 +267,7 @@ class PC_Add_Metabox {
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
 					// si une valeur en bdd
 					if ( isset($savedValue) && '' != $savedValue ) {
-						$btnTxt = 'Modifier';	
+						$btnTxt = 'Modifier';
 						// affichage lien pdf
 						$pdfUrl = wp_get_attachment_url($savedValue);
 			        	echo '<div class="pc-media-preview"><a class="pc-pdf-preview" href="'.$pdfUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a></div>';
@@ -278,7 +293,7 @@ class PC_Add_Metabox {
 					if ( isset($savedValue) && '' != $savedValue ) {
 						$btnTxt = 'Modifier';
 						// affichage images
-						$imgIds = explode(',', $savedValue);						
+						$imgIds = explode(',', $savedValue);
 						echo '<div class="pc-media-preview">';
 						foreach ($imgIds as $imgId) {
 							echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($imgId,'thumbnail')[0].');"></div>';
@@ -338,7 +353,7 @@ class PC_Add_Metabox {
 	/*==================================
 	=            Sauvegarde            =
 	==================================*/
-	
+
 	public function save_metabox_fields( $post_ID ) {
 
 		$content = $this->content; 	// pour la liste des champs
@@ -347,23 +362,22 @@ class PC_Add_Metabox {
     	if ( isset($_POST[$this->id.'-'.'nonce']) && wp_verify_nonce( $_POST[$this->id.'-'.'nonce'], basename( __FILE__ ) ) ) {
 
 			foreach ($content['fields'] as $field) {
+
 				// id préfixé
 				$id = $content['prefix'].'-'.$field['id'];
 				// valeur renvoyé par le form
 				$fieldTemp = $_POST[$id];
 				// nettoyage
-				if ( $field['clean'] ) {
-					switch ($field['type']) {
-						case 'text':
-							$fieldTemp = sanitize_text_field( $fieldTemp );
-							break;
-						case 'url':
-							$fieldTemp = sanitize_text_field( $fieldTemp );
-							break;
-						case 'textarea':
-							$fieldTemp = sanitize_textarea_field( $fieldTemp );
-							break;
-					}
+				switch ($field['type']) {
+					case 'text':
+						if ( $field['clean'] ) { $fieldTemp = sanitize_text_field( $fieldTemp ); }
+						break;
+					case 'url':
+						if ( $field['clean'] ) { $fieldTemp = sanitize_text_field( $fieldTemp ); }
+						break;
+					case 'textarea':
+						if ( $field['clean'] ) { $fieldTemp = sanitize_textarea_field( $fieldTemp ); }
+						break;
 				}
 				// valeur en bdd
 				$fieldSave = get_post_meta( $post_ID, $id, true );
@@ -390,7 +404,7 @@ class PC_Add_Metabox {
 
 	} // FIN save_metabox_fields()
 
-	
-	/*=====  FIN Sauvegarde  ======*/	
-	
+
+	/*=====  FIN Sauvegarde  ======*/
+
 }
