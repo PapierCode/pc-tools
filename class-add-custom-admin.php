@@ -9,11 +9,11 @@
 
 class PC_Add_Admin_Page {
 
-	public $title; 
-	public $slug; 
+	public $title;
+	public $slug;
 	public $optionName;
-	public $content; 
-	public $capability; 
+	public $content;
+	public $capability;
 
 
     /*====================================
@@ -38,21 +38,21 @@ class PC_Add_Admin_Page {
     * cf. https://codex.wordpress.org/Creating_Options_Pages
     *
     */
-    
+
     public function __construct( $title, $parent, $menuLabel, $slug = '', $content, $capability = 'editor', $position = '99', $icon = 'dashicons-clipboard', $sanitize ='' ) {
 
     	/*----------  variables de la class  ----------*/
-    	
+
     	$this->title 		= $title;
     	$this->slug 		= $slug;
     	$this->content 		= $content;
     	$this->optionName 	= $slug.'-option';
     	$this->capability 	= $capability;
     	$this->sanitize 	= $sanitize;
-	    
+
 
 	    /*----------  Insertion dans le menu  ----------*/
-	    
+
 	    add_action( 'admin_menu', function() use( $title, $parent, $menuLabel, $slug, $position, $icon, $capability ) {
 
 	    	// accès à la page aux éditeurs ou que au administrateur
@@ -98,11 +98,11 @@ class PC_Add_Admin_Page {
 
 
     /*=====  FIN Constructeur  ======*/
-    
+
     /*=================================
     =            Conteneur            =
     =================================*/
-    
+
     public function page_admin_display() {
 
     	echo '<div class="wrap"><h1>'.$this->title.'</h1>';
@@ -116,24 +116,24 @@ class PC_Add_Admin_Page {
 	        do_settings_sections($this->slug);
 
 	        // l'input submit
-	        submit_button(); 
+	        submit_button();
 
 	    echo '</form></div>';
 
 
     } // FIN page_admin_display
-    
-    
+
+
     /*=====  FIN Conteneur  ======*/
 
     /*===============================
     =            Contenu            =
     ===============================*/
-    
+
     public function add_admin_fields() {
 
     	/*----------  Entrée BDD  ----------*/
-    	
+
     	register_setting(
 	    	$this->slug.'-settings', 	// $option_group
 	    	$this->optionName,			// $option_name
@@ -141,12 +141,12 @@ class PC_Add_Admin_Page {
 	    );
 
     	/*----------  autorisation de sauvegarder pour les éditeurs  ----------*/
-    	
+
     	if ( $this->capability == 'editor' ) { add_filter( 'option_page_capability_'.$this->slug.'-settings', function(){ return 'edit_theme_options'; }); }
 
 
     	/*----------  Sections & champs  ----------*/
-    	
+
     	$content = $this->content;
 
     	// sections
@@ -245,13 +245,15 @@ class PC_Add_Admin_Page {
 
 					case 'url':
 						$type = 'display_input_url';
-						// chargement des scripts de l'éditeur	
-						wp_enqueue_editor();
+						// chargement des scripts de l'éditeur
+						add_action( 'admin_enqueue_scripts', function () {
+							wp_enqueue_editor();
+						});
 						break;
 
 					case 'date':
 						$type = 'display_input_date';
-						// chargement de jQuery DatePicker	
+						// chargement de jQuery DatePicker
 						add_action( 'admin_enqueue_scripts', function () {
 				    		wp_enqueue_script( 'jquery-ui-datepicker' );
 				    		wp_enqueue_style( 'admin-datepicker-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
@@ -270,14 +272,14 @@ class PC_Add_Admin_Page {
 			    	$datasFields				// $datas passé au callback
 
 			    ); // FIN add_settings_field(
-			
+
 			}; // FIN foreach($value['fields'])
 
     	}; // FIN foreach($content)
 
     } // FIN add_admin_fields()
-    
-    
+
+
     /*=====  FIN Contenu  ======*/
 
     /*========================================
@@ -291,10 +293,10 @@ class PC_Add_Admin_Page {
     	if ( '' != $msg ) { echo '<p class="description">'.$msg.'</p>';	}
 
     }
-    
-    
+
+
     /*----------  Input text  ----------*/
-    
+
     public function display_input_text( $datas ) {
 
 		$id = $datas['label_for'];
@@ -306,12 +308,12 @@ class PC_Add_Admin_Page {
 		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].' '.$required.' />';
 
 		$this->display_desc( $datas['desc'] );
-	    
+
 	}
-    
-    
+
+
     /*----------  Input date  ----------*/
-    
+
     public function display_input_date( $datas ) {
 
 		$id = $datas['label_for'];
@@ -331,12 +333,12 @@ class PC_Add_Admin_Page {
 		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$dateAttr.' '.$required.' />';
 
 		$this->display_desc( $datas['desc'] );
-	    
+
 	}
 
-    
+
     /*----------  Input url  ----------*/
-    
+
     public function display_input_url( $datas ) {
 
 		$id = $datas['label_for'];
@@ -348,12 +350,12 @@ class PC_Add_Admin_Page {
 		echo '<div style="display:flex;"><div style="flex-grow:1;margin-right:10px;"><input type="url" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" '.$required.' style="width:100%;" /></div><div><button type="button" class="button pc-link-select" data-cible="'.$id.'">Sélectionner</button></div></div>';
 
 		$this->display_desc( $datas['desc'] );
-	    
+
 	}
-    
+
 
     /*----------  Checkbox  ----------*/
-    
+
     public function display_checkbox( $datas ) {
 
 		$id = $datas['label_for'];
@@ -362,13 +364,13 @@ class PC_Add_Admin_Page {
 
 		echo '<input type="checkbox" name="'.$datas['name'].'" id="'.$id.'" value="1"' .$checked. ' '.$datas['attr'].'/>';
 
-		$this->display_desc( $datas['desc'] );		
-	    
+		$this->display_desc( $datas['desc'] );
+
 	}
-    
+
 
     /*----------  Radio  ----------*/
-    
+
     public function display_radio( $datas ) {
 
 		$id = $datas['label_for'];
@@ -376,7 +378,7 @@ class PC_Add_Admin_Page {
 		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
 		// champ obligatoire
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
-	
+
 		$radioIndex = 0; // <br/> à partir de 1
 		foreach ($datas['options'] as $radioKey => $radioValue) {
 			if ( $radioIndex > 0 ) { echo '<br/>'; }
@@ -385,13 +387,13 @@ class PC_Add_Admin_Page {
 			$radioIndex++;
 		}
 
-		$this->display_desc( $datas['desc'] );		
-	    
+		$this->display_desc( $datas['desc'] );
+
 	}
-    
+
 
     /*----------  Select  ----------*/
-    
+
     public function display_select( $datas ) {
 
 		$id = $datas['label_for'];
@@ -409,13 +411,13 @@ class PC_Add_Admin_Page {
 
 	    echo $select;
 
-	    $this->display_desc( $datas['desc'] );	
-	    
+	    $this->display_desc( $datas['desc'] );
+
 	}
-    
-    
+
+
     /*----------  Textarea  ----------*/
-    
+
     public function display_textarea( $datas ) {
 
 		$id = $datas['label_for'];
@@ -427,12 +429,12 @@ class PC_Add_Admin_Page {
 		echo '<textarea name="'.$datas['name'].'" id="'.$id.'" '.$datas['attr'].' style="'.$datas['css'].'" '.$required.' />'.$value.'</textarea>';
 
 		$this->display_desc( $datas['desc'] );
-	    
+
 	}
-    
-    
+
+
     /*----------  WYSIWYG  ----------*/
-    
+
     public function display_wysiwyg( $datas ) {
 
 		$id = $datas['label_for'];
@@ -467,12 +469,12 @@ class PC_Add_Admin_Page {
 		wp_editor( $value, $id, $buttons );
 
 		$this->display_desc( $datas['desc'] );
-	    
+
 	}
-    
-    
+
+
     /*----------  Image  ----------*/
-    
+
     public function display_img( $datas ) {
 
 		$id 		= $datas['label_for']; 		// id du champ
@@ -480,11 +482,11 @@ class PC_Add_Admin_Page {
 		$dataRemove = '';						// signale l'activation du btn remove au javascript
 		$btnRemove 	= '';						// btn remove (html)
 		$btnTxt		= 'Ajouter';				// texte du bouton qui ouvre la modal
-		
+
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) && '' != $datas['inBdd'][$id] ) {
 			$btnTxt = 'Modifier';
-			$value = $datas['inBdd'][$id];			
+			$value = $datas['inBdd'][$id];
 			echo '<div class="pc-media-preview">';
 			echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($value,'thumbnail')[0].');"></div>';
 			echo '</div>';
@@ -503,12 +505,12 @@ class PC_Add_Admin_Page {
 		echo $btnRemove;
 
 		$this->display_desc( $datas['desc'] );
-	    
+
 	}
-    
-    
+
+
     /*----------  Gallerie  ----------*/
-    
+
     public function display_gallery( $datas ) {
 
 		$id 		= $datas['label_for']; 		// id du champ
@@ -516,13 +518,13 @@ class PC_Add_Admin_Page {
 		$dataRemove = '';						// signale l'activation du btn remove au javascript
 		$btnRemove 	= '';						// btn remove (html)
 		$btnTxt		= 'Ajouter';				// texte du bouton qui ouvre la modal
-		
+
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) && '' != $datas['inBdd'][$id] ) {
 			$btnTxt = 'Modifier';
 			$value = $datas['inBdd'][$id];
 			$imgIds = explode(',', $value);
-			
+
 			echo '<div class="pc-media-preview">';
 			foreach ($imgIds as $imgId) {
 				echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($imgId,'thumbnail')[0].');"></div>';
@@ -543,12 +545,12 @@ class PC_Add_Admin_Page {
 		echo $btnRemove;
 
 		$this->display_desc( $datas['desc'] );
-	    
+
 	}
-    
-    
+
+
     /*----------  Pdf  ----------*/
-    
+
     public function display_pdf( $datas ) {
 
 		$id 		= $datas['label_for']; 		// id du champ
@@ -556,7 +558,7 @@ class PC_Add_Admin_Page {
 		$dataRemove = '';						// signale l'activation du btn remove au javascript
 		$btnRemove 	= '';						// btn remove (html)
 		$btnTxt		= 'Ajouter';				// texte du bouton qui ouvre la modal
-		
+
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) && '' != $datas['inBdd'][$id] ) {
 			$btnTxt = 'Modifier';
@@ -579,12 +581,12 @@ class PC_Add_Admin_Page {
 		echo $btnRemove;
 
 		$this->display_desc( $datas['desc'] );
-	    
+
 	}
-    
-    
+
+
     /*----------  Input file  ----------*/
-    
+
     public function display_input_file( $datas ) {
 
 		$id = $datas['label_for'];
@@ -596,10 +598,10 @@ class PC_Add_Admin_Page {
 		echo '<input type="file" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].' '.$required.' />';
 
 		$this->display_desc( $datas['desc'] );
-	    
+
 	}
 
-    
+
     /*=====  FIN Rendu des champs  ======*/
-    	
+
 }
