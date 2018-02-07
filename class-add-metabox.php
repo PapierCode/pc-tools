@@ -232,7 +232,7 @@ class PC_Add_Metabox {
 						// configuration wysiwyg = defaut
 						$buttons = $buttonsDefault;
 					}
-					echo '<td colspan="2" style="padding-left:0">';
+					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
 					wp_editor( $savedValue, $field['id'], $buttons );
 					break;
 
