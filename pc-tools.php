@@ -4,7 +4,7 @@
 Plugin Name: [PC] Tools
 Plugin URI: www.papier-code.fr
 Description: Boite à outils Papier Codé
-Version: 0.12.6
+Version: 0.12.7
 Author: Papier Codé
 */
 
@@ -287,7 +287,7 @@ function pc_post_navigation($prevTxt = '<span>Article </span>Précédent', $next
 =            SVG import            =
 ==================================*/
 
-function he_svg( $index, $color = false, $class = false, $hidden = true ) {
+function pc_svg( $index, $color = false, $class = false, $hidden = true ) {
 
 	global $sprite;
 	$svg = $sprite[$index];
