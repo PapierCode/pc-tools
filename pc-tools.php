@@ -4,7 +4,7 @@
 Plugin Name: [PC] Tools
 Plugin URI: www.papier-code.fr
 Description: Boite à outils Papier Codé
-Version: 0.12.7
+Version: 0.12.8
 Author: Papier Codé
 */
 
@@ -219,7 +219,7 @@ function pc_post_pager($prevTxt = '<span>Page </span><span>précédente</span>',
     $pagerNewClass = array('pager-link', 'pager-link-prev', 'is-active', 'pager-dots', 'pager-link-next');
 
 	// affichage
-    if ( count($pagesList) > 0 ) {
+    if ( isset($pagesList) && count($pagesList) > 0 ) {
 
 	    $pager = '<ul class="pager pager-list reset-list">';
 	    foreach ($pagesList as $page) {
