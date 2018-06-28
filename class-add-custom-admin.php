@@ -260,6 +260,10 @@ class PC_Add_Admin_Page {
 						});
 						break;
 
+					case 'custom':
+						$type = 'display_custom';
+						break;
+
 				} // FIN switch($datasFields['type'])
 
 				add_settings_field(
@@ -596,6 +600,21 @@ class PC_Add_Admin_Page {
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
 		echo '<input type="file" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].' '.$required.' />';
+
+		$this->display_desc( $datas['desc'] );
+
+	}
+
+
+    /*----------  Custom  ----------*/
+
+    public function display_custom( $datas ) {
+
+		$id = $datas['label_for'];
+		// si une valeur en bdd
+		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+
+		echo $datas['display'];
 
 		$this->display_desc( $datas['desc'] );
 

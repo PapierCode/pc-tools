@@ -39,9 +39,9 @@ class PC_recaptcha {
     /*==================================
     =            Affichages            =
     ==================================*/
-        
+
     /*----------  Champ  ----------*/
-    
+
     public function html() {
 
         return '<div class="g-recaptcha" data-sitekey="' . $this->api_site . '"></div>';
@@ -51,15 +51,15 @@ class PC_recaptcha {
 
     /*----------  Script  ----------*/
 
-    public function script() {
+    public function script( $lang = 'fr' ) {
 
-        return '<script src="https://www.google.com/recaptcha/api.js"></script>';
+        return '<script src="https://www.google.com/recaptcha/api.js?hl='.$lang.'"></script>';
 
     }
-    
-    
+
+
     /*=====  FIN Affichages  ======*/
-    
+
     /*====================================
     =            Vérification            =
     ====================================*/
@@ -83,7 +83,7 @@ class PC_recaptcha {
         if( $ip ){ $params['remoteip'] = $ip; }
 
         $url = "https://www.google.com/recaptcha/api/siteverify?" . http_build_query($params);
-        
+
         if (function_exists('curl_version')) {
 
             $curl = curl_init($url);
