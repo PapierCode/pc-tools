@@ -380,7 +380,7 @@ var wpLinkCibleId; // attribut id du input
 $body.on( 'click', '.pc-link-select', function() {
 
     // ajout d'un classe pour du css
-    $('body').addClass('pc-modal-link');
+    $body.addClass('pc-modal-link');
     // input ciblé
     wpLinkCibleId = $(this).data('cible');
     // le script s'attend à un wysiwyg, faut le feinter
@@ -398,7 +398,7 @@ $body.on( 'click', '#wp-link-submit', function(event) {
     // fermeture de la modale
     wpLink.close();
     // suppression class pour le css
-    $('body').removeClass('pc-link-modal');
+    $body.removeClass('pc-link-modal');
     
 });
 
@@ -408,7 +408,7 @@ $body.on( 'click', '#wp-link-cancel, #wp-link-backdrop, #wp-link-close', functio
     // fermeture de la modale
     wpLink.close();
     // suppression class pour le css
-    $('body').removeClass('pc-link-modal');
+    $body.removeClass('pc-link-modal');
 
 });
 
