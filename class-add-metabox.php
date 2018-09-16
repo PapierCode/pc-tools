@@ -177,6 +177,16 @@ class PC_Add_Metabox {
 					echo '<input type="text" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'  />';
 					break;
 
+				case 'email':
+					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					echo '<input type="email" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'  />';
+					break;
+
+				case 'number':
+					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					echo '<input type="number" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'  />';
+					break;
+
 				case 'checkbox':
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
 					echo '<input type="checkbox" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="1" '.checked('1', $savedValue, false).'/>';
