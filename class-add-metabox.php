@@ -335,7 +335,7 @@ class PC_Add_Metabox {
 					}
 
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="text" id="'.$field['id'].'" '.$dateAttr.' style="'.$field['css'].'" name="'.$field['id'].'" value="'.pc_date_bdd_to_admin($savedValue).'"  '.$required.' />';
+					echo '<input type="text" id="'.$field['id'].'" '.$dateAttr.' style="'.$field['css'].'" name="'.$field['id'].'" value="'.pc_date_bdd_to_admin($savedValue).'"  '.$required.' readonly />';
 					break;
 
 				case 'url':
