@@ -203,6 +203,19 @@ class PC_Add_Metabox {
 					}
 					break;
 
+				case 'checkboxes':
+					echo '<th>'.$field['label'].'</th><td>';
+					pc_var($savedValue);
+					$checkboxIndex = 0;
+					foreach ($field['options'] as $checkboxKey => $checkboxValue) {
+						if ( $checkboxIndex > 0 ) { echo '<br/>'; }
+						$checked = ( in_array($checkboxValue,$savedValue) ) ? 'checked' : '';
+						echo '<input type="checkbox" id="'.$field['id'].'-'.$checkboxIndex.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'[]" value="'.$checkboxValue.'" '.$checked.' '.$required.' />';
+						echo '<label for="'.$field['id'].'-'.$checkboxIndex.'">'.$checkboxKey.'</label>';
+						$checkboxIndex++;
+					}
+					break;
+
 				case 'textarea':
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
 					echo '<textarea id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" '.$required.' >'.$savedValue.'</textarea>';
@@ -365,6 +378,8 @@ class PC_Add_Metabox {
 	==================================*/
 
 	public function save_metabox_fields( $post_ID ) {
+
+		//pc_var($_POST); exit();
 
 		$content = $this->content; 	// pour la liste des champs
 
