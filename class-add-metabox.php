@@ -204,8 +204,9 @@ class PC_Add_Metabox {
 					break;
 
 				case 'checkboxes':
-					echo '<th>'.$field['label'].'</th><td>';
-					pc_var($savedValue);
+					echo '<th>'.$field['label'].'</th><td';
+					if ( $required == 'required' ) { echo ' class="pc-checkboxes-required"'; };
+					echo '>';
 					$checkboxIndex = 0;
 					foreach ($field['options'] as $checkboxKey => $checkboxValue) {
 						if ( $checkboxIndex > 0 ) { echo '<br/>'; }

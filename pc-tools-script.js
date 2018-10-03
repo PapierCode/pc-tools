@@ -5,6 +5,7 @@
 * * Medias upload
 * * Date Picker
 * * Compteur
+* * Checkboxes required
 *
 **/
 
@@ -414,6 +415,40 @@ $body.on( 'click', '#wp-link-cancel, #wp-link-backdrop, #wp-link-close', functio
 
 /*=====  FIN Modale lien  ======*/
 
+/*===========================================
+=            Checkboxes required            =
+===========================================*/
+
+var $tdCheckboxes = $('.pc-checkboxes-required'); // container
+
+// fonction qui vérifie si une des checkboxe est cochée
+var pc_checkboxes_required = function( $target ) {
+
+    if ( $target.filter(':checked').length > 0 ) {
+        $target.prop('required',false);
+    } else {
+        $target.prop('required',true);
+    }
+
+}
+
+if ( $tdCheckboxes.length > 0 ) {
+
+    $tdCheckboxes.each(function() {
+            
+        var $all = $(this).find('input');
+        pc_checkboxes_required($all); // au chargement de la page
+        $all.on('click', function() { // à chaque clic sur une checkboxe
+            pc_checkboxes_required($all);            
+        });
+
+    });
+
+}
+
+
+
+/*=====  FIN Checkboxes required  =====*/
 
     
 }); // End document.ready
