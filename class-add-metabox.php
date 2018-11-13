@@ -60,11 +60,12 @@ class PC_Add_Metabox {
 		            'label' 		=> '',
 		            'desc'  		=> '',
 		            'id'    		=> '',
-		            'required'	=> false,
-		            'attr' 		=> '',
+		            'required'		=> false,
+		            'attr' 			=> '',
 		            'css'			=> '',
-		            'options'	=> '',
-		            'clean'		=> true
+		            'options'		=> '',
+					'clean'			=> true,
+					'default'		=> ''
 		      ),
 				// arguments passés lors de la création
 				$content['fields'][$key]
@@ -257,7 +258,8 @@ class PC_Add_Metabox {
 						$buttons = $buttonsDefault;
 					}
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					wp_editor( $savedValue, $field['id'], $buttons );
+					$defaultContent = ( $savedValue != '' ) ? $savedValue : $field['default'];
+					wp_editor( $defaultContent, $field['id'], $buttons );
 					break;
 
 				case 'img':
