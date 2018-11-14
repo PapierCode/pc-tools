@@ -322,7 +322,7 @@ class PC_Add_Admin_Page {
 
     /*----------  Input email  ----------*/
 
-    public function display_input_text( $datas ) {
+    public function display_input_email( $datas ) {
 
 		$id = $datas['label_for'];
 		// si une valeur en bdd
