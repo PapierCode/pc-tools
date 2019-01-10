@@ -327,6 +327,29 @@ if ( $pcDatePicker.length > 0 ) {
 
 /*=====  End of Date Picker  ======*/
 
+/*======================================
+=            Select couleur            =
+======================================*/
+
+var $selectColor = $('.pc-color-picker');
+
+if ( $selectColor.length > 0 ) {
+
+    $selectColor.change(function() {
+
+        if ( $(this).val() !== '' ) { 
+            $(this).css('background-color',$(this).val());
+        } else {
+            $(this).css('background-color','#fff');
+        }
+
+    })
+
+}
+
+
+/*=====  FIN Select couleur  =====*/
+
 /*=================================
 =            Compteurs            =
 =================================*/

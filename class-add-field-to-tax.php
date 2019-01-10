@@ -151,6 +151,17 @@ class PC_add_field_to_tax {
 					echo '</select>';
 					break;
 
+				case 'color':
+					echo '<label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					$field['attr'] = ($field['attr'] !== '') ? str_replace('class="', 'class="pc-color-picker ', $field['attr']) : 'class="pc-color-picker"';
+					$field['css'] = ($savedValue !== '') ? 'background-color:'.$savedValue.'; '.$field['css'] : $field['css'];
+					echo '<select id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" '.$required.'><option value="" style="background-color:#fff;"></option>';
+					foreach ($field['options'] as $optionsKey => $optionValue) {
+						echo '<option style="background-color:'.$optionValue.'" value="'.$optionValue.'" '.selected($savedValue,$optionValue,false).'>'.$optionsKey.'</option>';
+					}
+					echo '</select>';
+					break;
+
 				case 'textarea':
 					echo '<label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
 					echo '<textarea name="'.$field['id'].'" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" '.$required.' >'.get_term_meta( $term->term_id, $field['id'], true ).'</textarea>';
