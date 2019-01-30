@@ -298,7 +298,20 @@ $body.on( 'click', '.pc-pdf-select', function() {
 =            Date Picker            =
 ===================================*/
 
-var $pcDatePicker = $('.pc-date-picker');
+var $pcDatePicker = $('.pc-date-picker'),
+    $pcDateRemove = $('.pc-date-remove');
+
+var pc_on_pick_a_date = function() {
+    if ( $(this).next('.pc-date-remove').length < 1 && !$(this).prop('required') ) {
+        $(this).after('<button class="reset-btn pc-date-remove" type="button" title="Supprimer"><span class="dashicons dashicons-no-alt"></span></button>');
+        $(this).next('.pc-date-remove').click(pc_date_remove);
+    }
+}
+
+var pc_date_remove = function() {
+    $(this).prev('.pc-date-picker').val('');
+    $(this).remove();
+}
 
 if ( $pcDatePicker.length > 0 ) {
 
@@ -318,9 +331,16 @@ if ( $pcDatePicker.length > 0 ) {
         firstDay: 1,
         isRTL: false,
         showMonthAfterYear: false,
-        yearSuffix: ""
+        yearSuffix: "",
+        onSelect:pc_on_pick_a_date
 
     });
+
+}
+
+if ( $pcDateRemove.length > 0 ) {
+
+    $pcDateRemove.click(pc_date_remove);
 
 }
 

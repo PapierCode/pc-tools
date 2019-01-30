@@ -355,7 +355,11 @@ class PC_Add_Admin_Page {
 		    $dateAttr = 'class="pc-date-picker" '.$datas['attr'];
 		}
 
-		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$dateAttr.' '.$required.' />';
+		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$dateAttr.' '.$required.' readonly />';
+
+		if ( $value != '' && $required == '' ) {
+			echo '<button class="reset-btn pc-date-remove" type="button" title="Supprimer"><span class="dashicons dashicons-no-alt"></span></button>';
+		}
 
 		$this->display_desc( $datas['desc'] );
 

@@ -341,7 +341,7 @@ class PC_Add_Metabox {
 
 				case 'date':
 
-					// recherche de l'attibut class
+					// recherche de l'attribut class
 					// pour ajouter la classe nécessaire au javascript
 					$dateAttr = strpos($field['attr'], 'class="');
 					if ($dateAttr !== false) {
@@ -352,6 +352,9 @@ class PC_Add_Metabox {
 
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
 					echo '<input type="text" id="'.$field['id'].'" '.$dateAttr.' style="'.$field['css'].'" name="'.$field['id'].'" value="'.pc_date_bdd_to_admin($savedValue).'"  '.$required.' readonly />';
+					if ( $savedValue != '' && $required == '' ) {
+						echo '<button class="reset-btn pc-date-remove" type="button" title="Supprimer"><span class="dashicons dashicons-no-alt"></span></button>';
+					}
 					break;
 
 				case 'url':
