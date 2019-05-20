@@ -207,6 +207,10 @@ class PC_Add_Admin_Page {
 						$type = 'display_input_email';
 						break;
 
+					case 'number':
+						$type = 'display_input_number';
+						break;
+
 					case 'checkbox':
 						$type = 'display_checkbox';
 						break;
@@ -314,6 +318,23 @@ class PC_Add_Admin_Page {
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
 		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].' '.$required.' />';
+
+		$this->display_desc( $datas['desc'] );
+
+	}
+
+
+    /*----------  Input number  ----------*/
+
+    public function display_input_number( $datas ) {
+
+		$id = $datas['label_for'];
+		// si une valeur en bdd
+		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+		// champ obligatoire
+		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
+
+		echo '<input type="number" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" style="'.$datas['css'].'"  '.$datas['attr'].' '.$required.' />';
 
 		$this->display_desc( $datas['desc'] );
 
