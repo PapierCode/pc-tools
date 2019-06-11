@@ -211,7 +211,7 @@ class PC_Add_Metabox {
 					$checkboxIndex = 0;
 					foreach ($field['options'] as $checkboxKey => $checkboxValue) {
 						if ( $checkboxIndex > 0 ) { echo '<br/>'; }
-						$checked = ( in_array($checkboxValue,$savedValue) ) ? 'checked' : '';
+						$checked = ( !empty($savedValue) && in_array($checkboxValue,$savedValue) ) ? 'checked' : '';
 						echo '<input type="checkbox" id="'.$field['id'].'-'.$checkboxIndex.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'[]" value="'.$checkboxValue.'" '.$checked.' '.$required.' />';
 						echo '<label for="'.$field['id'].'-'.$checkboxIndex.'">'.$checkboxKey.'</label>';
 						$checkboxIndex++;
