@@ -194,7 +194,7 @@ class PC_Add_Metabox {
 					break;
 
 				case 'radio':
-					echo '<th>'.$field['label'].'</th><td>';
+					echo '<th>'.$field['label'].'</th><td><div>';
 					$radioIndex = 0;
 					foreach ($field['options'] as $radioKey => $radioValue) {
 						if ( $radioIndex > 0 ) { echo '<br/>'; }
@@ -202,12 +202,13 @@ class PC_Add_Metabox {
 						echo '<label for="'.$field['id'].'-'.$radioIndex.'">'.$radioKey.'</label>';
 						$radioIndex++;
 					}
+					echo '</div>';
 					break;
 
 				case 'checkboxes':
 					echo '<th>'.$field['label'].'</th><td';
 					if ( $required == 'required' ) { echo ' class="pc-checkboxes-required"'; };
-					echo '>';
+					echo '><div>';
 					$checkboxIndex = 0;
 					foreach ($field['options'] as $checkboxKey => $checkboxValue) {
 						if ( $checkboxIndex > 0 ) { echo '<br/>'; }
@@ -216,6 +217,7 @@ class PC_Add_Metabox {
 						echo '<label for="'.$field['id'].'-'.$checkboxIndex.'">'.$checkboxKey.'</label>';
 						$checkboxIndex++;
 					}
+					echo '</div>';
 					break;
 
 				case 'textarea':
