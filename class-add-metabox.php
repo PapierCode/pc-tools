@@ -161,6 +161,7 @@ class PC_Add_Metabox {
 			$field['id'] = $datas['args']['prefix'].'-'.$field['id'];
 			// valeurs en bdd
 			$savedValue = get_post_meta( $post->ID, $field['id'], true );
+			if ( $savedValue == '' ) { $savedValue = $field['default']; }
 			// champ obligatoire
 			if ( $field['required'] ) {
 				$required = 'required';
@@ -260,8 +261,7 @@ class PC_Add_Metabox {
 						$buttons = $buttonsDefault;
 					}
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					$defaultContent = ( $savedValue != '' ) ? $savedValue : $field['default'];
-					wp_editor( $defaultContent, $field['id'], $buttons );
+					wp_editor( $savedValue, $field['id'], $buttons );
 					break;
 
 				case 'img':
