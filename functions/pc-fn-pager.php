@@ -73,7 +73,7 @@ add_filter('previous_post_link', 'post_link_attributes');
 	    return str_replace('<a href=', '<a '.$class.' href=', $datas);
 	}
 
-function pc_post_navigation($prevTxt = '<span>Article </span>Précédent', $nextTxt = '<span>Article </span>Suivant') {
+function pc_post_navigation($prevTxt = '<span>Article </span>Précédent', $nextTxt = '<span>Article </span>Suivant', $parent = '../' ) {
 
 	$pagination = '<ul class="pager pager-prevnext reset-list">';
 
@@ -89,7 +89,7 @@ function pc_post_navigation($prevTxt = '<span>Article </span>Précédent', $next
 	}
 
 	// retour liste
-	$pagination .= '<li class="pager-item"><a href="../" class="pager-link parger-link-back" title="Retour à la liste"><span>Retour</span></a></li>';
+	$pagination .= '<li class="pager-item"><a href="'.$parent.'" class="pager-link parger-link-back" title="Retour à la liste"><span>Retour</span></a></li>';
 
 	// construction du lien suivant
 	$nextObject = get_next_post();
