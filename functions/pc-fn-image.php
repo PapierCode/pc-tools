@@ -8,9 +8,9 @@
  * 
  */
 
-/*====================================
-=            Filtrage SVG            =
-====================================*/
+/*===============================
+=            Get SVG            =
+===============================*/
 
 function pc_svg( $index, $color = false, $class = false, $hidden = true ) {
 
@@ -33,7 +33,7 @@ function pc_svg( $index, $color = false, $class = false, $hidden = true ) {
 
 }
 
-/*=====  FIN Filtrage SVG  =====*/
+/*=====  FIN Get SVG  =====*/
 
 /*=================================
 =            Get image            =
@@ -54,31 +54,6 @@ function pc_get_img( $id, $size, $return = 'img', $class = '' ) {
             $datas = $imgAttr;
             $datas[3] = $imgAlt;
             return $datas;
-            break;
-    }
-
-}
-
-
-/*----------  Thumbnail par défaut  ----------*/
-
-function pc_get_default_st( $class = '', $return = 'img' ) {
-
-    global $images_project_sizes; // déclarée dans le thème
-    $stDefault = array(
-        get_bloginfo('template_directory').'/images/thumb-default.jpg',
-        $images_project_sizes['st']['width'],
-        $images_project_sizes['st']['height']
-    );
-
-    $stDefault = apply_filters( 'pc_filter_default_st', $stDefault );
-
-    switch ($return) {
-        case 'img':
-            return '<img src="'.$stDefault[0].'" alt="" width="'.$stDefault[1].'" height="'.$stDefault[2].'" class="'.$class.'" />';
-            break;
-        case 'datas':
-            return $stDefault;
             break;
     }
 

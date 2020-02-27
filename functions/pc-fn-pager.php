@@ -19,7 +19,7 @@ function pc_get_pager( $query = FALSE, $current = FALSE, $classCss = '', $svg = 
         'prev_text' 			=> '<span class="visually-hidden">Précédent</span>'.pc_svg($svg[0],$svg[1],$svg[2]),
         'type' 					=> 'array',
         'before_page_number' 	=> '<span class="visually-hidden">Page </span>',
-        'format'                => '?paged=%#%',
+        'format'                => '?paged=%#%#main',
     );
 
     if ( $query && $current ) {
@@ -35,18 +35,13 @@ function pc_get_pager( $query = FALSE, $current = FALSE, $classCss = '', $svg = 
     // affichage
     if ( isset($pagesList) && count($pagesList) > 0 ) {
 		
-		// aria en erreur (validator)
-		foreach ($pagesList as $key => $page) {
-			$pagesList[$key] = str_replace(array('aria-current',"='page'"), '', $page);
-		}
-		// classes pour les liens
 		$pagerOldClass = array('page-numbers', 'prev', 'current', 'dots', 'next');
 		$pagerNewClass = array('pager-link', 'pager-link--prev', 'is-active', 'pager-dots', 'pager-link--next');
 
-        $pager = '<ul class="pager-list reset-list no-print '.$classCss.'">';
+		$pager = '<ul class="pager-list reset-list no-print '.$classCss.'">';
         foreach ($pagesList as $page) {
-            $page = str_replace('aria-is-active="page"', '', $page);
             $page = str_replace($pagerOldClass, $pagerNewClass, $page);
+            $page = str_replace('aria-is-active', 'aria-current', $page);
             $pager .= '<li class="pager-item">'.$page.'</li>';
         }
         $pager .= '</ul>';
