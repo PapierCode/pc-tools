@@ -5,6 +5,7 @@
  * 
  ** Get SVG
  ** Get image
+ ** Sprite PHP to JS
  * 
  */
 
@@ -61,3 +62,25 @@ function pc_get_img( $id, $size, $return = 'img', $class = '' ) {
 
 
 /*=====  FIN Get image  =====*/
+
+/*========================================
+=            Sprite PHP to JS            =
+========================================*/
+
+function pc_sprite_to_js() {
+
+	global $sprite;
+
+	$sprite_js = array(
+		'arrow' => $sprite['arrow'],
+		'cross' => $sprite['cross'],
+	);
+
+	$sprite_js = apply_filters( 'pc_filter_sprite_js', $sprite_js );
+	
+	echo '<script>var sprite = '.json_encode($sprite_js, JSON_PRETTY_PRINT).'</script>';
+
+}
+
+
+/*=====  FIN Sprite PHP to JS  =====*/
