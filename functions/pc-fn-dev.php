@@ -70,8 +70,6 @@ function pc_sanitize_settings_fields( $settings_fields, $datas ) {
             switch ( $field['type'] ) {
 
                 case 'text':
-                    $datas[$prefix.'-'.$field['label_for']] = sanitize_text_field( $datas[$prefix.'-'.$field['label_for']] );
-                    break;
                 case 'date':
                     $datas[$prefix.'-'.$field['label_for']] = sanitize_text_field( $datas[$prefix.'-'.$field['label_for']] );
                     break;
