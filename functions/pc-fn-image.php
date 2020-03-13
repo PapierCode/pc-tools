@@ -67,14 +67,12 @@ function pc_get_img( $id, $size, $return = 'img', $class = '' ) {
 =            Sprite PHP to JS            =
 ========================================*/
 
-function pc_sprite_to_js() {
+function pc_sprite_to_js( $icons ) {
 
 	global $sprite;
 
-	$sprite_js = array(
-		'arrow' => $sprite['arrow'],
-		'cross' => $sprite['cross'],
-	);
+	$sprite_js = array();
+	foreach ($icons as $id) { $sprite_js[$id] = $sprite[$id]; }
 
 	$sprite_js = apply_filters( 'pc_filter_sprite_js', $sprite_js );
 	
