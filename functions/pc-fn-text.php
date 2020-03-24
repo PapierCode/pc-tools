@@ -71,3 +71,26 @@ function pc_phone($tel) {
 
 
 /*=====  FIN Téléphone au format international  =====*/
+
+/*===============================
+=            Message            =
+===============================*/
+
+function pc_display_alert_msg( $msg, $type = '', $format = '', $elt = 'p'  ) {
+
+	$css = 'msg';
+	$css .= ( $format == 'block' ) ? ' msg--block' : '';
+	if ( $type == 'error' ) { $css .= ' msg--error'; }
+	else if ( $type == 'success' ) { $css .= ' msg--success'; }
+
+	$return = '<'.$elt.' class="'.$css.'">';
+	$return .= '<span class="msg-ico">'.pc_svg( 'msg', '', 'svg-block' ).'</span>';
+	$return .= '<span class="msg-txt">'.$msg.'</span>';
+	$return .= '</'.$elt.'>';
+
+	return $return;
+
+}
+
+
+/*=====  FIN Message  =====*/
