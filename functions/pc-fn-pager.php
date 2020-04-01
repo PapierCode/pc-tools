@@ -11,12 +11,12 @@
 =            Pager            =
 =============================*/
 
-function pc_get_pager( $query = FALSE, $current = FALSE, $classCss = '', $svg = array('arrow','','svg-block') ) {
+function pc_get_pager( $query = FALSE, $current = FALSE, $classCss = '', $svg = array( 'arrow', '', 'svg-block' ) ) {
 
     $pagination = array(
         'mid_size'				=> 0,
-        'next_text' 			=> '<span class="visually-hidden">Suivant</span>'.pc_svg($svg[0],$svg[1],$svg[2]),
-        'prev_text' 			=> '<span class="visually-hidden">Précédent</span>'.pc_svg($svg[0],$svg[1],$svg[2]),
+        'next_text' 			=> '<span class="visually-hidden">Suivant</span>'.pc_svg( $svg[0], $svg[1], $svg[2] ),
+        'prev_text' 			=> '<span class="visually-hidden">Précédent</span>'.pc_svg( $svg[0], $svg[1], $svg[2] ),
         'type' 					=> 'array',
         'before_page_number' 	=> '<span class="visually-hidden">Page </span>',
         'format'                => '?paged=%#%#main',
@@ -30,20 +30,24 @@ function pc_get_pager( $query = FALSE, $current = FALSE, $classCss = '', $svg = 
     }
 
     // tableau contenant chaque élément (liens et '...')
-    $pagesList = paginate_links($pagination);
+    $list = paginate_links( $pagination );
 
     // affichage
-    if ( isset($pagesList) && count($pagesList) > 0 ) {
+    if ( isset($list) && count($list) > 0 ) {
 		
-		$pagerOldClass = array('page-numbers', 'prev', 'current', 'dots', 'next');
-		$pagerNewClass = array('pager-link', 'pager-link--prev', 'is-active', 'pager-dots', 'pager-link--next');
+		$css_old = array( 'page-numbers', 'prev', 'current', 'dots', 'next' );
+		$css_new = array( 'pager-link', 'pager-link--prev', 'is-active', 'pager-dots', 'pager-link--next' );
 
 		$pager = '<ul class="pager-list reset-list no-print '.$classCss.'">';
-        foreach ($pagesList as $page) {
-            $page = str_replace($pagerOldClass, $pagerNewClass, $page);
-            $page = str_replace('aria-is-active', 'aria-current', $page);
-            $pager .= '<li class="pager-item">'.$page.'</li>';
-        }
+
+        foreach ($list as $page) {
+
+            $page = str_replace( $css_old, $css_new, $page );
+            $page = str_replace( 'aria-is-active', 'aria-current', $page );
+			$pager .= '<li class="pager-item">'.$page.'</li>';
+			
+		}
+		
         $pager .= '</ul>';
 
         echo $pager;
@@ -59,21 +63,13 @@ function pc_get_pager( $query = FALSE, $current = FALSE, $classCss = '', $svg = 
 =            Navigation            =
 ==================================*/
 
-// filtres pour changer les classes des liens
-add_filter('next_post_link', 'post_link_attributes');
-add_filter('previous_post_link', 'post_link_attributes');
-
-	function post_link_attributes($datas) {
-	    $class = 'class="the-class"';
-	    return str_replace('<a href=', '<a '.$class.' href=', $datas);
-	}
-
-function pc_post_navigation($prevTxt = '<span>Article </span>Précédent', $nextTxt = '<span>Article </span>Suivant', $parent = '../' ) {
+function pc_post_navigation( $prevTxt = '<span>Article </span>Précédent', $nextTxt = '<span>Article </span>Suivant', $parent = '../' ) {
 
 	$pagination = '<ul class="pager pager-prevnext reset-list">';
 
 	// construction du lien précédent
 	$prevObject = get_previous_post();
+
 	if( $prevObject != '' ) {
 
 		$prevTitle 		= $prevObject->post_title;
@@ -88,6 +84,7 @@ function pc_post_navigation($prevTxt = '<span>Article </span>Précédent', $next
 
 	// construction du lien suivant
 	$nextObject = get_next_post();
+
 	if( $nextObject != '' ) {
 
 		$nextTitle 		= $nextObject->post_title;

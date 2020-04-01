@@ -14,10 +14,10 @@
 =            Afficher un tableau ou un objet            =
 =======================================================*/
 
-function pc_var($var, $margin = false) {
+function pc_var( $var, $margin = false ) {
 
 	$margin == true ? $style = 'style="margin-left:200px"' : $style = '';
-	echo '<pre '.$style.'>'.print_r($var,true).'</pre>';
+	echo '<pre '.$style.'>'.print_r( $var,true ).'</pre>';
 
 }
 
@@ -31,13 +31,13 @@ function pc_var($var, $margin = false) {
 function pc_array_multi_merge( $default, $new ) {
 
 	// pour chaque entrée du nouveau tableau
-    foreach ($new as $key => $value) {
+    foreach ( $new as $key => $value ) {
 
         // si c'est un tableau imbriqué
-        if ( is_array($new[$key]) ) {
+        if ( is_array( $new[$key] ) ) {
 
         	// fusion des entrées
-            $default[$key] = array_merge($default[$key],$new[$key]);
+            $default[$key] = array_merge( $default[$key], $new[$key] );
 
         } else {
 

@@ -13,7 +13,7 @@
 =            Get SVG            =
 ===============================*/
 
-function pc_svg( $index, $color = false, $class = false, $hidden = true ) {
+function pc_svg( $index, $color = false, $class = 'svg-block', $hidden = true ) {
 
 	global $sprite; // cf. images/sprite.php
 	$svg = $sprite[$index];
@@ -28,7 +28,7 @@ function pc_svg( $index, $color = false, $class = false, $hidden = true ) {
 	if ( $hidden ) { $svg = str_replace('<svg', '<svg aria-hidden="true"', $svg); }
 
 	// css
-	if ( $class ) { $svg = str_replace('class="no-print"', 'class="no-print '.$class.'"', $svg); }
+	$svg = str_replace('class="no-print"', 'class="no-print '.$class.'"', $svg);
 
 	return $svg;
 
@@ -44,16 +44,16 @@ function pc_svg( $index, $color = false, $class = false, $hidden = true ) {
 
 function pc_get_img( $id, $size, $return = 'img', $class = '' ) {
 
-	$imgAttr = wp_get_attachment_image_src($id,$size);
-	$imgAlt = get_post_meta($id, '_wp_attachment_image_alt', true);
+	$attr = wp_get_attachment_image_src( $id, $size );
+	$alt = get_post_meta( $id, '_wp_attachment_image_alt', true );
 
     switch ($return) {
         case 'img':
-            return '<img src="'.$imgAttr[0].'" class="'.$class.'" width="'.$imgAttr[1].'" height="'.$imgAttr[2].'" alt="'.esc_attr($imgAlt).'"/>';
+            return '<img src="'.$attr[0].'" class="'.$class.'" width="'.$attr[1].'" height="'.$attr[2].'" alt="'.esc_attr($alt).'"/>';
             break;
         case 'datas':
-            $datas = $imgAttr;
-            $datas[3] = $imgAlt;
+            $datas = $attr;
+            $datas[3] = $alt;
             return $datas;
             break;
     }
@@ -71,12 +71,12 @@ function pc_sprite_to_js( $icons ) {
 
 	global $sprite;
 
-	$sprite_js = array();
-	foreach ($icons as $id) { $sprite_js[$id] = $sprite[$id]; }
+	$js_sprite = array();
+	foreach ( $icons as $id ) { $js_sprite[$id] = $sprite[$id]; }
 
-	$sprite_js = apply_filters( 'pc_filter_sprite_js', $sprite_js );
+	$js_sprite = apply_filters( 'pc_filter_js_sprite', $js_sprite );
 	
-	echo '<script>var sprite = '.json_encode($sprite_js, JSON_PRETTY_PRINT).'</script>';
+	echo '<script>var sprite = '.json_encode( $js_sprite, JSON_PRETTY_PRINT ).'</script>';
 
 }
 

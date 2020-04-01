@@ -627,8 +627,10 @@ class PC_Add_Admin_Page {
 				$btnRemove 	= '<input class="button pc-media-remove" type="button" value="Supprimer"/>';
 			}
 		}
+		// champ obligatoire
+		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }	
 
-		echo '<input type="hidden" name="'.$datas['name'].'" id="'.$id.'" class="pc-media-id" value="'.$value.'" />';
+		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" class="pc-media-id visually-hidden" value="'.$value.'" '.$required.' />';
 		echo '<input class="button pc-pdf-select" type="button" value="'.$btnTxt.'" '.$dataRemove.' />';
 		echo $btnRemove;
 

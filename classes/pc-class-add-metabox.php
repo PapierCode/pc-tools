@@ -301,7 +301,7 @@ class PC_Add_Metabox {
 			        	echo '<div class="pc-media-preview"><a class="pc-pdf-preview" href="'.$pdfUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a></div>';
 					}
 					// champs
-					echo '<input type="hidden" id="'.$field['id'].'" class="pc-media-id" name="'.$field['id'].'" value="'.$savedValue.'"/>';
+					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id visually-hidden" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'/>';
 					echo '<input class="button pc-pdf-select" type="button" value="'.$btnTxt.'" ';
 					// si btn de suppression activé
 					if ( $field['options']['btnremove'] == true ) {

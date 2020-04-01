@@ -31,11 +31,13 @@ include 'classes/pc-class-add-custom-admin.php';
 include 'classes/pc-class-add-recaptcha.php';
 
 
-/*----------  JS & CSS  ----------*/
+/*----------  Javascript  ----------*/
 
 add_action( 'admin_enqueue_scripts', function () {
 
     // scripts pour admin
-    wp_enqueue_script( 'tools-scripts', plugin_dir_url( __FILE__ ).'pc-tools-script.js' );
+	wp_enqueue_script( 'tools-scripts', plugin_dir_url( __FILE__ ).'pc-tools-script.js' );
+	// modal médias
+	wp_enqueue_media();
 
 });
