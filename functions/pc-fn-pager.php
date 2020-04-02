@@ -11,7 +11,16 @@
 =            Pager            =
 =============================*/
 
-function pc_get_pager( $query = FALSE, $current = FALSE, $classCss = '', $svg = array( 'arrow', '', 'svg-block' ) ) {
+/**
+ * 
+ * @param object	$query		Requête WP custom
+ * @param integer	$current	Numéro de page courante
+ * @param string	$css		Classes CSS supplémentaires
+ * @param array		$svg		Voir pc_svg()
+ * 
+ */
+
+function pc_get_pager( $query = '', $current = '', $css = '', $svg = array( 'arrow', '', 'svg-block' ) ) {
 
     $pagination = array(
         'mid_size'				=> 0,
@@ -22,7 +31,7 @@ function pc_get_pager( $query = FALSE, $current = FALSE, $classCss = '', $svg = 
         'format'                => '?paged=%#%#main',
     );
 
-    if ( $query && $current ) {
+    if ( is_object($query) && $current != '' ) {
 
         $pagination['total'] = $query->max_num_pages;
         $pagination['current'] = $current;
@@ -38,7 +47,7 @@ function pc_get_pager( $query = FALSE, $current = FALSE, $classCss = '', $svg = 
 		$css_old = array( 'page-numbers', 'prev', 'current', 'dots', 'next' );
 		$css_new = array( 'pager-link', 'pager-link--prev', 'is-active', 'pager-dots', 'pager-link--next' );
 
-		$pager = '<ul class="pager-list reset-list no-print '.$classCss.'">';
+		$pager = '<ul class="pager-list reset-list no-print '.$css.'">';
 
         foreach ($list as $page) {
 
@@ -63,19 +72,28 @@ function pc_get_pager( $query = FALSE, $current = FALSE, $classCss = '', $svg = 
 =            Navigation            =
 ==================================*/
 
-function pc_post_navigation( $prevTxt = '<span>Article </span>Précédent', $nextTxt = '<span>Article </span>Suivant', $parent = '../' ) {
+/**
+ * 
+ * @param string	$prev_inner		Contenu du lien précédent
+ * @param string	$next_inner 	Contenu du lien suivant
+ * @param string	$parent			Url de la page parent
+ * 
+ */
+
+function pc_post_navigation( $prev_inner = '<span>Article </span>Précédent', $next_inner = '<span>Article </span>Suivant', $parent = '../' ) {
 
 	$pagination = '<ul class="pager pager-prevnext reset-list">';
 
 	// construction du lien précédent
-	$prevObject = get_previous_post();
+	$prev_object = get_previous_post();
 
-	if( $prevObject != '' ) {
+	if( is_object($prev_object) ) {
 
-		$prevTitle 		= $prevObject->post_title;
-		$prevUrl 		= get_permalink($prevObject->ID);
-		$prevLink 		= '<a href="'.$prevUrl.'" class="pager-link pager-link-prev" title="'.$prevTitle.'"><span>'.$prevTxt.'</span></a>';
-		$pagination 	.= '<li class="pager-item">'.$prevLink.'</li>';
+		$prev_title 	= $prev_object->post_title;
+		$prev_url 		= get_permalink( $prev_object->ID );
+		$prev_link 		= '<a href="'.$prev_url.'" class="pager-link pager-link-prev" title="'.$prev_title.'"><span>'.$prev_inner.'</span></a>';
+
+		$pagination 	.= '<li class="pager-item">'.$prev_link.'</li>';
 
 	}
 
@@ -83,18 +101,20 @@ function pc_post_navigation( $prevTxt = '<span>Article </span>Précédent', $nex
 	$pagination .= '<li class="pager-item"><a href="'.$parent.'" class="pager-link parger-link-back" title="Retour à la liste"><span>Retour</span></a></li>';
 
 	// construction du lien suivant
-	$nextObject = get_next_post();
+	$next_object = get_next_post();
 
-	if( $nextObject != '' ) {
+	if( is_object($next_object) ) {
 
-		$nextTitle 		= $nextObject->post_title;
-		$nextUrl 		= get_permalink($nextObject->ID);
-		$nextLink 		= '<a href="'.$nextUrl.'" class="pager-link pager-link-next" title="'.$nextTitle.'"><span>'.$nextTxt.'</span></a>';
-		$pagination 	.= '<li class="pager-item">'.$nextLink.'</li>';
+		$next_title 	= $next_object->post_title;
+		$next_url 		= get_permalink( $next_object->ID );
+		$next_link 		= '<a href="'.$next_url.'" class="pager-link pager-link-next" title="'.$next_title.'"><span>'.$next_inner.'</span></a>';
+
+		$pagination 	.= '<li class="pager-item">'.$next_link.'</li>';
 
 	}
 
 	$pagination .= '</ul>';
+
 	echo $pagination;
 
 }

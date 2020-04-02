@@ -15,6 +15,13 @@
 =            Limite du nombre de caractères            =
 ======================================================*/
 
+/**
+ * 
+ * @param string    $txt		Texte à couper
+ * @param integer	$limit		Nombre de caratères maximum
+ * 
+ */
+
 function pc_words_limit( $txt, $limit ) {
 
     $length = mb_strlen($txt,'utf-8');
@@ -41,6 +48,13 @@ function pc_words_limit( $txt, $limit ) {
 =            Traitement WYSIWYG            =
 ==========================================*/
 
+/**
+ * 
+ * @param string	$txt			Texte à rendre en HTML
+ * @param boolean	$container		Insérer dans un div.editor
+ * 
+ */
+
 function pc_wp_wysiwyg( $txt, $container = true ) {
 
 	$txt =	do_shortcode( $txt );
@@ -61,6 +75,12 @@ function pc_wp_wysiwyg( $txt, $container = true ) {
 =            Téléphone au format international            =
 =========================================================*/
 
+/**
+ * 
+ * @param string	$tel	Numéro de téléphone au format "00 00 00 00 00"
+ * 
+ */
+
 function pc_phone( $tel ) {
 
 	$tel = str_replace( ' ', '', $tel );
@@ -76,6 +96,15 @@ function pc_phone( $tel ) {
 /*===============================
 =            Message            =
 ===============================*/
+
+/**
+ * 
+ * @param string	$msg		Texte à afficher
+ * @param string	$type		Type de message : "error" ou "success"
+ * @param string	$format		Format d'affichage : vide ou "block"
+ * @param string	$elt		Élément HTML contenant
+ * 
+ */
 
 function pc_display_alert_msg( $msg, $type = '', $format = '', $elt = 'p' ) {
 

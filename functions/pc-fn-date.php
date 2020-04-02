@@ -28,6 +28,12 @@ $pc_months_list = array(
 =            Convertion bdd -> affichage            =
 ===================================================*/
 
+/**
+ * 
+ * @param string	$date_bdd	Date au format XXXx-XX-XX
+ * 
+ */
+
 function pc_date_bdd_to_admin( $date_bdd ) {
 
 	// si pas de date en paramètres, stop here !
@@ -51,6 +57,12 @@ function pc_date_bdd_to_admin( $date_bdd ) {
 /*===================================================
 =            Convertion affichage -> bdd            =
 ===================================================*/
+
+/**
+ * 
+ * @param string	$date_admin	Date au format 01 janvier 1977
+ * 
+ */
 
 function pc_date_admin_to_bdd( $date_admin ) {
 

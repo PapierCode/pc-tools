@@ -14,6 +14,13 @@
 =            Afficher un tableau ou un objet            =
 =======================================================*/
 
+/**
+ * 
+ * @param n/a		$var		Donnée à afficher : chaine de caractères, variable, tableau, object,...
+ * @param boolean	$margin		Marge à gauche pour un affichage dans l'administration WP
+ * 
+ */
+
 function pc_var( $var, $margin = false ) {
 
 	$margin == true ? $style = 'style="margin-left:200px"' : $style = '';
@@ -27,6 +34,13 @@ function pc_var( $var, $margin = false ) {
 /*===========================================================
 =            Fusion de tableau multidimensionnel            =
 ===========================================================*/
+
+/**
+ * 
+ * @param array		$default	Tableau à mettre à jour
+ * @param array		$new		Tableau ajouté
+ * 
+ */
 
 function pc_array_multi_merge( $default, $new ) {
 
@@ -58,6 +72,13 @@ function pc_array_multi_merge( $default, $new ) {
 /*====================================================
 =            Nettoyage des champs d'admin            =
 ====================================================*/
+
+/**
+ * 
+ * @param array		$settings_fields	Liste et configuration des champs
+ * @param array		@datas				Données à traiter
+ * 
+ */
 
 function pc_sanitize_settings_fields( $settings_fields, $datas ) {
 

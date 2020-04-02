@@ -1,6 +1,8 @@
 <?php
 /**
  * 
+ * Rechercher une page par sa spécificité
+ * 
  */
 
 
@@ -9,6 +11,13 @@
 ========================================*/
 
 /*----------  Template  ----------*/
+
+/**
+ * 
+ * @param string	$template_name	Nom du modèle
+ * @param string	$type			Valeur retournée par la fonction : "url" ou "object"
+ * 
+ */
 
 function pc_get_page_by_template( $template_name, $type = 'url' ) {
 
@@ -31,6 +40,13 @@ function pc_get_page_by_template( $template_name, $type = 'url' ) {
 }
 
 /*----------  Contenu spécifique  ----------*/
+
+/**
+ * 
+ * @param string	$slug	Slug du contenu spécifique
+ * @param string	$type	Valeur retournée par la fonction : "url" ou "object"
+ * 
+ */
 
 function pc_get_page_by_custom_content( $slug, $type = 'url' ) {
 
