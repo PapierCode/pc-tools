@@ -53,34 +53,3 @@ function pc_post_pager($prevTxt = '<span>Page </span><span>précédente</span>',
 
 
 /*=====  FIN Page  =====*/
-
-/*====================================
-=            Statistiques            =
-====================================*/
-
-function pc_display_tag_analytics() {
-
-    global $pcSettings;
-
-    if ( isset( $pcSettings['google-analytics-active'] ) ) {
-
-        echo '<script async src="https://www.googletagmanager.com/gtag/js?id='.$pcSettings['google-analytics-code'].'"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments)};gtag("js", new Date());gtag("config", "'.$pcSettings['google-analytics-code'].'");</script>';
-
-    }
-
-}
-
-function pc_display_tag_matomo() {
-
-    global $pcSettings;
-
-    if ( isset( $pcSettings['matomo-analytics-active'] ) ) {
-
-        echo '<script>var _paq = window._paq || [];_paq.push(["trackPageView"]);_paq.push(["enableLinkTracking"]);(function(){var u="https://analytics.papier-code.fr/"; _paq.push(["setTrackerUrl", u+"matomo.php"]);_paq.push(["setSiteId", "'.$pcSettings['matomo-analytics-code'].'"]);var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];g.type="text/javascript"; g.async=true; g.defer=true; g.src=u+"matomo.js"; s.parentNode.insertBefore(g,s);})();</script>';
-
-    }
-
-}
-
-
-/*=====  FIN Statistiques  ======*/
