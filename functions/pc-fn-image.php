@@ -78,6 +78,17 @@ function pc_get_img( $id, $size, $return = 'img', $css = '' ) {
 
 }
 
+/*----------  Pour le partage, par défaut  ----------*/
+
+function pc_get_img_default_url_to_share() {
+
+	$img_url = get_template_directory_uri().'/images/share-default.jpg';
+	$img_url = apply_filters( 'pc_filter_img_default_url_to_share', $img_url );
+
+	return $img_url;
+
+}
+
 
 /*=====  FIN Get image  =====*/
 
