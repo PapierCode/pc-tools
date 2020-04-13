@@ -84,14 +84,14 @@ function pc_get_img_default_to_share() {
 
 	global $images_project_sizes;
 
-	$img_url = array(
+	$img = array(
 		get_template_directory_uri().'/images/share-default.jpg',
 		$images_project_sizes['share']['width'],
 		$images_project_sizes['share']['height']
 	);
-	$img_url = apply_filters( 'pc_filter_img_default_url_to_share', $img_url );
+	$img = apply_filters( 'pc_filter_img_default_to_share', $img );
 
-	return $img_url;
+	return $img;
 
 }
 
