@@ -57,14 +57,18 @@ function pc_get_page_by_custom_content( $slug, $type = 'url' ) {
         'posts_per_page' => -1
 	) );
 	
-    switch ($type) {
-        case 'url':
-            return get_the_permalink( $page[0]->ID );
-            break;
-        case 'object':
-            return $page[0];
-            break;
-    }
+	if ( !empty( $page ) ) {
+		
+		switch ($type) {
+			case 'url':
+				return get_the_permalink( $page[0]->ID );
+				break;
+			case 'object':
+				return $page[0];
+				break;
+		}
+
+	} else { return false; }
 
 }
 
