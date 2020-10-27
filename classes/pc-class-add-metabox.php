@@ -387,8 +387,6 @@ class PC_Add_Metabox {
 
 	public function save_metabox_fields( $post_ID ) {
 
-		//pc_var($_POST); exit();
-
 		$content = $this->content; 	// pour la liste des champs
 
 		// check input hidden de vérification
