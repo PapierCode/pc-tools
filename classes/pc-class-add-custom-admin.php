@@ -152,7 +152,7 @@ class PC_Add_Admin_Page {
     	// sections
     	foreach ( $content as $sectionDatas ) {
 
-    		if ( isset($sectionDatas['desc']) ) { $desc = $sectionDatas['desc']; } else { $desc = ''; }
+    		$desc = ( isset($sectionDatas['desc']) ) ? '<div class="pc-metabox-help">'.$sectionDatas['desc'].'</div>' : '';
     		$idSection 	= $this->slug.'-'.$sectionDatas['id'];
 
 			add_settings_section(

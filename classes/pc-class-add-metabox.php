@@ -147,7 +147,9 @@ class PC_Add_Metabox {
 	public function add_metabox_fields( $post, $datas ) {
 
 		// description
-		echo $datas['args']['desc'];
+		if ( '' != $datas['args']['desc'] ) {
+			echo '<div class="pc-metabox-help">'.$datas['args']['desc'].'</div>';
+		}
 
 		// input hidden de vérification pour la sauvegarde
 		wp_nonce_field( basename( __FILE__ ), $this->id.'-'.'nonce' );

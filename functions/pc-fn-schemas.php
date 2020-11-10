@@ -65,7 +65,7 @@ function pc_get_schema_same_as() {
 		$id = $settings_project_fields[2]['prefix'].'-'.$field['label_for'];
 		if ( isset($settings_project[$id]) && $settings_project[$id] != '' ) {	
 			$same_as[] = $settings_project[$id];				
-		}	
+		}
 
 	}
 
@@ -234,7 +234,7 @@ function pc_get_schema_article( $post, $post_metas, $context = false ) {
 	// post
 	$post_id = $post->ID;
 	$post_url = get_the_permalink($post_id);	
-	$post_img = ( isset( $post_metas['thumbnail-img'] ) ) ? pc_get_img( $post_metas['thumbnail-img'][0], 'share', 'datas' ) : pc_get_img_default_to_share();
+	$post_img = ( isset( $post_metas['visual-id'] ) ) ? pc_get_img( $post_metas['visual-id'][0], 'share', 'datas' ) : pc_get_img_default_to_share();
 
 	// données structurées
 	$schema = array(
