@@ -61,7 +61,7 @@ function pc_wp_wysiwyg( $txt, $container = true ) {
 	$txt =	wpautop( $txt );
 
 	if ( $container ) {
-		return '<div class="editor">'.$txt.'</div>';
+		return '<div class="editor"><div class="editor-inner">'.$txt.'</div></div>';
 	} else {
 		return $txt;
 	}
