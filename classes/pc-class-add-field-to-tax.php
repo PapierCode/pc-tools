@@ -76,7 +76,13 @@ class PC_add_field_to_tax {
 		// input hidden de vérification pour la sauvegarde
 		wp_nonce_field( basename( __FILE__ ), $content['prefix'].'-'.'nonce' );
 		// titre de l'ensemble
-		echo '<h2>'.$content['title'].'</h2>'.$content['desc'].'<table class="form-table">';
+		echo '<h2>'.$content['title'].'</h2>';
+		// aide
+		if ( '' != $content['desc'] ) {
+			echo '<div class="pc-metabox-help">'.$content['desc'].'</div>';
+		}
+		// nouveau tableau
+		echo '<table class="form-table">';
 
 		// champs
 		foreach ($content['fields'] as $field) {
