@@ -39,7 +39,7 @@ class PC_Add_Admin_Page {
     *
     */
 
-    public function __construct( $title, $parent, $menuLabel, $slug = '', $content, $capability = 'editor', $position = '99', $icon = 'dashicons-clipboard', $sanitize ='' ) {
+    public function __construct( $title, $parent, $menuLabel, $slug, $content, $capability = 'editor', $position = '99', $icon = 'dashicons-clipboard', $sanitize ='' ) {
 
     	/*----------  variables de la class  ----------*/
 
