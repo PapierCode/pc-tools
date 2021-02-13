@@ -13,43 +13,48 @@
 
 /**
  * 
- * @param object	$query		Requête WP custom
- * @param integer	$current	Numéro de page courante
- * @param string	$css		Classes CSS supplémentaires
- * @param array		$svg		Voir pc_svg()
+ * @param object	$custom_query		WP requête
+ * @param integer	$custom_current		Numéro de page courante
+ * @param string	$custom_css			Arguments pour paginate_links()
  * 
  */
 
-function pc_get_pager( $query = '', $current = '', $css = '', $svg = array( 'arrow', '', 'svg-block' ) ) {
+function pc_get_pager( $custom_query = null, $custom_current = null, $custom_args = array() ) {
 
-    $pagination = array(
-        'mid_size'				=> 0,
-        'next_text' 			=> '<span class="visually-hidden">Suivant</span>'.pc_svg( $svg[0], $svg[1], $svg[2] ),
-        'prev_text' 			=> '<span class="visually-hidden">Précédent</span>'.pc_svg( $svg[0], $svg[1], $svg[2] ),
-        'type' 					=> 'array',
-        'before_page_number' 	=> '<span class="visually-hidden">Page </span>',
-        'format'                => '?paged=%#%#main',
-    );
+	// fusion des arguments
+    $args = array_merge(
+		array(
+			'mid_size'				=> 0,
+			'next_text' 			=> '<span class="visually-hidden">Suivant</span>'.pc_svg( 'arrow' ),
+			'prev_text' 			=> '<span class="visually-hidden">Précédent</span>'.pc_svg( 'arrow', ),
+			'type' 					=> 'array',
+			'before_page_number' 	=> '<span class="visually-hidden">Page </span>',
+			'format'                => '?paged=%#%#main',
+			'ul_css'				=> 'pager-list reset-list no-print' // custom
+		),
+		$custom_args
+	);
 
-    if ( is_object($query) && $current != '' ) {
+	// si requête custom
+    if ( is_object( $custom_query ) && '' != $custom_current ) {
 
-        $pagination['total'] = $query->max_num_pages;
-        $pagination['current'] = $current;
+        $args['total'] = $custom_query->max_num_pages;
+        $args['current'] = $custom_current;
 
     }
 
     // tableau contenant chaque élément (liens et '...')
-    $list = apply_filters( 'pc_filter_pager_args', paginate_links( $pagination ) );
+    $paginate_links = paginate_links( $args );
 
     // affichage
-    if ( isset($list) && count($list) > 0 ) {
+    if ( isset( $paginate_links ) && count( $paginate_links ) > 0 ) {
 		
 		$css_old = array( 'page-numbers', 'prev', 'current', 'dots', 'next' );
 		$css_new = array( 'pager-link', 'pager-link--prev', 'is-active', 'pager-dots', 'pager-link--next' );
 
-		$pager = '<ul class="pager-list reset-list no-print '.$css.'">';
+		$pager = '<ul class="'.$args['ul_css'].'">';
 
-        foreach ($list as $page) {
+        foreach ( $paginate_links as $page ) {
 
             $page = str_replace( $css_old, $css_new, $page );
             $page = str_replace( 'aria-is-active', 'aria-current', $page );
@@ -82,7 +87,7 @@ function pc_get_pager( $query = '', $current = '', $css = '', $svg = array( 'arr
 
 function pc_post_navigation( $prev_inner = '<span>Article </span>Précédent', $next_inner = '<span>Article </span>Suivant', $parent = '../' ) {
 
-	$pagination = '<ul class="pager pager-prevnext reset-list">';
+	$args = '<ul class="pager pager-prevnext reset-list">';
 
 	// construction du lien précédent
 	$prev_object = get_previous_post();
@@ -93,12 +98,12 @@ function pc_post_navigation( $prev_inner = '<span>Article </span>Précédent', $
 		$prev_url 		= get_permalink( $prev_object->ID );
 		$prev_link 		= '<a href="'.$prev_url.'" class="pager-link pager-link-prev" title="'.$prev_title.'"><span>'.$prev_inner.'</span></a>';
 
-		$pagination 	.= '<li class="pager-item">'.$prev_link.'</li>';
+		$args 	.= '<li class="pager-item">'.$prev_link.'</li>';
 
 	}
 
 	// retour liste
-	$pagination .= '<li class="pager-item"><a href="'.$parent.'" class="pager-link parger-link-back" title="Retour à la liste"><span>Retour</span></a></li>';
+	$args .= '<li class="pager-item"><a href="'.$parent.'" class="pager-link parger-link-back" title="Retour à la liste"><span>Retour</span></a></li>';
 
 	// construction du lien suivant
 	$next_object = get_next_post();
@@ -109,13 +114,13 @@ function pc_post_navigation( $prev_inner = '<span>Article </span>Précédent', $
 		$next_url 		= get_permalink( $next_object->ID );
 		$next_link 		= '<a href="'.$next_url.'" class="pager-link pager-link-next" title="'.$next_title.'"><span>'.$next_inner.'</span></a>';
 
-		$pagination 	.= '<li class="pager-item">'.$next_link.'</li>';
+		$args 	.= '<li class="pager-item">'.$next_link.'</li>';
 
 	}
 
-	$pagination .= '</ul>';
+	$args .= '</ul>';
 
-	echo $pagination;
+	echo $args;
 
 }
 
