@@ -39,7 +39,7 @@ function pc_get_pager( $query = '', $current = '', $css = '', $svg = array( 'arr
     }
 
     // tableau contenant chaque élément (liens et '...')
-    $list = paginate_links( $pagination );
+    $list = apply_filters( 'pc_filter_pager_args', paginate_links( $pagination ) );
 
     // affichage
     if ( isset($list) && count($list) > 0 ) {
