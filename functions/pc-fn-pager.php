@@ -26,7 +26,7 @@ function pc_get_pager( $custom_query = null, $custom_current = null, $custom_arg
 		array(
 			'mid_size'				=> 0,
 			'next_text' 			=> '<span class="visually-hidden">Suivant</span>'.pc_svg( 'arrow' ),
-			'prev_text' 			=> '<span class="visually-hidden">Précédent</span>'.pc_svg( 'arrow', ),
+			'prev_text' 			=> '<span class="visually-hidden">Précédent</span>'.pc_svg( 'arrow' ),
 			'type' 					=> 'array',
 			'before_page_number' 	=> '<span class="visually-hidden">Page </span>',
 			'format'                => '?paged=%#%#main',
