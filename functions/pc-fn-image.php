@@ -78,23 +78,6 @@ function pc_get_img( $id, $size, $return = 'img', $css = '' ) {
 
 }
 
-/*----------  Pour le partage, par défaut  ----------*/
-
-function pc_get_img_default_to_share() {
-
-	global $images_project_sizes;
-
-	$img = array(
-		get_template_directory_uri().'/images/share-default.jpg',
-		$images_project_sizes['share']['width'],
-		$images_project_sizes['share']['height']
-	);
-	$img = apply_filters( 'pc_filter_img_default_to_share', $img );
-
-	return $img;
-
-}
-
 
 /*=====  FIN Get image  =====*/
 
