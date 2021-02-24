@@ -31,7 +31,7 @@ function pc_words_limit( $txt, $limit ) {
         $temp = mb_substr( $txt,0, $limit, 'utf-8' );
         $last_space = mb_strripos( $temp, ' ', 0, 'utf-8' );
 
-        return mb_substr( $temp, 0, $last_space, 'utf-8') . '...';
+        return mb_substr( $temp, 0, $last_space, 'utf-8') . '&hellip;';
 
     } else {
 
