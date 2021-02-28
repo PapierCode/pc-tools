@@ -78,13 +78,22 @@ function pc_wp_wysiwyg( $txt, $container = true ) {
 /**
  * 
  * @param string	$tel	Numéro de téléphone au format "00 00 00 00 00"
+ * @param boolean	$href	Distiné à l'attribut href
  * 
  */
 
-function pc_phone( $tel ) {
+function pc_phone( $tel, $href = true ) {
 
-	$tel = str_replace( ' ', '', $tel );
-	$tel = '+33' . substr( $tel, 1, strlen($tel) );
+	if ( $href ) {
+
+		$tel = str_replace( ' ', '', $tel );
+		$tel = '+33' . substr( $tel, 1, strlen($tel) );
+
+	} else {
+
+		$tel = '+33 ' . substr( $tel, 1, strlen($tel) );
+
+	}
 
 	return $tel;
 
