@@ -95,12 +95,10 @@ function pc_sprite_to_js( $icons ) {
 
 	global $sprite;
 
-	$js_sprite = array();
-	foreach ( $icons as $id ) { $js_sprite[$id] = $sprite[$id]; }
-
-	$js_sprite = apply_filters( 'pc_filter_js_sprite', $js_sprite );
+	$sprite_js = array();
+	foreach ( $icons as $id ) { $sprite_js[$id] = $sprite[$id]; }
 	
-	echo '<script>var sprite = '.json_encode( $js_sprite, JSON_PRETTY_PRINT ).'</script>';
+	echo '<script>var sprite = '.json_encode( $sprite_js, JSON_PRETTY_PRINT ).'</script>';
 
 }
 
