@@ -82,7 +82,7 @@ class PC_Add_Metabox {
 
 		/*----------  Création  ----------*/
 
-		add_action( 'admin_init', function() use( $posts, $title, $id, $content, $position, $priority ) {
+		add_action( 'add_meta_boxes', function() use( $posts, $title, $id, $content, $position, $priority ) {
 
 			add_meta_box(
 		      $id,										// $id
