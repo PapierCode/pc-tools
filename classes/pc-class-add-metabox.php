@@ -159,6 +159,8 @@ class PC_Add_Metabox {
 		// champs
 		foreach ( $datas['args']['fields'] as $field ) {
 
+			if ( isset( $field['admin_not_in'] ) ) { continue; }
+
 			// id prefixé
 			$field['id'] = $datas['args']['prefix'].'-'.$field['id'];
 			// valeurs en bdd

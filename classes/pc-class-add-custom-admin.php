@@ -105,7 +105,7 @@ class PC_Add_Admin_Page {
 
     public function page_admin_display() {
 
-    	echo '<div class="wrap"><h1>'.$this->title.'</h1>';
+    	echo '<div class="wrap pc-settings"><h1>'.$this->title.'</h1>';
 
 	    settings_errors();
 
