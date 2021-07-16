@@ -13,13 +13,13 @@
 
 /**
  * 
- * @param object	$custom_query		WP requête
- * @param integer	$custom_current		Numéro de page courante
- * @param string	$custom_css			Arguments pour paginate_links()
+ * @param object	$query		WP requête
+ * @param integer	$current	Numéro de page courante
+ * @param string	$args		Arguments pour paginate_links()
  * 
  */
 
-function pc_get_pager( $custom_query = null, $custom_current = null, $custom_args = array() ) {
+function pc_get_pager( $query = null, $current = null, $args = array() ) {
 
 	// fusion des arguments
     $args = array_merge(
@@ -32,14 +32,14 @@ function pc_get_pager( $custom_query = null, $custom_current = null, $custom_arg
 			'format'                => '?paged=%#%#main',
 			'ul_css'				=> 'pager-list reset-list no-print' // custom
 		),
-		$custom_args
+		$args
 	);
 
 	// si requête custom
-    if ( is_object( $custom_query ) && '' != $custom_current ) {
+    if ( is_object( $query ) && '' != $current ) {
 
-        $args['total'] = $custom_query->max_num_pages;
-        $args['current'] = $custom_current;
+        $args['total'] = $query->max_num_pages;
+        $args['current'] = $current;
 
     }
 

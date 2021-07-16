@@ -7,7 +7,7 @@
 *
 **/
 
-class PC_hcaptcha {
+class PC_Hcaptcha {
 
     private $api_secret;
     private $api_site;
