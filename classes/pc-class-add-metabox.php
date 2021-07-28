@@ -201,6 +201,7 @@ class PC_Add_Metabox {
 				case 'radio':
 					echo '<th>'.$field['label'].'</th><td><div>';
 					$radioIndex = 0;
+					$savedValue = ( '' == $savedValue && isset( $field['default'] ) ) ? $field['default'] : $savedValue;
 					foreach ($field['options'] as $radioKey => $radioValue) {
 						if ( $radioIndex > 0 ) { echo '<br/>'; }
 						echo '<input type="radio" id="'.$field['id'].'-'.$radioIndex.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$radioValue.'" '.checked($radioValue, $savedValue, false).' '.$required.' />';
