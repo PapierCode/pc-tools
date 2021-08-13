@@ -331,6 +331,89 @@ if ( $pcPdfSelect.length > 0 ) {
 
 /*=====  FIN Medias : pdf  =====*/
 
+/*====================================
+=            Medias : file            =
+====================================*/
+
+var $pcFileSelect = $('.pc-file-select');
+
+if ( $pcFileSelect.length > 0 ) {
+
+	$pcFileSelect.click( function() {
+
+		var $btnSelect      = $(this),                          // bouton ajouter/modifier
+			$container      = $(this).parent(),                 // conteneur direct
+			$hiddenField    = $container.find('.pc-media-id');  // champ caché qui transmet à la bdd
+
+		// si la modal a déjà été ouverte : réutilisation et sortie de la fonction
+		if (fileUploader) { fileUploader.open(); return; }
+
+
+		/*----------  création de l'objet modale  ----------*/
+
+		var fileUploader = wp.media({
+
+			title: 'Insérer un fichier',
+			//library: { type: 'application/pdf' },
+			button: { text: 'Insérer un fichier' },
+			multiple: false 
+
+		}); // FIN wp.media
+
+		
+		/*----------  Au clic sur le bouton de validation de la modal  ----------*/
+
+		fileUploader.on('select', function() {
+
+			// datas de l'image sélectionnée
+			var fileDatas = fileUploader.state().get('selection').first().toJSON();
+
+			// mise à jour du champ caché
+			$hiddenField.val(fileDatas.id);
+
+			// si une preview existe déjà
+			if ( $container.find('.pc-file-preview').length > 0 ) {
+
+				// modification de l'attribut src
+				$container.find('.pc-file-preview').attr('href', fileDatas.url);
+
+			// si pas de preview
+			} else {
+
+				// ajoute la preview
+				$container.prepend('<div class="pc-media-preview"><a class="pc-file-preview" href="'+fileDatas.url+'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a></div>');
+				// texte du bouton
+				$btnSelect.val('Modifier');
+
+				// si suppression autorisée
+				if ( $btnSelect.data('remove') == 'active') {
+
+					// ajoute le btn
+					$btnSelect.after('<input class="button pc-media-remove" type="button" value="Supprimer"/>');
+					// au clic sur le nouveau btn de suppression
+					$container.find('.pc-media-remove').click(function() { pc_media_remove( $(this) ); });
+
+				} // FIN if btn suppression
+
+			} // FIN if preview 
+
+			// si erreur affichée précédemment
+			$container.find('p').remove();
+
+		}); // FIN fileUploader.on(select)
+
+
+		/*----------  ouverture de la modal  ----------*/
+
+		fileUploader.open();
+
+	});
+
+} // FIN if $pcFileSelect
+
+
+/*=====  FIN Medias : file  =====*/
+
 /*===================================
 =            Date Picker            =
 ===================================*/
