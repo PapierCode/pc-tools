@@ -33,7 +33,7 @@ class PC_Hcaptcha {
 
     public function display() {
 
-		echo '<script src="https://www.hCaptcha.com/1/api.js" async defer></script>';
+		echo '<script src="https://js.hCaptcha.com/1/api.js" async defer></script>';
         echo '<div class="h-captcha" data-sitekey="'.$this->api_site.'"></div>';
 
     }
