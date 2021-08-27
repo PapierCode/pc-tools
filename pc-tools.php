@@ -3,7 +3,7 @@
 Plugin Name: [PC] Tools
 Plugin URI: www.papier-code.fr
 Description: Boite à outils Papier Codé
-Version: 1.6.6
+Version: 1.6.7
 Author: Papier Codé
 */
 
@@ -31,8 +31,9 @@ include 'classes/pc-class-add-hcaptcha.php';		// création hcaptcha
 
 
 /*----------  Javascript  ----------*/
-
-add_action( 'admin_enqueue_scripts', function () {
+add_action( 'admin_enqueue_scripts', function ( $hook ) {
+	
+	if ( 'user-new.php' == $hook ) { return; }
 
     // scripts utiles aux fonctions et classes ci-dessus
 	wp_enqueue_script( 'pc-tools-scripts', plugin_dir_url( __FILE__ ).'pc-tools-script.js' );
