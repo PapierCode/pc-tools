@@ -273,17 +273,17 @@ class PC_Add_Metabox {
 					$btnTxt = 'Ajouter';
 					// label
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					echo '<div class="pc-media-preview">';
 					// si une valeur en bdd
 					if ( isset($savedValue) && '' != $savedValue ) {
 						$btnTxt = 'Modifier';
 						// affichage image
-						echo '<div class="pc-media-preview">';
 						echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($savedValue,'thumbnail')[0].');"></div>';
-						echo '</div>';
 					}
+					echo '</div>';
 					// champs
 					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id visually-hidden" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'/>';
-					echo '<input class="button pc-img-select" type="button" value="'.$btnTxt.'" ';
+					echo '<input class="button pc-media-select" type="button" data-type="image" value="'.$btnTxt.'" ';
 					// si btn de suppression activé
 					if ( $field['options']['btnremove'] == true ) {
 						echo 'data-remove="active" />';
@@ -298,16 +298,18 @@ class PC_Add_Metabox {
 					$btnTxt = 'Ajouter';
 					// label
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					echo '<div class="pc-media-preview">';
 					// si une valeur en bdd
 					if ( isset($savedValue) && '' != $savedValue ) {
 						$btnTxt = 'Modifier';
 						// affichage lien pdf
 						$pdfUrl = wp_get_attachment_url($savedValue);
-			        	echo '<div class="pc-media-preview"><a class="pc-pdf-preview" href="'.$pdfUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a></div>';
+			        	echo '<a class="pc-pdf-preview" href="'.$pdfUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a>';
 					}
+					echo '</div>';
 					// champs
 					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id visually-hidden" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'/>';
-					echo '<input class="button pc-pdf-select" type="button" value="'.$btnTxt.'" ';
+					echo '<input class="button pc-media-select" type="button" data-type="pdf" value="'.$btnTxt.'" ';
 					// si btn de suppression activé
 					if ( $field['options']['btnremove'] == true ) {
 						echo 'data-remove="active" />';
@@ -322,16 +324,18 @@ class PC_Add_Metabox {
 					$btnTxt = 'Ajouter';
 					// label
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					echo '<div class="pc-media-preview">';
 					// si une valeur en bdd
 					if ( isset($savedValue) && '' != $savedValue ) {
 						$btnTxt = 'Modifier';
 						// affichage lien fichier
 						$fileUrl = wp_get_attachment_url($savedValue);
-			        	echo '<div class="pc-media-preview"><a class="pc-file-preview" href="'.$fileUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a></div>';
+			        	echo '<a class="pc-file-preview" href="'.$fileUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a>';
 					}
+					echo '</div>';
 					// champs
 					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id visually-hidden" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'/>';
-					echo '<input class="button pc-file-select" type="button" value="'.$btnTxt.'" ';
+					echo '<input class="button pc-file-select" data-type="file" type="button" value="'.$btnTxt.'" ';
 					// si btn de suppression activé
 					if ( $field['options']['btnremove'] == true ) {
 						echo 'data-remove="active" />';
@@ -359,7 +363,7 @@ class PC_Add_Metabox {
 					}
 					// champs
 					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id visually-hidden" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'/>';
-					echo '<input class="button pc-gallery-select" type="button" value="'.$btnTxt.'" ';
+					echo '<input class="button pc-gallery-select pc-media-select" type="button" value="'.$btnTxt.'" ';
 					// si btn de suppression activé
 					if ( $field['options']['btnremove'] == true ) {
 						echo 'data-remove="active" />';

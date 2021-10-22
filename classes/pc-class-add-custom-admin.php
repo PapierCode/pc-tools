@@ -183,7 +183,8 @@ class PC_Add_Admin_Page {
 		                'attr'      => '',
 		                'css'       => '',
 		                'required'	=> false,
-		                'options'   => array()
+		                'options'   => array(),
+						'default'	=> ''
 		            ),
 		            // arguments passés lors de la création
 					$fieldValues
@@ -313,7 +314,7 @@ class PC_Add_Admin_Page {
 
 		$id = $datas['label_for'];
 		// si une valeur en bdd
-		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = $datas['default']; }
 		// champ obligatoire
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
@@ -330,7 +331,7 @@ class PC_Add_Admin_Page {
 
 		$id = $datas['label_for'];
 		// si une valeur en bdd
-		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = $datas['default']; }
 		// champ obligatoire
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
@@ -347,7 +348,7 @@ class PC_Add_Admin_Page {
 
 		$id = $datas['label_for'];
 		// si une valeur en bdd
-		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = $datas['default']; }
 		// champ obligatoire
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
@@ -364,7 +365,7 @@ class PC_Add_Admin_Page {
 
 		$id = $datas['label_for'];
 		// si une valeur en bdd
-		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( pc_date_bdd_to_admin($datas['inBdd'][$id]) ); } else { $value = ''; }
+		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( pc_date_bdd_to_admin($datas['inBdd'][$id]) ); } else { $value = $datas['default']; }
 		// champ obligatoire
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 		// recherche de l'attibut class
@@ -393,7 +394,7 @@ class PC_Add_Admin_Page {
 
 		$id = $datas['label_for'];
 		// si une valeur en bdd
-		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = $datas['default']; }
 		// champ obligatoire
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
@@ -410,7 +411,7 @@ class PC_Add_Admin_Page {
 
 		$id = $datas['label_for'];
 		// si une valeur en bdd
-		if ( isset($datas['inBdd'][$id]) ) { $checked = 'checked="checked"'; } else { $checked = ''; }
+		if ( isset($datas['inBdd'][$id]) ) { $checked = 'checked="checked"'; } else { $checked = $datas['default']; }
 
 		echo '<input type="checkbox" name="'.$datas['name'].'" id="'.$id.'" value="1"' .$checked. ' '.$datas['attr'].'/>';
 
@@ -425,7 +426,7 @@ class PC_Add_Admin_Page {
 
 		$id = $datas['label_for'];
 		// si une valeur en bdd
-		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = $datas['default']; }
 		// champ obligatoire
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
@@ -448,7 +449,7 @@ class PC_Add_Admin_Page {
 
 		$id = $datas['label_for'];
 		// si une valeur en bdd
-		if ( isset($datas['inBdd'][$id]) ) { $selected = esc_attr( $datas['inBdd'][$id] ); } else { $selected = ''; }
+		if ( isset($datas['inBdd'][$id]) ) { $selected = esc_attr( $datas['inBdd'][$id] ); } else { $selected = $datas['default']; }
 		// champ obligatoire
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
@@ -472,7 +473,7 @@ class PC_Add_Admin_Page {
 
 		$id = $datas['label_for'];
 		// si une valeur en bdd
-		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = ''; }
+		if ( isset($datas['inBdd'][$id]) ) { $value = esc_attr( $datas['inBdd'][$id] ); } else { $value = $datas['default']; }
 		// champ obligatoire
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
@@ -489,7 +490,7 @@ class PC_Add_Admin_Page {
 
 		$id = $datas['label_for'];
 		// si une valeur en bdd
-		if ( isset($datas['inBdd'][$id]) ) { $value = $datas['inBdd'][$id]; } else { $value = ''; }
+		if ( isset($datas['inBdd'][$id]) ) { $value = $datas['inBdd'][$id]; } else { $value = $datas['default']; }
 
 		// configuration wysiwyg par défaut
 		$pcSettings = get_option( 'pc-settings-option' );
@@ -533,14 +534,15 @@ class PC_Add_Admin_Page {
 		$btnRemove 	= '';						// btn remove (html)
 		$btnTxt		= 'Ajouter';				// texte du bouton qui ouvre la modal
 
+		echo '<div class="pc-media-preview">';
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) && '' != $datas['inBdd'][$id] ) {
 			$btnTxt = 'Modifier';
 			$value = $datas['inBdd'][$id];
-			echo '<div class="pc-media-preview">';
 			echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($value,'thumbnail')[0].');"></div>';
-			echo '</div>';
 		}
+		echo '</div>';
+
 		// btn de suppression
 		if ( $datas['options']['btnremove'] == true ) {
 			$dataRemove		= 'data-remove="active"';
@@ -552,7 +554,7 @@ class PC_Add_Admin_Page {
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
 		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" class="pc-media-id visually-hidden" value="'.$value.'" '.$required.' />';
-		echo '<input class="button pc-img-select" type="button" value="'.$btnTxt.'" '.$dataRemove.' />';
+		echo '<input class="button pc-media-select" type="button" data-type="image" value="'.$btnTxt.'" '.$dataRemove.' />';
 		echo $btnRemove;
 
 		$this->display_desc( $datas['desc'] );
@@ -593,7 +595,7 @@ class PC_Add_Admin_Page {
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }		
 
 		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" class="pc-media-id visually-hidden" value="'.$value.'" '.$required.' />';
-		echo '<input class="button pc-gallery-select" type="button" value="'.$btnTxt.'" '.$dataRemove.' />';
+		echo '<input class="button pc-gallery-select pc-media-select" type="button" value="'.$btnTxt.'" '.$dataRemove.' />';
 		echo $btnRemove;
 
 		$this->display_desc( $datas['desc'] );
@@ -611,14 +613,16 @@ class PC_Add_Admin_Page {
 		$btnRemove 	= '';						// btn remove (html)
 		$btnTxt		= 'Ajouter';				// texte du bouton qui ouvre la modal
 
+		echo '<div class="pc-media-preview">';
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) && '' != $datas['inBdd'][$id] ) {
 			$btnTxt = 'Modifier';
 			$value = $datas['inBdd'][$id];
 			// affichage lien pdf
 			$pdfUrl = wp_get_attachment_url($value);
-        	echo '<div class="pc-media-preview"><a class="pc-pdf-preview" href="'.$pdfUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a></div>';
+        	echo '<a class="pc-pdf-preview" href="'.$pdfUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a>';
 		}
+		echo '</div>';
 
 		// btn de suppression
 		if ( $datas['options']['btnremove'] == true ) {
@@ -631,7 +635,7 @@ class PC_Add_Admin_Page {
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }	
 
 		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" class="pc-media-id visually-hidden" value="'.$value.'" '.$required.' />';
-		echo '<input class="button pc-pdf-select" type="button" value="'.$btnTxt.'" '.$dataRemove.' />';
+		echo '<input class="button pc-media-select" type="button" data-type="pdf" value="'.$btnTxt.'" '.$dataRemove.' />';
 		echo $btnRemove;
 
 		$this->display_desc( $datas['desc'] );

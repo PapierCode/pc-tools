@@ -206,17 +206,17 @@ class PC_add_field_to_tax {
 					$btnTxt = 'Ajouter';
 					// label
 					echo '<label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					echo '<div class="pc-media-preview">';
 					// si une valeur en bdd
 					if ( isset($savedValue) && '' != $savedValue ) {
 						$btnTxt = 'Modifier';
 						// affichage image		
-						echo '<div class="pc-media-preview">';
 						echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($savedValue,'thumbnail')[0].');"></div>';
-						echo '</div>';
 					}
+					echo '</div>';
 					// champs
 					echo '<input type="hidden" id="'.$field['id'].'" class="pc-media-id" name="'.$field['id'].'" value="'.$savedValue.'" />';
-					echo '<input class="button pc-img-select" type="button" value="'.$btnTxt.'" ';
+					echo '<input class="button pc-media-select" type="button" data-type="image" value="'.$btnTxt.'" ';
 					// si btn de suppression activé
 					if ( $field['options']['btnremove'] == true ) {
 						echo 'data-remove="active" />';
