@@ -2,9 +2,8 @@
 *
 * [PC] Tools : fonctions javascript pour l'admin WP
 *
-** Communs
-** Medias : suppression
-** Medias : image
+** Fonctions médias
+** Medias
 ** Medias : galerie
 ** Medias : pdf
 ** Date Picker
