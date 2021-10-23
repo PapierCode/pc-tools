@@ -92,7 +92,7 @@ function pc_media_modal( $button ) {
 	modal.on( 'select', function() {
 
 		// datas du media sélectionnée
-		var media_datas = modal.state().get('selection').first().toJSON(); console.log($field);
+		var media_datas = modal.state().get('selection').first().toJSON();
 
 		// mise à jour du champ caché
 		$field.val(media_datas.id);
@@ -143,7 +143,7 @@ jQuery(document).ready(function($){
 =            Communs            =
 ===============================*/
 
-var $wp_body = $('#wpbody');
+var $body = $('body');
 
 
 /*=====  FIN Communs  ======*/
@@ -152,10 +152,10 @@ var $wp_body = $('#wpbody');
 =            Médias            =
 ==============================*/
 
-$wp_body.on( 'click', '.pc-media-select[data-type]', function() {
+$body.on( 'click', '.pc-media-select[data-type]', function() {
     pc_media_modal( $(this) );
 });
-$wp_body.on( 'click', '.pc-media-remove', function() {
+$body.on( 'click', '.pc-media-remove', function() {
     pc_media_remove( $(this) );
 });
 
@@ -442,10 +442,10 @@ if ( $pcCounter.length > 0 ) {
 var wpLinkCibleId; // attribut id du input
 
 // ouverture
-$wp_body.on( 'click', '.pc-link-select', function() {
+$body.on( 'click', '.pc-link-select', function() {
 
     // ajout d'un classe pour du css
-    $wp_body.addClass('pc-modal-link');
+    $body.addClass('pc-modal-link');
     // input ciblé
     wpLinkCibleId = $(this).data('cible');
     // le script s'attend à un wysiwyg, faut le feinter
@@ -456,24 +456,24 @@ $wp_body.on( 'click', '.pc-link-select', function() {
 });
 
 // validation
-$wp_body.on( 'click', '#wp-link-submit', function(event) {
+$body.on( 'click', '#wp-link-submit', function(event) {
 
     // ajout de l'url dans le champ
     $('#'+wpLinkCibleId).val(wpLink.getAttrs().href);
     // fermeture de la modale
     wpLink.close();
     // suppression class pour le css
-    $wp_body.removeClass('pc-link-modal');
+    $body.removeClass('pc-link-modal');
     
 });
 
 // fermeture
-$wp_body.on( 'click', '#wp-link-cancel, #wp-link-backdrop, #wp-link-close', function(event) {
+$body.on( 'click', '#wp-link-cancel, #wp-link-backdrop, #wp-link-close', function(event) {
 
     // fermeture de la modale
     wpLink.close();
     // suppression class pour le css
-    $wp_body.removeClass('pc-link-modal');
+    $body.removeClass('pc-link-modal');
 
 });
 
