@@ -25,6 +25,7 @@ function pc_get_pager( $query = null, $current = null, $args = array() ) {
     $args = array_merge(
 		array(
 			'mid_size'				=> 0,
+			'end_size'				=> 0,
 			'next_text' 			=> '<span class="visually-hidden">Suivant</span>'.pc_svg( 'arrow' ),
 			'prev_text' 			=> '<span class="visually-hidden">Précédent</span>'.pc_svg( 'arrow' ),
 			'type' 					=> 'array',
@@ -52,7 +53,7 @@ function pc_get_pager( $query = null, $current = null, $args = array() ) {
 		$css_old = array( 'page-numbers', 'prev', 'current', 'dots', 'next' );
 		$css_new = array( 'pager-link', 'pager-link--prev', 'is-active', 'pager-dots', 'pager-link--next' );
 
-		$pager = '<ul class="'.$args['ul_css'].'">';
+		$pager = '<nav class="pager" role="navigation" aria-label="Pagination"><ul class="'.$args['ul_css'].'">';
 
         foreach ( $paginate_links as $page ) {
 
@@ -62,7 +63,7 @@ function pc_get_pager( $query = null, $current = null, $args = array() ) {
 			
 		}
 		
-        $pager .= '</ul>';
+        $pager .= '</ul></nav>';
 
         echo $pager;
 
