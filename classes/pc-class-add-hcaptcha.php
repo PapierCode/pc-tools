@@ -45,13 +45,13 @@ class PC_Hcaptcha {
     =            Validation            =
     ==================================*/
 
-    public function validate( $hcaptcha_response ) {
+    public function validate() {
 
-        if ( empty( $hcaptcha_response ) ) { return false; }
+        if ( empty( $_POST['h-captcha-response'] ) ) { return false; }
 
         $query_args = array(
             'secret'    => $this->api_secret,
-            'response'  => $hcaptcha_response
+            'response'  => $_POST['h-captcha-response']
 		);
 
 		$verify = curl_init();
