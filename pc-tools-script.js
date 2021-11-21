@@ -60,23 +60,28 @@ function pc_media_modal( $button ) {
 
 		case 'pdf' :
 			modal_params = {
-
 				title: 'Insérer un pdf',
 				library: { type: 'application/pdf' },
 				button: { text: 'Insérer un pdf' },
 				multiple: false 
-		
 			};
 			break;
 
 		case 'file' :
 			modal_params = {
-
 				title: 'Insérer un fichier',
 				button: { text: 'Insérer un fichier' },
 				multiple: false 
-		
 			};
+			break;
+
+		case 'audio' :
+			modal_params = {
+				title: 'Insérer un fichier audio',
+				library: { type: 'audio/mpeg' },
+				button: { text: 'Insérer un fichier audio' },
+				multiple: false
+			}; 
 			break;
 
 	}
@@ -107,7 +112,10 @@ function pc_media_modal( $button ) {
 			case 'pdf' :
 			case 'file' :
 				media_url = media_datas.url;
-				preview_inner = '<a class="pc-pdf-preview" href="' + media_url + '" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier</a>'
+				preview_inner = '<a class="pc-pdf-preview" href="' + media_url + '" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier</a>';
+			case 'audio' :
+				media_url = media_datas.url;
+				preview_inner = '<audio class="pc-audio-preview" controls src="' + media_url + '"></audio>';
 		}
 
 		// mise à jour preview

@@ -319,6 +319,33 @@ class PC_Add_Metabox {
 						}
 					} else { echo ' />'; }
 					break;
+					break;
+
+				case 'audio':
+					$btnTxt = 'Ajouter';
+					// label
+					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					echo '<div class="pc-media-preview">';
+					// si une valeur en bdd
+					if ( isset($savedValue) && '' != $savedValue ) {
+						$btnTxt = 'Modifier';
+						// affichage lien pdf
+						$pdfUrl = wp_get_attachment_url($savedValue);
+			        	echo '<a class="pc-pdf-preview" href="'.$pdfUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Écouter le fichier actuel</a>';
+					}
+					echo '</div>';
+					// champs
+					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id visually-hidden" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'/>';
+					echo '<input class="button pc-media-select" type="button" data-type="audio" value="'.$btnTxt.'" ';
+					// si btn de suppression activé
+					if ( $field['options']['btnremove'] == true ) {
+						echo 'data-remove="active" />';
+						// affiche le btn si une image est déjà enregistrée
+						if ( isset($savedValue) && '' != $savedValue ) {
+							echo ' <input class="button pc-media-remove" type="button" value="Supprimer"/>';
+						}
+					} else { echo ' />'; }
+					break;
 
 				case 'file':
 					$btnTxt = 'Ajouter';
