@@ -330,8 +330,8 @@ class PC_Add_Metabox {
 					if ( isset($savedValue) && '' != $savedValue ) {
 						$btnTxt = 'Modifier';
 						// affichage lien pdf
-						$pdfUrl = wp_get_attachment_url($savedValue);
-			        	echo '<a class="pc-pdf-preview" href="'.$pdfUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Écouter le fichier actuel</a>';
+						$audioUrl = wp_get_attachment_url($savedValue);
+			        	echo '<audio class="pc-audio-preview" controls src="'.$audioUrl.'"></audio>';
 					}
 					echo '</div>';
 					// champs
