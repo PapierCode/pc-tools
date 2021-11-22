@@ -44,6 +44,26 @@ function pc_words_limit( $txt, $limit ) {
 
 /*=====  FIN Limite du nombre de caractères  =====*/
 
+/*===============================================
+=            Textarea to paragraphes            =
+===============================================*/
+
+function pc_textearea_to_paragraphs( $txt ) {
+
+	$txt_to_array = explode( PHP_EOL, $txt );
+	$txt_formated = '';
+
+	foreach ( $txt_to_array as $p ) {
+		if ( !empty( $p ) ) { $txt_formated .= '<p>'.$p.'</p>'; }
+	}
+
+	return $txt_formated;
+
+}
+
+
+/*=====  FIN Textarea to paragraphes  =====*/
+
 /*==========================================
 =            Traitement WYSIWYG            =
 ==========================================*/
