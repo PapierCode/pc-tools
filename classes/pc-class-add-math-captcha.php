@@ -9,7 +9,10 @@
 class PC_MathCaptcha {
 
 	public $math;
+	public $msg_error;
 
+	private $lang; 
+	
 	private $cipher_method;
 	private $pass_phrase;
 	private $iv;
@@ -19,7 +22,18 @@ class PC_MathCaptcha {
     =            Constructeur            =
     ====================================*/
 
-    function __construct( $pass_phrase, $iv ) {
+    function __construct( $pass_phrase, $iv, $lang ) {
+
+		switch ( $lang ) {
+			case 'fr':
+				$msg_error = '<strong>Résolvez le nouveau calcul</strong> (protection contre les spams)';
+				break;
+			case 'en':
+				$msg_error = '<strong>Solve the new calculation</strong> (spam protection)';
+				break;
+		}
+		$this->msg_error = apply_filters( 'pc_filter_mathcaptcha_msg_error', $msg_error, $lang );
+		$this->lang = $lang;
 		
 		$types = array( 'add', 'sub' );
 		$this->math = array( rand( 1, 10 ), rand( 1, 10 ), $types[ rand( 0, 1 ) ] );
@@ -32,6 +46,38 @@ class PC_MathCaptcha {
 
 
     /*=====  FIN Constructeur  ======*/
+
+	/*=============================
+	=            Champ            =
+	=============================*/
+	
+	public function get_field_label_text() {
+
+		$math = $this->math;
+
+		switch ( $this->lang ) {
+			case 'fr':
+				$operator = ( 'add' == $math[2] ) ? 'plus' : 'moins';
+				$label_text = 'Combien font '.$math[0].'&nbsp;'.$operator.'&nbsp;'.$math[1].'&nbsp;?';
+				break;
+			case 'en':
+				$operator = ( 'add' == $math[2] ) ? 'plus' : 'minus';
+				$label_text = 'How many do '.$math[0].'&nbsp;'.$operator.'&nbsp;'.$math[1].'&nbsp;?';
+				break;
+		}
+
+		return apply_filters( 'pc_filter_mathcaptcha_label_text', $label_text , $math, $operator, $this->lang );
+
+	}
+	
+	public function get_field_inputs() {
+
+		return '<input type="number" id="form-captcha" name="form-captcha" value="" required /><input type="hidden" name="captcha-math" value="'.$this->get_encode_math().'" />';
+
+	}
+	
+	
+	/*=====  FIN Champ  =====*/
 
 	/*===========================================
 	=            Encodage / Décodage            =

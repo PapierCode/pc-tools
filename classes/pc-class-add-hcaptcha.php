@@ -9,6 +9,8 @@
 
 class PC_Hcaptcha {
 
+	public $msg_error;
+
     private $api_secret;
     private $api_site;
 
@@ -18,6 +20,8 @@ class PC_Hcaptcha {
     ====================================*/
 
     function __construct( $api_site, $api_secret ) {
+
+		$this->msg_error = apply_filters( 'pc_filter_hcaptcha_msg_error', 'Cochez la case <strong>Je suis un humain</strong>, et si nécessaire suivez les instructions' );
 
         $this->api_secret = $api_secret;
         $this->api_site = $api_site;
@@ -30,6 +34,12 @@ class PC_Hcaptcha {
     /*=================================
     =            Affichage            =
     =================================*/
+
+	public function get_field_label_text() {
+
+		return apply_filters( 'pc_filter_hcaptcha_label_text', 'Protection contre les spams' );
+
+	}
 
     public function display() {
 
