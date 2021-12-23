@@ -34,7 +34,7 @@ function pc_svg( $index, $color = '', $css = 'svg-block', $hidden = true ) {
 	if ( $color != '' ) {	$svg = str_replace('fill="#fff"', 'fill="'.$color.'"', $svg); }
 
 	// aria hidden
-	if ( $hidden ) { $svg = str_replace('<svg', '<svg aria-hidden="true"', $svg); }
+	if ( $hidden ) { $svg = str_replace('<svg', '<svg aria-hidden="true" focusable="false"', $svg); }
 
 	// css
 	$svg = str_replace('class="no-print"', 'class="no-print '.$css.'"', $svg);
@@ -96,7 +96,7 @@ function pc_sprite_to_js( $icons ) {
 	global $sprite;
 
 	$sprite_js = array();
-	foreach ( $icons as $id ) { $sprite_js[$id] = $sprite[$id]; }
+	foreach ( $icons as $id ) { $sprite_js[$id] = str_replace( '<svg', '<svg aria-hidden="true" focusable="false"', $sprite[$id] ); }
 	
 	echo '<script>var sprite = '.json_encode( $sprite_js, JSON_PRETTY_PRINT ).'</script>';
 
