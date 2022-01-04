@@ -254,10 +254,12 @@ class PC_Add_Admin_Page {
 
 					case 'url':
 						$type = 'display_input_url';
-						// chargement des scripts de l'éditeur
-						add_action( 'admin_enqueue_scripts', function () {
-							wp_enqueue_editor();
-						});
+						if ( isset($datasFields['options']['btnselection']) && false !== $datasFields['options']['btnselection'] ) {
+							// chargement des scripts de l'éditeur
+							add_action( 'admin_enqueue_scripts', function () {
+								wp_enqueue_editor();
+							});
+						}
 						break;
 
 					case 'date':
@@ -398,7 +400,13 @@ class PC_Add_Admin_Page {
 		// champ obligatoire
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
-		echo '<div style="display:flex;"><div style="flex-grow:1;margin-right:10px;"><input type="url" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" '.$required.' style="width:100%;" /></div><div><button type="button" class="button pc-link-select" data-cible="'.$id.'">Sélectionner</button></div></div>';
+		$tag = '<input type="url" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" '.$required.' style="width:100%;" />';
+
+		if ( isset($datas['options']['btnselection']) && false !== $datas['options']['btnselection'] ) {
+			echo '<div style="display:flex;"><div style="flex-grow:1;margin-right:10px;">'.$tag.'</div><div><button type="button" class="button pc-link-select" data-cible="'.$id.'">Sélectionner</button></div></div>';
+		} else {
+			echo $tag;
+		}
 
 		$this->display_desc( $datas['desc'] );
 

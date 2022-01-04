@@ -420,9 +420,14 @@ class PC_Add_Metabox {
 					break;
 
 				case 'url':
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td><div style="display:flex;">';
-					echo '<div style="flex-grow:1;margin-right:10px;"><input type="url" id="'.$field['id'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.' style="width:100%" /></div><div><button type="button" class="button pc-link-select" data-cible="'.$field['id'].'">Sélectionner</button></div>';
-					echo '</div>';
+					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					if ( isset($field['options']['btnselection']) && false !== $field['options']['btnselection'] ) {
+						echo '<div style="display:flex;"><div style="flex-grow:1;margin-right:10px;">';
+					}
+					echo '<input type="url" id="'.$field['id'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.' style="width:100%" />';
+					if ( isset($field['options']['btnselection']) && false !== $field['options']['btnselection'] ) {
+						echo '</div><div><button type="button" class="button pc-link-select" data-cible="'.$field['id'].'">Sélectionner</button></div></div>';
+					}
 					break;
 
 			} // FIN switch($field['type'])
