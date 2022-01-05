@@ -254,7 +254,7 @@ class PC_Add_Admin_Page {
 
 					case 'url':
 						$type = 'display_input_url';
-						if ( isset($datasFields['options']['btnselection']) && false !== $datasFields['options']['btnselection'] ) {
+						if ( !isset($datasFields['options']['btnselection']) || true == $datasFields['options']['btnselection'] ) {
 							// chargement des scripts de l'éditeur
 							add_action( 'admin_enqueue_scripts', function () {
 								wp_enqueue_editor();
@@ -402,7 +402,7 @@ class PC_Add_Admin_Page {
 
 		$tag = '<input type="url" name="'.$datas['name'].'" id="'.$id.'" value="'.$value.'" '.$required.' style="width:100%;" />';
 
-		if ( isset($datas['options']['btnselection']) && false !== $datas['options']['btnselection'] ) {
+		if ( !isset($datas['options']['btnselection']) || true == $datas['options']['btnselection'] ) {
 			echo '<div style="display:flex;"><div style="flex-grow:1;margin-right:10px;">'.$tag.'</div><div><button type="button" class="button pc-link-select" data-cible="'.$id.'">Sélectionner</button></div></div>';
 		} else {
 			echo $tag;
