@@ -109,13 +109,13 @@ function pc_media_modal( $button ) {
 				media_url = media_datas.sizes.hasOwnProperty('thumbnail') ? media_datas.sizes.thumbnail.url : media_datas.url ;
 				preview_inner = '<div class="pc-media-preview-item" style="background-image:url(' + media_url + ');"></div>';
 				break;
-			case 'pdf' :
-			case 'file' :
-				media_url = media_datas.url;
-				preview_inner = '<a class="pc-pdf-preview" href="' + media_url + '" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier</a>';
 			case 'audio' :
 				media_url = media_datas.url;
 				preview_inner = '<audio class="pc-audio-preview" controls src="' + media_url + '"></audio>';
+			case 'pdf' :
+			default :
+				media_url = media_datas.url;
+				preview_inner = '<a class="pc-pdf-preview" href="' + media_url + '" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier</a>';
 		}
 
 		// mise à jour preview
