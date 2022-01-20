@@ -77,8 +77,7 @@ function pc_textearea_to_paragraphs( $txt ) {
 
 function pc_wp_wysiwyg( $txt, $container = true ) {
 
-	$txt =	do_shortcode( $txt );
-	$txt =	wpautop( $txt );
+	$txt = apply_filters( 'the_content', $txt );
 
 	if ( $container ) {
 		return '<div class="editor"><div class="editor-inner">'.$txt.'</div></div>';
