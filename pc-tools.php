@@ -3,7 +3,7 @@
 Plugin Name: [PC] Tools
 Plugin URI: www.papier-code.fr
 Description: Boite à outils Papier Codé
-Version: 1.11.2
+Version: 1.12.0
 Author: Papier Codé
 */
 
@@ -14,7 +14,6 @@ include 'functions/pc-fn-dev.php';			// outils de développement
 include 'functions/pc-fn-statistics.php';	// script Matomo ou Google Analytics
 include 'functions/pc-fn-get-page.php';		// rechercher une page par sa spécificité
 include 'functions/pc-fn-text.php';			// manipuler des textes
-include 'functions/pc-fn-date.php';			// manipuler des dates
 include 'functions/pc-fn-image.php';		// rechercher une image par son ID, manipuler du svg
 include 'functions/pc-fn-pager.php';		// afficher une pagination ou une navigation entre article
 

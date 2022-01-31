@@ -107,19 +107,6 @@ class PC_Add_Metabox {
 		// pour chaque champ défini
 		foreach ($content['fields'] as  $field ) {
 
-			// Scripts & styles supplémentaires : type date
-			if ( $field['type'] == 'date' ) {
-
-				add_action( 'admin_enqueue_scripts', function () {
-
-					// chargement de jQuery DatePicker
-					wp_enqueue_script( 'jquery-ui-datepicker' );
-					wp_enqueue_style( 'admin-datepicker-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
-
-				});
-
-			} // FIN if type=date
-
 			// Scripts & styles supplémentaires : type url
 			if ( $field['type'] == 'url' ) {
 
@@ -154,7 +141,7 @@ class PC_Add_Metabox {
 		// input hidden de vérification pour la sauvegarde
 		wp_nonce_field( basename( __FILE__ ), $this->id.'-'.'nonce' );
 
-		echo '<table class="form-table">';
+		echo '<table class="form-table pc-metabox">';
 
 		// champs
 		foreach ( $datas['args']['fields'] as $field ) {
@@ -402,21 +389,18 @@ class PC_Add_Metabox {
 					break;
 
 				case 'date':
-
-					// recherche de l'attribut class
-					// pour ajouter la classe nécessaire au javascript
-					$dateAttr = strpos($field['attr'], 'class="');
-					if ($dateAttr !== false) {
-					    $dateAttr = str_replace('class="', 'class="pc-date-picker ', $field['attr']);
-					} else {
-					    $dateAttr = 'class="pc-date-picker" '.$field['attr'];
-					}
-
 					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="text" id="'.$field['id'].'" '.$dateAttr.' style="'.$field['css'].'" name="'.$field['id'].'" value="'.pc_date_bdd_to_admin($savedValue).'"  '.$required.' readonly />';
-					if ( $savedValue != '' && $required == '' ) {
-						echo '<button class="reset-btn pc-date-remove" type="button" title="Supprimer"><span class="dashicons dashicons-no-alt"></span></button>';
-					}
+					echo '<input type="date" id="'.$field['id'].'" style="'.$field['css'].'" '.$field['attr'].' name="'.$field['id'].'" value="'.$savedValue.'" '.$required.' />';
+					break;
+
+				case 'time':
+					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					echo '<input type="time" id="'.$field['id'].'" style="'.$field['css'].'" '.$field['attr'].' name="'.$field['id'].'" value="'.$savedValue.'" '.$required.' />';
+					break;
+
+				case 'datetime':
+					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+					echo '<input type="datetime-local" id="'.$field['id'].'" style="'.$field['css'].'" '.$field['attr'].' name="'.$field['id'].'" value="'.$savedValue.'" '.$required.' />';
 					break;
 
 				case 'url':
@@ -477,9 +461,6 @@ class PC_Add_Metabox {
 				}
 				// valeur en bdd
 				$fieldSave = get_post_meta( $post_ID, $id, true );
-
-				// si champ de type date -> changement de format
-				if ( $field['type'] == 'date' ) { $fieldTemp = pc_date_admin_to_bdd($fieldTemp); }
 
 				// si une valeur arrive & si rien en bdd
 				if ( $fieldTemp && '' == $fieldSave ) {

@@ -30,7 +30,7 @@ function pc_get_pager( $query = null, $current = null, $args = array() ) {
 			'prev_text' 			=> '<span class="visually-hidden">Précédent</span>'.pc_svg( 'arrow' ),
 			'type' 					=> 'array',
 			'before_page_number' 	=> '<span class="visually-hidden">Page </span>',
-			'format'                => '?paged=%#%#main',
+			'format'                => '?paged=%#%',
 			'ul_css'				=> 'pager-list reset-list no-print' // custom
 		),
 		$args
