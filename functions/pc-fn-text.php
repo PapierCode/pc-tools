@@ -75,12 +75,13 @@ function pc_textearea_to_paragraphs( $txt ) {
  * 
  */
 
-function pc_wp_wysiwyg( $txt, $container = true ) {
+function pc_wp_wysiwyg( $txt, $container = true, $css = array() ) {
 
 	$txt = apply_filters( 'the_content', $txt );
+	$css[] = 'editor';
 
 	if ( $container ) {
-		return '<div class="editor"><div class="editor-inner">'.$txt.'</div></div>';
+		return '<div class="'.implode(' ',$css).'"><div class="editor-inner">'.$txt.'</div></div>';
 	} else {
 		return $txt;
 	}
