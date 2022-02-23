@@ -97,21 +97,23 @@ function pc_wp_wysiwyg( $txt, $container = true, $css = array() ) {
 
 /**
  * 
- * @param string	$tel	Numéro de téléphone au format "00 00 00 00 00"
- * @param boolean	$href	Distiné à l'attribut href
+ * @param string	$tel				Numéro de téléphone au format "00 00 00 00 00"
+ * @param boolean	$href				Distiné à l'attribut href
+ * @param boolean	$prefix_display		Affichage du préfixe
+ * @param string	$prefix				Préfixe international
  * 
  */
 
-function pc_phone( $tel, $href = true ) {
+function pc_phone( $tel, $href = true, $prefix_display = false, $prefix = '+33' ) {
 
 	if ( $href ) {
 
 		$tel = str_replace( ' ', '', $tel );
-		$tel = '+33' . substr( $tel, 1, strlen($tel) );
+		$tel = $prefix.substr( $tel, 1, strlen($tel) );
 
-	} else {
-
-		$tel = '+33 ' . substr( $tel, 1, strlen($tel) );
+	} else if ( $prefix_display ) {
+		
+		$tel = $prefix.substr( $tel, 1, strlen($tel) );
 
 	}
 
