@@ -91,7 +91,8 @@ class PC_Add_Custom_Post {
                 'supports'          => array( 'title' ),
                 'public'            => true,
                 'has_archive'       => true,
-                'taxonomies'        => array()
+                'taxonomies'        => array(),
+				'active_slugdiv'	=> false
             ),           
             // arguments passés lors de la création
             $this->postTypeArgs          
@@ -111,7 +112,9 @@ class PC_Add_Custom_Post {
 
         /*----------  Désactivation metabox identifiant  ----------*/
 
-        add_action( 'admin_menu', function() { remove_meta_box( 'slugdiv', $this->postType, 'normal' ); } ); 
+		if ( !$args['active_slugdiv'] ) {
+	        add_action( 'admin_menu', function() { remove_meta_box( 'slugdiv', $this->postType, 'normal' ); } ); 
+		}
 
 
     } // FIN add_custom_post()
