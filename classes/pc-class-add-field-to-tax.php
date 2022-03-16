@@ -187,7 +187,8 @@ class PC_add_field_to_tax {
 					        'visualblocks_default_state'	=> true,
 					        'paste_as_text'             	=> true,
 					        'media_alt_source'          	=> false,
-					        'media_poster'              	=> false
+					        'media_poster'              	=> false,
+							'wp_autoresize_on'				=> true
 					    )
 			        );
 			        // si une configuration est passé dans les arguments
