@@ -58,11 +58,11 @@ class PC_MathCaptcha {
 		switch ( $this->lang ) {
 			case 'fr':
 				$operator = ( 'add' == $math[2] ) ? 'plus' : 'moins';
-				$label_text = 'Combien font '.$math[0].'&nbsp;'.$operator.'&nbsp;'.$math[1].'&nbsp;?';
+				$label_text = 'Protection contre les spams, combien font '.$math[0].'&nbsp;'.$operator.'&nbsp;'.$math[1].'&nbsp;?';
 				break;
 			case 'en':
 				$operator = ( 'add' == $math[2] ) ? 'plus' : 'minus';
-				$label_text = 'How many do '.$math[0].'&nbsp;'.$operator.'&nbsp;'.$math[1].'&nbsp;?';
+				$label_text = 'Spam protection, how many do '.$math[0].'&nbsp;'.$operator.'&nbsp;'.$math[1].'&nbsp;?';
 				break;
 		}
 
