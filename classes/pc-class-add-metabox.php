@@ -146,7 +146,7 @@ class PC_Add_Metabox {
 
 	public function display_metabox_content( $post ) {
 
-		$content = apply_filters( 'pc_filter_metabox_content', $this->content, $post );
+		$content = apply_filters( 'pc_filter_metabox_content', $this->content, $this->id, $post );
 
 		// description
 		if ( !empty( $content['desc'] ) ) { echo '<div class="pc-metabox-help">'.$content['desc'].'</div>'; }
