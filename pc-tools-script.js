@@ -49,7 +49,7 @@ function pc_media_modal( $button ) {
 
 	switch ( type ) {
 
-		case 'image' :
+		case 'img' :
 			modal_params = {
 				title: 'Insérer une image',
 				library: { type: 'image' },
@@ -105,7 +105,7 @@ function pc_media_modal( $button ) {
 		// création preview inner
 		var media_url, preview_inner;
 		switch ( type ) {
-			case 'image' :
+			case 'img' :
 				media_url = media_datas.sizes.hasOwnProperty('thumbnail') ? media_datas.sizes.thumbnail.url : media_datas.url ;
 				preview_inner = '<div class="pc-media-preview-item" style="background-image:url(' + media_url + ');"></div>';
 				break;
@@ -248,31 +248,19 @@ if ( $pcGallerySelect.length > 0 ) {
 				galleryPreview += '<div class="pc-media-preview-item" style="background-image:url('+imgUrl+');"></div>';
 			}
 			$hiddenField.val(imgIdsToSave.join());
+			// affichage
+			$container.find('.pc-media-preview').html(galleryPreview);
+			// texte du bouton
+			$btnSelect.val('Modifier');
 
-			// si une preview existe déjà
-			if ( $container.find('.pc-media-preview').length > 0 ) {
-
-				$container.find('.pc-media-preview').html(galleryPreview);
-
-			// si pas encore de preview
-			} else {
-
-				// ajoute la preview
-				$container.prepend('<div class="pc-media-preview">'+galleryPreview+'</div>');
-				// texte du bouton
-				$btnSelect.val('Modifier');
-
-				// si suppression autorisée
-				if ( $btnSelect.data('remove') == 'active') {
-
-					// ajoute le btn
-					$btnSelect.after('<input class="button pc-media-remove" data-cible="gallery" type="button" value="Supprimer"/>');
-					// au clic sur le nouveau btn de suppression
-					$container.find('.pc-media-remove').click(function() { pc_media_remove( $(this) ); });
-
-				} // FIN if btn suppression
-
-			}
+			// si suppression autorisée
+			$btn_Remove = $container.find('.pc-media-remove');
+			if ( 'active' == $btnSelect.data('remove') && 0 == $btn_Remove.length) {
+				// ajoute le btn
+				$btnSelect.after('<input class="button pc-media-remove" data-cible="gallery" type="button" value="Supprimer"/>');
+				// au clic sur le nouveau btn de suppression
+				$container.find('.pc-media-remove').click(function() { pc_media_remove( $(this) ); });
+			} // FIN if btn suppression
 
 		}); // FIN galleryUploader.on(select)
 
@@ -438,7 +426,7 @@ $body.on( 'click', '#wp-link-cancel, #wp-link-backdrop, #wp-link-close', functio
 =            Checkboxes required            =
 ===========================================*/
 
-var $tdCheckboxes = $('.pc-checkboxes-required'); // container
+var $required_checkboxes = $('.pc-checkboxes-required'); // container
 
 // fonction qui vérifie si une des checkboxe est cochée
 var pc_checkboxes_required = function( $target ) {
@@ -451,9 +439,9 @@ var pc_checkboxes_required = function( $target ) {
 
 }
 
-if ( $tdCheckboxes.length > 0 ) {
+if ( $required_checkboxes.length > 0 ) {
 
-    $tdCheckboxes.each(function() {
+    $required_checkboxes.each(function() {
             
         var $all = $(this).find('input');
         pc_checkboxes_required($all); // au chargement de la page

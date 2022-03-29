@@ -1,58 +1,52 @@
 <?php
 
 /**
-*
-* [PC] Tools : création d'une metabox et des champs associés
-*
-**/
+ *
+ * [PC] Tools : création d'une metabox et des champs associés
+ *
+ */
 
 
 class PC_Add_Metabox {
 
-	public $id;
-	public $content;
+	private $for;
+	private $title;
+	private $id;
+	private $content;
+	private $position;
+	private $priority;
+
+	private $post;		// post courant
+
 
     /*====================================
     =            Constructeur            =
     ====================================*/
 
-    /*
-    *
-    * * [array]		$post 		: slugs des custom posts concernés
-    * * [string]	$title 		: titre de la metabox
-    * * [string]	$id 		: identifiant de la metabox
-    * * [array]		$content 	: contenu de la metabox
-    * * [string]	$position 	: position dans l'interface, "normal" (defaut) ou "side"
-    * * [string]	$priority 	: priorité d'affichage, "high" (defaut) ou "low"
-    *
-    * cf. https://developer.wordpress.org/reference/functions/add_meta_box/
-    *
-    */
+    /**
+	 * [array] 	$post 		: slugs des custom posts concernés
+     * [string]	$title 		: titre de la metabox
+     * [string]	$id 		: identifiant de la metabox
+     * [array]	$content 	: contenu de la metabox
+     * [string]	$position 	: position dans l'interface, "normal" (defaut) ou "side"
+     * [string]	$priority 	: priorité d'affichage, "high" (defaut) ou "low"
+	 *
+	 */
 
-   public function __construct( $posts, $title, $id, $content, $position = 'normal', $priority = 'high' ) {
+   public function __construct( $for, $title, $id, $content, $position = 'normal', $priority = 'high' ) {
 
+		/*----------  Préparation des données  ----------*/
 
-		/*----------  Vérifcation des données  ----------*/
+		$content = array_merge(
+				array(
+					'desc' 		=> '',
+					'prefix' 	=> '',
+					'fields' 	=> array()
+				),
+				$content
+		);
 
-		// pour les valeurs relatives à définition de la metabox
-	   // fusion du contenu avec des valeurs vides
-	   // évite une erreur en cas d'omission
-	   $content = array_merge(
-	    	// défaut
-	    	array(
-	    		'desc' 		=> '',
-	    		'prefix' 	=> '',
-	    		'fields' 	=> array()
-	    	),
-	    	// arguments passés lors de la création
-	    	$content
-	   );
-
-		// pour les valeurs relatives à chaque champ défini
-    	foreach ($content['fields'] as $key => $field ) {
-
-			// fusion du propriétés du champ avec des valeurs vides
-	    	// évite une erreur en cas d'omission
+    	foreach ($content['fields'] as $key => $field ) {			
 			$content['fields'][$key] = array_merge(
 				// defaut
 				array(
@@ -63,379 +57,291 @@ class PC_Add_Metabox {
 		            'required'		=> false,
 		            'attr' 			=> '',
 		            'css'			=> '',
-		            'options'		=> '',
+		            'options'		=> array(),
 					'clean'			=> true,
-					'default'		=> ''
-		      ),
-				// arguments passés lors de la création
+					'default'		=> '',
+					'admin_not_in'	=> false
+		      	),
 				$content['fields'][$key]
 			);
 
-    	} // FIN foreach($content[fields])
+    	}
 
+		$this->for			= $for;
+		$this->title 		= $title;
+		$this->id 			= $id;
+		$this->content 		= $content;
+		$this->position 	= $position;
+		$this->priority 	= $priority;
+		
 
-	   /*----------  Variables de la class  ----------*/
+		/*----------  Dépendances  ----------*/
 
-	   $this->id = $id;
-	   $this->content = $content;
-
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_dependencies' ) );
 
 		/*----------  Création  ----------*/
 
-		add_action( 'add_meta_boxes', function() use( $posts, $title, $id, $content, $position, $priority ) {
-
-			add_meta_box(
-		      $id,										// $id
-		      $title,									// $title
-		      array( $this, 'add_metabox_fields' ),	// $callback
-		      $posts,									// $screen
-		      $position,								// $position
-		      $priority,								// $priority
-		      $content 								// $callback_args
-		  	);
-
-		} );
-
+		add_action( 'add_meta_boxes', array( $this, 'add_metabox' ), 10, 2 );
 
 	   /*----------  Sauvegarde  ----------*/
 
-    	add_action( 'save_post', array( $this, 'save_metabox_fields' ) );
-
-
-		/*----------  Scripts & styles supplémentaires  ----------*/
-
-		// pour chaque champ défini
-		foreach ($content['fields'] as  $field ) {
-
-			// Scripts & styles supplémentaires : type url
-			if ( $field['type'] == 'url' ) {
-
-				add_action( 'admin_enqueue_scripts', function () {
-
-					// chargement des scripts de l'éditeur
-					wp_enqueue_editor();
-
-				});
-
-			} // FIN if type=url
-
-		} // FIN foreach($content[fields])
-
+    	add_action( 'save_post', array( $this, 'save_metabox' ) );
 
 	} // FIN __construct()
 
 
-   /*=====  FIN Constructeur  ======*/
+   	/*=====  FIN Constructeur  ======*/
+
+	/*===================================
+	=            Dépendances            =
+	===================================*/
+	
+	public function add_dependencies( $hook_suffix ) {
+		
+		if ( in_array( $hook_suffix, array( 'post.php', 'post-new.php' ) ) ) {
+
+			$fields = $this->content['fields'];
+
+			foreach ( $fields as  $field ) {
+
+				if ( $field['type'] == 'url' && ( !isset($field['options']['btnselection']) || true == $field['options']['btnselection'] ) ) {
+					wp_enqueue_editor();
+				}
+
+			}
+
+		}
+
+	}
+	
+	
+	/*=====  FIN Dépendances  =====*/
+	
+	/*=========================================
+	=            Création métaboxe            =
+	=========================================*/
+	
+	public function add_metabox( $post_type, $post ) {
+
+		if ( apply_filters( 'pc_filter_add_metabox', true, $this->id, $post ) ) {
+
+			$this->post = $post;
+
+			add_meta_box(
+				$this->id,
+				$this->title,
+				array( $this, 'display_metabox_content' ),
+				$this->for,
+				$this->position,
+				$this->priority,
+				$this->content
+			);
+
+		}
+
+	}
+	
+	
+	/*=====  FIN Création métaboxe  =====*/
 
 	/*==============================
 	=            Champs            =
 	==============================*/
 
-	public function add_metabox_fields( $post, $datas ) {
+	public function display_metabox_content() {
+
+		$content = $this->content;
 
 		// description
-		if ( '' != $datas['args']['desc'] ) {
-			echo '<div class="pc-metabox-help">'.$datas['args']['desc'].'</div>';
-		}
+		if ( !empty( $content['desc'] ) ) { echo '<div class="pc-metabox-help">'.$content['desc'].'</div>'; }
 
 		// input hidden de vérification pour la sauvegarde
 		wp_nonce_field( basename( __FILE__ ), $this->id.'-'.'nonce' );
 
 		echo '<table class="form-table pc-metabox">';
 
-		// champs
-		foreach ( $datas['args']['fields'] as $field ) {
+			// champs
+			foreach ( $content['fields'] as $field ) {
 
-			if ( isset( $field['admin_not_in'] ) ) { continue; }
+				if ( $field['admin_not_in'] ) { continue; }
 
-			// id prefixé
-			$field['id'] = $datas['args']['prefix'].'-'.$field['id'];
-			// valeurs en bdd
-			$savedValue = get_post_meta( $post->ID, $field['id'], true );
-			if ( $savedValue == '' ) { $savedValue = $field['default']; }
-			// champ obligatoire
-			if ( $field['required'] ) {
-				$required = 'required';
-				$field['label'] = $field['label'].'<span class="label-required"> *</span>';
-			} else {
-				$required = '';
-			}
+				echo '<tr>';
+					$this->display_field( $field, $content['prefix'] );
+				echo '</tr>';
 
-			echo '<tr>';
+			} // FIN foreach($data[args])
+
+		echo '</table>';
+
+	} // FIN display_metabox_content()
+
+
+	/*=====  FIN Champs  ======*/
+
+	/*=======================================
+	=            Affichage champ            =
+	=======================================*/
+	
+	private function display_field( $field, $prefix ) {
+
+		// nom & identifiant
+		$name = $prefix.'-'.$field['id'];
+		// sauvegarde & défaut
+		$value = get_post_meta( $this->post->ID, $name, true );
+		if ( '' == $value ) { $value = $field['default']; }
+		// attribut obligatoire
+		$required = ( $field['required'] ) ? 'required' : '';
+
+		$label_for = ( !in_array( $field['type'], array( 'radio', 'checkboxes' ) ) ) ? ' for="'.$name.'"' : '';
+		$label_txt = ( $field['required'] ) ? $field['label'].'<span class="label-required"> *</span>' : $field['label'];
+		echo '<th><label'.$label_for.'>'.$label_txt.'</label></th>';
+		
+		echo '<td>';
 
 			switch ( $field['type'] ) {
 
 				case 'text':
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="text" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'  />';
-					break;
-
 				case 'email':
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="email" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'  />';
-					break;
-
 				case 'number':
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="number" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'  />';
+				case 'date':
+				case 'time':
+				case 'datetime-local':
+					echo '<input type="'.$field['type'].'" id="'.$name.'" style="'.$field['css'].'" '.$field['attr'].' name="'.$name.'" value="'.$value.'" '.$required.' />';
 					break;
 
 				case 'checkbox':
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="checkbox" id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="1" '.checked('1', $savedValue, false).'/>';
-					break;
-
-				case 'radio':
-					echo '<th>'.$field['label'].'</th><td><div>';
-					$radioIndex = 0;
-					$savedValue = ( '' == $savedValue && isset( $field['default'] ) ) ? $field['default'] : $savedValue;
-					foreach ($field['options'] as $radioKey => $radioValue) {
-						if ( $radioIndex > 0 ) { echo '<br/>'; }
-						echo '<input type="radio" id="'.$field['id'].'-'.$radioIndex.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" value="'.$radioValue.'" '.checked($radioValue, $savedValue, false).' '.$required.' />';
-						echo '<label for="'.$field['id'].'-'.$radioIndex.'">'.$radioKey.'</label>';
-						$radioIndex++;
-					}
-					echo '</div>';
-					break;
-
-				case 'checkboxes':
-					echo '<th>'.$field['label'].'</th><td';
-					if ( $required == 'required' ) { echo ' class="pc-checkboxes-required"'; };
-					echo '><div>';
-					$checkboxIndex = 0;
-					foreach ($field['options'] as $checkboxKey => $checkboxValue) {
-						if ( $checkboxIndex > 0 ) { echo '<br/>'; }
-						$checked = ( !empty($savedValue) && in_array($checkboxValue,$savedValue) ) ? 'checked' : '';
-						echo '<input type="checkbox" id="'.$field['id'].'-'.$checkboxIndex.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'[]" value="'.$checkboxValue.'" '.$checked.' '.$required.' />';
-						echo '<label for="'.$field['id'].'-'.$checkboxIndex.'">'.$checkboxKey.'</label>';
-						$checkboxIndex++;
-					}
-					echo '</div>';
+					echo '<input type="checkbox" id="'.$name.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$name.'" value="1" '.checked('1', $value, false).'/>';
 					break;
 
 				case 'textarea':
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<textarea id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" '.$required.' >'.$savedValue.'</textarea>';
+					echo '<textarea id="'.$name.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$name.'" '.$required.' >'.$value.'</textarea>';
 					break;
 
 				case 'select':
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<select id="'.$field['id'].'" '.$field['attr'].' style="'.$field['css'].'" name="'.$field['id'].'" '.$required.' ><option value=""></option>';
+					echo '<select id="'.$name.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$name.'" '.$required.' ><option value=""></option>';
 					foreach ($field['options'] as $optionsKey => $optionValue) {
-						echo '<option value="'.$optionValue.'" '.selected($savedValue,$optionValue,false).'>'.$optionsKey.'</option>';
+						echo '<option value="'.$optionValue.'" '.selected($value,$optionValue,false).'>'.$optionsKey.'</option>';
 					}
 					echo '</select>';
 					break;
 
+				case 'url':
+					$display_url_picker = ( !isset($field['options']['btnselection']) || true == $field['options']['btnselection'] ) ? true : false;
+					if ( $display_url_picker ) { echo '<div style="display:flex;"><div style="flex-grow:1;margin-right:10px;">'; }
+					echo '<input type="url" id="'.$name.'" name="'.$name.'" value="'.$value.'" '.$required.' style="width:100%" />';
+					if ( $display_url_picker ) { echo '</div><div><button type="button" class="button pc-link-select" data-cible="'.$name.'">Sélectionner</button></div></div>'; }
+					break;
+
+				case 'radio':
+					echo '<div>';
+						$radio_index = 0;
+						$value = ( '' == $value && '' != $field['default'] ) ? $field['default'] : $value;
+						foreach ( $field['options'] as $radio_label => $radio_value ) {
+							if ( $radio_index > 0 ) { echo '<br/>'; }
+							echo '<input type="radio" id="'.$name.'-'.$radio_index.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$name.'" value="'.$radio_value.'" '.checked($radio_value, $value, false).' '.$required.' />';
+							echo '<label for="'.$name.'-'.$radio_index.'">'.$radio_label.'</label>';
+							$radio_index++;
+						}
+					echo '</div>';
+					break;
+
+				case 'checkboxes':
+					echo ( $required == 'required' ) ? '<div class="pc-checkboxes-required">' : '<div>';
+						$checkbox_index = 0;
+						foreach ( $field['options'] as $checkbox_label => $checkbox_value ) {
+							if ( $checkbox_index > 0 ) { echo '<br/>'; }
+							$checked = ( !empty($value) && in_array( $checkbox_value, $value ) ) ? 'checked' : '';
+							echo '<input type="checkbox" id="'.$name.'-'.$checkbox_index.'" '.$field['attr'].' style="'.$field['css'].'" name="'.$name.'[]" value="'.$checkbox_value.'" '.$checked.' '.$required.' />';
+							echo '<label for="'.$name.'-'.$checkbox_index.'">'.$checkbox_label.'</label>';
+							$checkbox_index++;
+						}
+					echo '</div>';
+					break;
+
 				case 'wysiwyg':
-					// configuration wysiwyg par défaut
-					$pcSettings = get_option( 'pc-settings-option' );
-					$buttonsDefault = array(
-			            'media_buttons'		=> true,
-					    'quicktags'    		=> true,
-					    'textarea_rows'		=> 6,
-					    'tinymce'      		=> array (
-					        'toolbar1'                  	=> $pcSettings['tinymce-toolbar1'],
-					        'toolbar2'                  	=> $pcSettings['tinymce-toolbar2'],
-					        'block_formats'             	=> $pcSettings['tinymce-block'],
-					        'visualblocks_default_state'	=> true,
-					        'paste_as_text'             	=> true,
-					        'media_alt_source'          	=> false,
-					        'media_poster'              	=> false,
-							'wp_autoresize_on'				=> true
-					    )
-			        );
-			        // si une configuration est passé dans les arguments
-					if ( $field['options'] != '' ) {
-						// configuration wysiwyg = fusion défaut/nouvelle
-						$buttons = pc_array_multi_merge($buttonsDefault,$field['options']);
-					} else {
-						// configuration wysiwyg = defaut
-						$buttons = $buttonsDefault;
-					}
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					wp_editor( $savedValue, $field['id'], $buttons );
+					$settings_pc = get_option( 'pc-settings-option' );
+					$wysiwyg_default_settings = array(
+						'media_buttons'		=> true,
+						'quicktags'    		=> ( !current_user_can('administrator') ) ? false : true,
+						'textarea_rows'		=> 6,
+						'tinymce'      		=> array (
+							'toolbar1'                  	=> $settings_pc['tinymce-toolbar1'],
+							'toolbar2'                  	=> $settings_pc['tinymce-toolbar2'],
+							'block_formats'             	=> $settings_pc['tinymce-block'],
+							'visualblocks_default_state'	=> true,
+							'paste_as_text'             	=> true,
+							'wp_autoresize_on'				=> true,
+							'media_alt_source'          	=> false, // options plugin media
+							'media_poster'              	=> false // options plugin media
+						)
+					);
+					$wysiwyg_settings = ( is_array( $field['options'] ) && !empty($field['options']) ) ? pc_array_multi_merge( $wysiwyg_default_settings, $field['options'] ) : $wysiwyg_default_settings;
+					wp_editor( $value, $name, $wysiwyg_settings );
 					break;
 
 				case 'img':
-					$btnTxt = 'Ajouter';
-					// label
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<div class="pc-media-preview">';
-					// si une valeur en bdd
-					if ( isset($savedValue) && '' != $savedValue ) {
-						$btnTxt = 'Modifier';
-						// affichage image
-						echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($savedValue,'thumbnail')[0].');"></div>';
-					}
-					echo '</div>';
-					// champs
-					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id visually-hidden" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'/>';
-					echo '<input class="button pc-media-select" type="button" data-type="image" value="'.$btnTxt.'" ';
-					// si btn de suppression activé
-					if ( $field['options']['btnremove'] == true ) {
-						echo 'data-remove="active" />';
-						// affiche le btn si une image est déjà enregistrée
-						if ( isset($savedValue) && '' != $savedValue ) {
-							echo ' <input class="button pc-media-remove" type="button" value="Supprimer"/>';
-						}
-					} else { echo ' />'; }
-					break;
-
 				case 'pdf':
-					$btnTxt = 'Ajouter';
-					// label
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<div class="pc-media-preview">';
-					// si une valeur en bdd
-					if ( isset($savedValue) && '' != $savedValue ) {
-						$btnTxt = 'Modifier';
-						// affichage lien pdf
-						$pdfUrl = wp_get_attachment_url($savedValue);
-			        	echo '<a class="pc-pdf-preview" href="'.$pdfUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a>';
-					}
-					echo '</div>';
-					// champs
-					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id visually-hidden" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'/>';
-					echo '<input class="button pc-media-select" type="button" data-type="pdf" value="'.$btnTxt.'" ';
-					// si btn de suppression activé
-					if ( $field['options']['btnremove'] == true ) {
-						echo 'data-remove="active" />';
-						// affiche le btn si une image est déjà enregistrée
-						if ( isset($savedValue) && '' != $savedValue ) {
-							echo ' <input class="button pc-media-remove" type="button" value="Supprimer"/>';
-						}
-					} else { echo ' />'; }
-					break;
-					break;
-
 				case 'audio':
-					$btnTxt = 'Ajouter';
-					// label
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<div class="pc-media-preview">';
-					// si une valeur en bdd
-					if ( isset($savedValue) && '' != $savedValue ) {
-						$btnTxt = 'Modifier';
-						// affichage lien pdf
-						$audioUrl = wp_get_attachment_url($savedValue);
-			        	echo '<audio class="pc-audio-preview" controls src="'.$audioUrl.'"></audio>';
-					}
-					echo '</div>';
-					// champs
-					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id visually-hidden" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'/>';
-					echo '<input class="button pc-media-select" type="button" data-type="audio" value="'.$btnTxt.'" ';
-					// si btn de suppression activé
-					if ( $field['options']['btnremove'] == true ) {
-						echo 'data-remove="active" />';
-						// affiche le btn si une image est déjà enregistrée
-						if ( isset($savedValue) && '' != $savedValue ) {
-							echo ' <input class="button pc-media-remove" type="button" value="Supprimer"/>';
-						}
-					} else { echo ' />'; }
-					break;
-
 				case 'file':
-					$btnTxt = 'Ajouter';
-					// label
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+				case 'gallery':
+					$button_media_txt = 'Ajouter';
 					echo '<div class="pc-media-preview">';
-					// si une valeur en bdd
-					if ( isset($savedValue) && '' != $savedValue ) {
-						$btnTxt = 'Modifier';
-						// affichage lien fichier
-						$fileUrl = wp_get_attachment_url($savedValue);
-			        	echo '<a class="pc-file-preview" href="'.$fileUrl.'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier actuel</a>';
+					if ( '' != $value ) {
+						$button_media_txt = 'Modifier';
+						switch ( $field['type'] ) {
+							case 'pdf':
+							case 'file':
+								echo '<a class="pc-'.$field['type'].'-preview" href="'.wp_get_attachment_url($value).'" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier</a>';
+								break;
+							case 'audio':
+								echo '<audio class="pc-audio-preview" controls src="'.wp_get_attachment_url($value).'"></audio>';
+								break;
+							case 'img':				
+							case 'gallery':				
+								$gallery_images_id = explode( ',', $value );
+								foreach ( $gallery_images_id as $image_id ) {
+									echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($image_id,'thumbnail')[0].');"></div>';
+								}
+								break;
+						}
 					}
 					echo '</div>';
-					// champs
-					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id visually-hidden" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'/>';
-					echo '<input class="button pc-media-select" data-type="file" type="button" value="'.$btnTxt.'" ';
-					// si btn de suppression activé
-					if ( $field['options']['btnremove'] == true ) {
-						echo 'data-remove="active" />';
-						// affiche le btn si une image est déjà enregistrée
-						if ( isset($savedValue) && '' != $savedValue ) {
-							echo ' <input class="button pc-media-remove" type="button" value="Supprimer"/>';
-						}
-					} else { echo ' />'; }
-					break;
 
-				case 'gallery':
-					$btnTxt = 'Ajouter';
-					// label
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					// si une valeur en bdd
-					if ( isset($savedValue) && '' != $savedValue ) {
-						$btnTxt = 'Modifier';
-						// affichage images
-						$imgIds = explode(',', $savedValue);
-						echo '<div class="pc-media-preview">';
-						foreach ($imgIds as $imgId) {
-							echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($imgId,'thumbnail')[0].');"></div>';
-						}
-						echo '</div>';
+					echo '<input type="text" id="'.$name.'" class="pc-media-id visually-hidden" name="'.$name.'" value="'.$value.'" '.$required.'/>';
+
+					$button_media_css = array( 'button', 'pc-media-select' );
+					if ( 'gallery' == $field['type'] ) { $button_media_css[] = 'pc-gallery-select'; }
+
+					$button_media_data = array();
+					if ( 'gallery' != $field['type'] ) { $button_media_data[] = 'data-type="'.$field['type'].'"'; }
+					if ( isset( $field['options']['btnremove'] ) && true == $field['options']['btnremove'] ) { 
+						$button_media_data[] = 'data-remove="active"';
+						$display_button_media_remove = true;
 					}
-					// champs
-					echo '<input type="text" id="'.$field['id'].'" class="pc-media-id visually-hidden" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.'/>';
-					echo '<input class="button pc-gallery-select pc-media-select" type="button" value="'.$btnTxt.'" ';
-					// si btn de suppression activé
-					if ( $field['options']['btnremove'] == true ) {
-						echo 'data-remove="active" />';
-						// affiche le btn si une image est déjà enregistrée
-						if ( isset($savedValue) && '' != $savedValue ) {
-							echo ' <input class="button pc-media-remove" type="button" value="Supprimer"/>';
-						}
-					} else { echo ' />'; }
-					break;
 
-				case 'date':
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="date" id="'.$field['id'].'" style="'.$field['css'].'" '.$field['attr'].' name="'.$field['id'].'" value="'.$savedValue.'" '.$required.' />';
-					break;
-
-				case 'time':
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="time" id="'.$field['id'].'" style="'.$field['css'].'" '.$field['attr'].' name="'.$field['id'].'" value="'.$savedValue.'" '.$required.' />';
-					break;
-
-				case 'datetime':
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					echo '<input type="datetime-local" id="'.$field['id'].'" style="'.$field['css'].'" '.$field['attr'].' name="'.$field['id'].'" value="'.$savedValue.'" '.$required.' />';
-					break;
-
-				case 'url':
-					echo '<th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
-					if ( !isset($field['options']['btnselection']) || true == $field['options']['btnselection'] ) {
-						echo '<div style="display:flex;"><div style="flex-grow:1;margin-right:10px;">';
-					}
-					echo '<input type="url" id="'.$field['id'].'" name="'.$field['id'].'" value="'.$savedValue.'" '.$required.' style="width:100%" />';
-					if ( !isset($field['options']['btnselection']) || true == $field['options']['btnselection'] ) {
-						echo '</div><div><button type="button" class="button pc-link-select" data-cible="'.$field['id'].'">Sélectionner</button></div></div>';
+					echo '<input class="'.implode(' ',$button_media_css).'" type="button" value="'.$button_media_txt.'" '.implode(' ',$button_media_data).'>';
+					if ( isset( $display_button_media_remove ) && '' != $value ) {
+						echo ' <input class="button pc-media-remove" type="button" value="Supprimer"/>';
 					}
 					break;
 
 			} // FIN switch($field['type'])
-
+		
 			// description du champ
 			if ( !empty($field['desc']) ) { echo '<p class="description">'.$field['desc'].'</p>'; }
 
-			echo '</td></tr>';
+		echo '</td>';		
 
-		} // FIN foreach($data[args])
-
-		echo '</table>';
-
-	} // FIN add_metabox_fields()
-
-
-	/*=====  FIN Champs  ======*/
+	}
+	
+	
+	/*=====  FIN Affichage champ  =====*/
 
 	/*==================================
 	=            Sauvegarde            =
 	==================================*/
 
-	public function save_metabox_fields( $post_ID ) {
+	public function save_metabox( $post_ID ) {
 
 		$content = $this->content; 	// pour la liste des champs
 
@@ -445,42 +351,40 @@ class PC_Add_Metabox {
 			foreach ($content['fields'] as $field) {
 
 				// id préfixé
-				$id = $content['prefix'].'-'.$field['id'];
+				$name = $content['prefix'].'-'.$field['id'];
 				// valeur renvoyé par le form
-				$fieldTemp = $_POST[$id];
+				$value_temp = $_POST[$name];
 				// nettoyage
-				switch ($field['type']) {
+				switch ( $field['type'] ) {
 					case 'text':
-						if ( $field['clean'] ) { $fieldTemp = sanitize_text_field( $fieldTemp ); }
-						break;
-					case 'url':
-						if ( $field['clean'] ) { $fieldTemp = sanitize_text_field( $fieldTemp ); }
+						if ( $field['clean'] ) { $value_temp = sanitize_text_field( $value_temp ); }
+						if ( $field['clean'] ) { $value_temp = sanitize_text_field( $value_temp ); }
 						break;
 					case 'textarea':
-						if ( $field['clean'] ) { $fieldTemp = sanitize_textarea_field( $fieldTemp ); }
+						if ( $field['clean'] ) { $value_temp = sanitize_textarea_field( $value_temp ); }
 						break;
 				}
 				// valeur en bdd
-				$fieldSave = get_post_meta( $post_ID, $id, true );
+				$value_saved = get_post_meta( $post_ID, $name, true );
 
 				// si une valeur arrive & si rien en bdd
-				if ( $fieldTemp && '' == $fieldSave ) {
-					add_post_meta( $post_ID, $id, $fieldTemp, true );
+				if ( $value_temp && '' == $value_saved ) {
+					add_post_meta( $post_ID, $name, $value_temp, true );
 
 				// si une valeur arrive & différente de la bdd
-				} elseif ( $fieldTemp && $fieldTemp != $fieldSave ) {
-					update_post_meta( $post_ID, $id, $fieldTemp );
+				} elseif ( $value_temp && $value_temp != $value_saved ) {
+					update_post_meta( $post_ID, $name, $value_temp );
 
 				// si rien n'arrive & si un truc en bdd
-				} elseif ( '' == $fieldTemp && $fieldSave ) {
-					delete_post_meta( $post_ID, $id );
+				} elseif ( '' == $value_temp && $value_saved ) {
+					delete_post_meta( $post_ID, $name );
 				}
 
 			}
 
 		}
 
-	} // FIN save_metabox_fields()
+	} // FIN save_metabox()
 
 
 	/*=====  FIN Sauvegarde  ======*/
