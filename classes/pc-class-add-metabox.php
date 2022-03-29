@@ -16,8 +16,6 @@ class PC_Add_Metabox {
 	private $position;
 	private $priority;
 
-	private $post;		// post courant
-
 
     /*====================================
     =            Constructeur            =
@@ -125,8 +123,6 @@ class PC_Add_Metabox {
 
 		if ( apply_filters( 'pc_filter_add_metabox', true, $this->id, $post ) ) {
 
-			$this->post = $post;
-
 			add_meta_box(
 				$this->id,
 				$this->title,
@@ -148,9 +144,9 @@ class PC_Add_Metabox {
 	=            Champs            =
 	==============================*/
 
-	public function display_metabox_content() {
+	public function display_metabox_content( $post ) {
 
-		$content = $this->content;
+		$content = apply_filters( 'pc_filter_metabox_content', $this->content, $post );
 
 		// description
 		if ( !empty( $content['desc'] ) ) { echo '<div class="pc-metabox-help">'.$content['desc'].'</div>'; }
@@ -166,7 +162,7 @@ class PC_Add_Metabox {
 				if ( $field['admin_not_in'] ) { continue; }
 
 				echo '<tr>';
-					$this->display_field( $field, $content['prefix'] );
+					$this->display_field( $field, $content['prefix'], $post );
 				echo '</tr>';
 
 			} // FIN foreach($data[args])
@@ -182,12 +178,12 @@ class PC_Add_Metabox {
 	=            Affichage champ            =
 	=======================================*/
 	
-	private function display_field( $field, $prefix ) {
+	private function display_field( $field, $prefix, $post ) {
 
 		// nom & identifiant
 		$name = $prefix.'-'.$field['id'];
 		// sauvegarde & défaut
-		$value = get_post_meta( $this->post->ID, $name, true );
+		$value = get_post_meta( $post->ID, $name, true );
 		if ( '' == $value ) { $value = $field['default']; }
 		// attribut obligatoire
 		$required = ( $field['required'] ) ? 'required' : '';
