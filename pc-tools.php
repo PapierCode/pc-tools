@@ -3,7 +3,7 @@
 Plugin Name: [PC] Tools
 Plugin URI: www.papier-code.fr
 Description: Boite à outils Papier Codé
-Version: 1.13.2
+Version: 1.13.3
 Author: Papier Codé
 */
 

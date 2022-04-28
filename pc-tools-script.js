@@ -107,15 +107,15 @@ function pc_media_modal( $button ) {
 		switch ( type ) {
 			case 'img' :
 				media_url = media_datas.sizes.hasOwnProperty('thumbnail') ? media_datas.sizes.thumbnail.url : media_datas.url ;
-				preview_inner = '<div class="pc-media-preview-item" style="background-image:url(' + media_url + ');"></div>';
+				preview_inner = '<div class="pc-media-preview-item" style="background-image:url(' + media_url.replaceAll( ' ', '%20' ) + ');"></div>';
 				break;
 			case 'audio' :
 				media_url = media_datas.url;
-				preview_inner = '<audio class="pc-audio-preview" controls src="' + media_url + '"></audio>';
+				preview_inner = '<audio class="pc-audio-preview" controls src="' + media_url.replaceAll( ' ', '%20' ) + '"></audio>';
 			case 'pdf' :
 			default :
 				media_url = media_datas.url;
-				preview_inner = '<a class="pc-pdf-preview" href="' + media_url + '" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier</a>';
+				preview_inner = '<a class="pc-pdf-preview" href="' + media_url.replaceAll( ' ', '%20' ) + '" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier</a>';
 		}
 
 		// mise à jour preview
@@ -245,7 +245,7 @@ if ( $pcGallerySelect.length > 0 ) {
 			for (var i = 0; i < galleryDatas.length; i++) {
 				imgIdsToSave.push(galleryDatas[i].id);
 				imgUrl = galleryDatas[i].sizes.hasOwnProperty('thumbnail') ? galleryDatas[i].sizes.thumbnail.url : galleryDatas[i].url ;
-				galleryPreview += '<div class="pc-media-preview-item" style="background-image:url('+imgUrl+');"></div>';
+				galleryPreview += '<div class="pc-media-preview-item" style="background-image:url('+imgUrl.replaceAll( ' ', '%20' )+');"></div>';
 			}
 			$hiddenField.val(imgIdsToSave.join());
 			// affichage

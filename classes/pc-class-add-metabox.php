@@ -296,7 +296,7 @@ class PC_Add_Metabox {
 							case 'gallery':				
 								$gallery_images_id = explode( ',', $value );
 								foreach ( $gallery_images_id as $image_id ) {
-									echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($image_id,'thumbnail')[0].');"></div>';
+									echo '<div class="pc-media-preview-item" style="background-image:url('.str_replace(' ','%20',wp_get_attachment_image_src($image_id,'thumbnail')[0]).');"></div>';
 								}
 								break;
 						}
