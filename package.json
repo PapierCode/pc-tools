@@ -1,0 +1,14 @@
+{
+	"name": "papiercode",
+	"version": "1.0.0",
+	"description": "Gulp pour Papier Codé",
+	"devDependencies": {
+		"es6-promise": "^4.0.0",
+		"gulp": "^4.0.0",
+		"gulp-concat": "^2.0.0",
+		"gulp-jshint": "^2.0.0",
+		"gulp-terser": "^2.0.0",
+		"gulp-watch": "^5.0.0",
+		"jshint": "^2.0.0"
+	}
+}

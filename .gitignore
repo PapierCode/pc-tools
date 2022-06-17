@@ -46,4 +46,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# node
+node_modules
+
+# node
+package-lock.json
+
 .vscode/
