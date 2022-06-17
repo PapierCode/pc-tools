@@ -26,14 +26,27 @@ class PC_Posts_Selector {
 	/*=====  FIN Construct  =====*/
 
 	private function get_posts_list() {
+
+		$repeater_args = $this->repeater_args;
+		$field_value = explode( ',', $this->field_value );
 		
 		$posts = get_posts( $this->query_args );
+
 		$posts_list = array();
 		foreach ( $posts as $post ) {
-			$posts_list[] = array( 
-				'id' => $post->ID,
-				'title' => $post->post_title
-			);
+			if ( isset( $repeater_args['subpages'] ) ) {
+				if ( $post->post_parent < 1 || in_array( $post->ID, $field_value ) ) {
+					$posts_list[] = array( 
+						'id' => $post->ID,
+						'title' => $post->post_title
+					);
+				}
+			} else {
+				$posts_list[] = array( 
+					'id' => $post->ID,
+					'title' => $post->post_title
+				);
+			}
 		}
 		
 		return $posts_list;
