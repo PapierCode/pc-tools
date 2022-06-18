@@ -10,10 +10,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		const container = selector.querySelector( '.posts-selector-list' ); // container des éléments 
 		const add = selector.querySelector( '.pc-repeater-more' ); // btn ajout
-		const target = selector.querySelector( '.posts-selector-target' ); // champ sauvegardé
-		const save = target.value != '' ? target.value.split(',') : []; // champ sauvegardé
+		const meta = selector.querySelector( '.posts-selector-meta' ); // champ sauvegardé
 
-		let selectedIds = []; // posts sélectionnés	
+		let selection = meta.value; // posts sélectionnés (string)
 
 
 		/*----------  Création/ajout d'une line   ----------*/	
@@ -38,7 +37,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				if ( post.id == selected ) {
 					option.setAttribute( 'selected', '' );
 					select.dataset.from = selected;
-				} else if ( selectedIds.includes( post.id ) ) {
+				} else if ( selection.includes( post.id ) ) {
 					option.style.display = 'none';
 				}
 				option.innerText = post.title;
@@ -49,7 +48,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 			select.addEventListener( 'change', ( e ) => {
 
-				let allSelects = container.querySelectorAll( 'select' );
+				let selects = container.querySelectorAll( 'select' );
 				let selectCurrent = e.target;
 				let value = selectCurrent.value;
 				let from = selectCurrent.dataset.from;
@@ -57,28 +56,22 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				if ( '' !== value ) {
 					
 					// masque l'option dans les autres selects
-					allSelects.forEach( ( select ) => { 
-						if ( selectCurrent !== select ) {
-							select.querySelector( 'option[value="'+value+'"]' ).style.display = 'none';
-						}
+					selects.forEach( ( select ) => { 
+						if ( selectCurrent !== select ) { select.querySelector( 'option[value="'+value+'"]' ).style.display = 'none'; }
 					} );
 
-					selectedIds.push( parseInt( value ) );
+					selection.push( parseInt( value ) );
 
 				} 
 
 				if ( value !== from ) {
 
 					// réaffiche l'option dans les autres selects
-					allSelects.forEach( ( select ) => { 
-						if ( selectCurrent !== select && from != '' ) {
-							select.querySelector( 'option[value="'+from+'"]' ).style.display = 'block';
-						}
+					selects.forEach( ( select ) => { 
+						if ( selectCurrent !== select && from != '' ) { select.querySelector( 'option[value="'+from+'"]' ).style.display = 'block'; }
 					} );
 
-					selectedIds = selectedIds.filter( ( id ) => {
-						return id != selectCurrent.dataset.from;
-					} );
+					selection = selection.filter( ( id ) => { return id != selectCurrent.dataset.from; } );
 
 				}
 
@@ -101,13 +94,13 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				let value = parent.querySelector( 'select' ).value;
 
 				if ( value != '' ) { // réaffichage dans les autres selects
-					let allSelects = container.querySelectorAll( 'select' );
-					allSelects.forEach( ( select ) => { 
+					let selects = container.querySelectorAll( 'select' );
+					selects.forEach( ( select ) => { 
 						select.querySelector( 'option[value="'+value+'"]' ).style.display = 'block';
 					} );
 				}
 
-				selectedIds = selectedIds.filter( ( id ) => {
+				selection = selection.filter( ( id ) => {
 					return id != parent.querySelector( 'select' ).value;
 				} );
 
@@ -137,29 +130,40 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				
 		function updateTarget() {
 
-			let toSave = [];
+			let save = [];
 
 			let selects = container.querySelectorAll( 'select' );
-			selects.forEach( ( select ) => { toSave.push(select.value); } );
+			selects.forEach( ( select ) => { if ( select.value != '' ) { save.push( select.value ); } } );
 			
-			target.value = toSave.join();
+			meta.value = save.join();
 
-			console.log( 'toSave', toSave.join() );
-			console.log( 'selectedIds', selectedIds );
+			// console.log( 'save', save.join() );
+			// console.log( 'selection', selection );
 
 		}
 
 
 		/*----------  Init  ----------*/
 
-		if ( save.length > 0 ) {
-			save.forEach( ( id ) => { selectedIds.push( parseInt( id ) ); } );
-			selectedIds.forEach( ( id ) => { addLine( parseInt( id ) ); } );
-		}
-		
-		add.addEventListener( 'click', addLine );
+		if ( selection != '' ) {
 
-		// temp
+			selection = selection.split(',');
+			selection.map( ( id ) => { return parseInt( id ); } );
+			selection.forEach( ( id ) => { addLine( id ); } );
+
+		} else { selection = []; }
+		
+		add.addEventListener( 'click', () => {
+
+			if ( selection.length == posts.length || container.querySelectorAll( '.posts-selector-item' ).length == posts.length ) {
+				alert( 'Il n\'y a plus de possibilité d\'ajout.' );
+			} else {
+				addLine();
+			}
+
+	 	} );
+
+		// tri temporaire en jQuery
 		let $container = jQuery( container );
 		$container.sortable( { handle : '.pc-repeater-btn-move' } );
 		$container.on( 'sortupdate', updateTarget );

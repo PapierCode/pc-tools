@@ -87,7 +87,7 @@ class PC_Posts_Selector {
 		
 			$add_button_txt = ( isset($repeater_args['add_button_txt']) ) ? $repeater_args['add_button_txt'] : 'Ajouter un item';
 			$return .= '<button type="button" class="button pc-repeater-more">'.$add_button_txt.'</button>';
-			$return .= '<input type="hidden" name="'.$this->field_name.'" value="'.$this->field_value.'" class="posts-selector-target" />';
+			$return .= '<input type="hidden" name="'.$this->field_name.'" value="'.$this->field_value.'" class="posts-selector-meta" />';
 
 		$return .= '</div>';
 
