@@ -148,7 +148,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		if ( selection != '' ) {
 
 			selection = selection.split(',');
-			selection.map( ( id ) => { return parseInt( id ); } );
+			selection = selection.map( ( id ) => { return parseInt( id ); } );
 			selection.forEach( ( id ) => { addLine( id ); } );
 
 		} else { selection = []; }
