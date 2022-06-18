@@ -94,9 +94,11 @@ function pc_media_modal( $button ) {
 			case 'audio' :
 				media_url = media_datas.url;
 				preview_inner = '<audio class="pc-audio-preview" controls src="' + media_url.replaceAll( ' ', '%20' ) + '"></audio>';
+				break;
 			default :
 				media_url = media_datas.url;
 				preview_inner = '<a class="pc-pdf-preview" href="' + media_url.replaceAll( ' ', '%20' ) + '" target="_blank"><div class="dashicons dashicons-media-default"></div> Voir le fichier</a>';
+				break;
 		}
 
 		// mise à jour preview

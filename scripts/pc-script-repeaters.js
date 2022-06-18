@@ -1,6 +1,6 @@
-'use strict';
-
 document.addEventListener( 'DOMContentLoaded', () => {
+
+	'use strict';
 
 	const selectors = document.querySelectorAll( '.posts-selector' );
 
@@ -212,7 +212,7 @@ if ( $repeaters.length > 0 ) {
 			console.log(to_save);
 			$target.val(to_save);
 
-		}
+		};
 
 		$repeater.on( 'focusout', 'input, textarea, select', function(e) {
 			update_repeater();
@@ -229,7 +229,7 @@ if ( $repeaters.length > 0 ) {
 				.html(function(i,old) { return old.replaceAll('[index]', $repeater.children().length ); })
 				.appendTo($repeater)
 				.removeClass('pc-repeater-src')
-				.find('input[data-required="required"]').prop('required',true)
+				.find('input[data-required="required"]').prop('required',true);
 		});
 
 		$repeater.sortable({

@@ -46,12 +46,12 @@ if ( $pcDatePicker.length > 0 ) {
 			$(this).after('<button class="reset-btn pc-date-remove" type="button" title="Supprimer"><span class="dashicons dashicons-no-alt"></span></button>');
 			$(this).next('.pc-date-remove').click(pc_date_remove);
 		}
-	}
+	};
 
 	var pc_date_remove = function() {
 		$(this).prev('.pc-date-picker').val('');
 		$(this).remove();
-	}
+	};
 
 		$pcDatePicker.datepicker({
 

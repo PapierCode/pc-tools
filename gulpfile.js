@@ -27,6 +27,14 @@ const terser		= require( 'gulp-terser' ); // minification js
 =            Tâche JS            =
 ================================*/
 
+function js_hint() {
+
+	return src( 'scripts/*.js' )
+        .pipe(jshint( { esnext:true, browser:true } ))
+        .pipe(jshint.reporter( 'default' ));
+
+}
+
 function js() {
 
     return src( 'scripts/*.js' )
@@ -44,7 +52,7 @@ function js() {
 ==================================*/
 
 exports.watch = function() {
-	watch( [ 'scripts/*.js' ], series(js)  )
+	watch( [ 'scripts/*.js' ], series(js_hint,js)  )
 };
 
 

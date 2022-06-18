@@ -82,7 +82,7 @@ var pc_checkboxes_required = function( $target ) {
         $target.prop('required',true);
     }
 
-}
+};
 
 if ( $required_checkboxes.length > 0 ) {
 
