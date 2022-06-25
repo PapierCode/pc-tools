@@ -155,26 +155,29 @@ if ( $pcGallerySelect.length > 0 ) {
 
 		var $btnSelect      = $(this),                                      // bouton ajouter/modifier
 			$container      = $(this).parent(),                             // conteneur parent
-			$hiddenField    = $container.find('.pc-media-id'),            // champ caché qui transmet à la bdd
+			$hiddenField    = $container.find('.pc-media-id'),            	// champ caché qui transmet à la bdd
 			imgIds          = $hiddenField.val();                           // contenu du champ caché
 			gallery_state   = imgIds ? 'gallery-edit' : 'gallery-library';  // menu activé par défaut dans la modal (modifier ou créer)
+			btn_modal   	= imgIds ? 'Modifier la galerie' : 'Ajouter à la galerie';  // texte btn modal
 
 		// si la modal a déjà été ouverte : réutilisation et sortie de la fonction
-		if ( galleryUploader ) { galleryUploader.open(); return; }
+		if ( galleryUploader ) { galleryUploader.open( { button: { text: 'blurb' } } ); return; }
 
 
 		/*----------  Création de l'objet modal  ----------*/
 		
 		var galleryUploader = wp.media({
 
-			title: 'Insérer une gallerie',
-			button: { text: 'Insérer une gallerie' },
+			title: btn_modal,
+			button: { text: btn_modal },
 			library: { type: 'image' },
 			frame: "post",
 			state: gallery_state,
 			multiple: true,
 
 		}); // FIN wp.media
+
+		console.log(galleryUploader);
 
 
 		/*----------  À l'ouverture de la modal  ----------*/

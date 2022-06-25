@@ -581,18 +581,18 @@ class PC_Add_Admin_Page {
 		$btnRemove 	= '';						// btn remove (html)
 		$btnTxt		= 'Ajouter';				// texte du bouton qui ouvre la modal
 
+		echo '<div class="pc-media-preview">';
 		// si une valeur en bdd
 		if ( isset($datas['inBdd'][$id]) && '' != $datas['inBdd'][$id] ) {
 			$btnTxt = 'Modifier';
 			$value = $datas['inBdd'][$id];
 			$imgIds = explode(',', $value);
 
-			echo '<div class="pc-media-preview">';
 			foreach ($imgIds as $imgId) {
 				echo '<div class="pc-media-preview-item" style="background-image:url('.wp_get_attachment_image_src($imgId,'thumbnail')[0].');"></div>';
 			}
-			echo '</div>';
 		}
+		echo '</div>';
 		// btn de suppression
 		if ( $datas['options']['btnremove'] == true ) {
 			$dataRemove		= 'data-remove="active"';
