@@ -74,6 +74,13 @@ class PC_Repeater {
 			$required = ( isset( $args['required'] ) && !$src ) ? ' required' : '';
 			$data_required = ( isset( $args['required'] )) ? ' data-required="required"' : '';
 
+			$attrs = '';
+			if ( isset( $args['attrs'] )) {
+				foreach ( $args['attrs'] as $attr => $attr_value ) {
+					$attrs .= ' '.$attr.'="'.$attr_value.'"';
+				}
+			}
+
 			$return .= '<div class="pc-repeater-field">';
 
 				/*----------  Label  ----------*/
@@ -89,19 +96,20 @@ class PC_Repeater {
 				switch ( $args['type'] ) {
 					
 					case 'text':
-						$return .= '<input type="'.$args['type'].'" style="width:100%" id="'.$id.'" name="'.$name.'" value="'.$value.'"'.$required.$data_required.' />';
+					case 'number':
+						$return .= '<input type="'.$args['type'].'" style="width:100%" id="'.$id.'" name="'.$name.'" value="'.$value.'"'.$required.$data_required.$attrs.' />';
 						break;
 					
 					case 'url':
-						$return .= '<div style="display:flex;"><div style="flex-grow:1;margin-right:10px;"><input type="'.$args['type'].'" style="width:100%" id="'.$id.'" name="'.$name.'" value="'.$value.'"'.$required.$data_required.' /></div><div><button type="button" class="button pc-link-select" data-cible="'.$id.'">Sélectionner</button></div></div>';
+						$return .= '<div style="display:flex;"><div style="flex-grow:1;margin-right:10px;"><input type="'.$args['type'].'" style="width:100%" id="'.$id.'" name="'.$name.'" value="'.$value.'"'.$required.$data_required.$attrs.' /></div><div><button type="button" class="button pc-link-select" data-cible="'.$id.'">Sélectionner</button></div></div>';
 						break;
 					
 					case 'textarea':
-						$return .= '<textarea style="width:100%" id="'.$id.'" name="'.$name.'"'.$required.$data_required.' />'.$value.'</textarea>';
+						$return .= '<textarea style="width:100%" id="'.$id.'" name="'.$name.'"'.$required.$data_required.$attrs.' />'.$value.'</textarea>';
 						break;
 					
 					case 'select':
-						$return .= '<select style="width:100%" id="'.$id.'" name="'.$name.'"'.$required.$data_required.'>';
+						$return .= '<select style="width:100%" id="'.$id.'" name="'.$name.'"'.$required.$data_required.$attrs.'>';
 							$return .= '<option value=""></option>';
 							foreach ( $this->repeater_args[$name] as $option_value => $option_label ) {
 								$return .= '<option value="'.$option_value.'" '.selected( $value, $option_value, false ).'>'.$option_label.'</option>';
