@@ -3,7 +3,7 @@
 Plugin Name: [PC] Tools
 Plugin URI: www.papier-code.fr
 Description: Boite à outils Papier Codé
-Version: 1.14.4
+Version: 1.14.5
 Author: Papier Codé
 */
 
@@ -39,7 +39,7 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 	if ( 'user-new.php' == $hook ) { return; }
 
     // scripts utiles aux fonctions et classes ci-dessus
-	wp_enqueue_script( 'pc-tools-scripts', plugin_dir_url( __FILE__ ).'pc-tools-scripts.js' );
+	wp_enqueue_script( 'pc-tools-scripts', plugin_dir_url( __FILE__ ).'pc-tools-scripts.js', array('jquery'), filemtime(plugin_dir_path( __FILE__ ).'pc-tools-scripts.js') );
 	wp_enqueue_media();
 
 });
