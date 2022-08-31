@@ -14,7 +14,7 @@ function pc_repeater_extract_sub( $string, $tag ) {
 
 }
 
-function pc_repeater_extract( $string, $tags, $separator ) {
+function pc_repeater_extract( $string, $tags, $separator = '[/]' ) {
 
 	$elts = explode( $separator, $string);
 	$subs = array();
