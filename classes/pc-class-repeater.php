@@ -14,9 +14,9 @@ function pc_repeater_extract_sub( $string, $tag ) {
 
 }
 
-function pc_repeater_extract( $string, $tags ) {
+function pc_repeater_extract( $string, $tags, $separator ) {
 
-	$elts = explode( '[/]', $string);
+	$elts = explode( $separator, $string);
 	$subs = array();
 
 	foreach ( $elts as $elt ) {
@@ -128,6 +128,17 @@ class PC_Repeater {
 						$return .= '<input class="button pc-media-select" data-type="image" type="button" value="'.$btn_txt.'" />';
 						break;
 
+					case 'audio':
+						$return .= '<div class="pc-media-preview">';
+						if ( !$src && '' != $value && is_object( get_post( $value ) ) ) {
+							$btn_txt = 'Modifier';
+							$return .= '<audio class="pc-audio-preview" controls src="'.wp_get_attachment_url($value).'"></audio>';
+						} else { $btn_txt = 'Ajouter'; }
+						$return .= '</div>';
+						$return .= '<input type="text" name="'.$name.'" id="'.$id.'" class="pc-media-id visually-hidden" value="'.$value.'"'.$required.$data_required.' />';
+						$return .= '<input class="button pc-media-select" data-type="audio" type="button" value="'.$btn_txt.'" />';
+						break;
+
 				}
 
 				$return .= '</div>'; // FIN .pc-repeater-field
@@ -152,18 +163,18 @@ class PC_Repeater {
 	=            Affichage complet            =
 	=========================================*/
 	
-	public function display() {
+	public function display( $separator = '[/]' ) {
 
 		$repeater_args = $this->repeater_args;
 	
 		$fields_names = array();
 		foreach ( $this->fields as $name => $args ) { $fields_names[] = $name; }
 	
-		$return = '<div class="pc-repeater" data-fields="'.implode( ',', $fields_names ).'">';
+		$return = '<div class="pc-repeater" data-fields="'.implode( ',', $fields_names ).'" data-separator="'.$separator.'">';
 
 			if ( '' != $this->field_value ) {
 
-				$items_saved = pc_repeater_extract( $this->field_value , $fields_names );
+				$items_saved = pc_repeater_extract( $this->field_value , $fields_names, $separator );
 
 				foreach ( $items_saved as $item_index => $item_value ) {
 					$return .= $this->display_repeater_item( $item_index, $item_value );

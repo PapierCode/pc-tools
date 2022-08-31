@@ -186,6 +186,7 @@ if ( $repeaters.length > 0 ) {
 
 		var $repeater = $(this);
 		var fields = $repeater.data('fields').split(',');
+		var separator = $repeater.data('separator');
 
 		var $target = $repeater.nextAll('.pc-repeater-target');
 		var $more = $repeater.nextAll('.pc-repeater-more');
@@ -205,7 +206,7 @@ if ( $repeaters.length > 0 ) {
 				});
 
 				if ( to_save == '' ) { to_save = sub_to_save; }
-				else { to_save += '[/]' + sub_to_save; }
+				else { to_save += separator + sub_to_save; }
 
 			});
 
