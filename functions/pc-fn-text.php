@@ -113,7 +113,7 @@ function pc_phone( $tel, $href = true, $prefix_display = false, $prefix = '+33' 
 
 	} else if ( $prefix_display ) {
 		
-		$tel = $prefix.substr( $tel, 1, strlen($tel) );
+		$tel = $prefix.' '.substr( $tel, 1, strlen($tel) );
 
 	}
 
