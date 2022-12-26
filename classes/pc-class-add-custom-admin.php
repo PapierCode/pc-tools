@@ -563,7 +563,7 @@ class PC_Add_Admin_Page {
 		if ( $datas['required'] ) { $required = 'required'; } else { $required = ''; }
 
 		echo '<input type="text" name="'.$datas['name'].'" id="'.$id.'" class="pc-media-id visually-hidden" value="'.$value.'" '.$required.' />';
-		echo '<input class="button pc-media-select" type="button" data-type="image" value="'.$btnTxt.'" '.$dataRemove.' />';
+		echo '<input class="button pc-media-select" type="button" data-type="img" value="'.$btnTxt.'" '.$dataRemove.' />';
 		echo $btnRemove;
 
 		$this->display_desc( $datas['desc'] );

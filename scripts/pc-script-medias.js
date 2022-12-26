@@ -31,7 +31,7 @@ function pc_media_modal( $button ) {
 
 	switch ( type ) {
 
-		case 'image' :
+		case 'img' :
 			modal_params = {
 				title: 'Insérer une image',
 				library: { type: 'image' },
@@ -87,7 +87,7 @@ function pc_media_modal( $button ) {
 		// création preview inner
 		var media_url, preview_inner;
 		switch ( type ) {
-			case 'image' :
+			case 'img' :
 				media_url = media_datas.sizes.hasOwnProperty('thumbnail') ? media_datas.sizes.thumbnail.url : media_datas.url ;
 				preview_inner = '<div class="pc-media-preview-item" style="background-image:url(' + media_url.replaceAll( ' ', '%20' ) + ');"></div>';
 				break;
