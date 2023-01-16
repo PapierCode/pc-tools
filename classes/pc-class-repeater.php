@@ -6,11 +6,15 @@
 
 function pc_repeater_extract_sub( $string, $tag ) {
 
-	$tag_length = strlen( $tag );
-	$sub_start = strpos( $string, '['.$tag.']' ) + ( $tag_length + 2 );
-	$sub_length = strpos( $string, '[/'.$tag.']' ) - $sub_start;
+	if ( str_contains( $string, $tag ) ) {
 
-	return substr( $string, $sub_start, $sub_length );
+		$tag_length = strlen( $tag );
+		$sub_start = strpos( $string, '['.$tag.']' ) + ( $tag_length + 2 );
+		$sub_length = strpos( $string, '[/'.$tag.']' ) - $sub_start;
+
+		return substr( $string, $sub_start, $sub_length );
+
+	} else { return ''; }
 
 }
 
