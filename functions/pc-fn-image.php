@@ -80,27 +80,3 @@ function pc_get_img( $id, $size, $return = 'img', $css = '' ) {
 
 
 /*=====  FIN Get image  =====*/
-
-/*========================================
-=            Sprite PHP to JS            =
-========================================*/
-
-/**
- * 
- * @param array	$icons	Index du tableau $sprite à convertir
- * 
- */
-
-function pc_sprite_to_js( $icons ) {
-
-	global $sprite;
-
-	$sprite_js = array();
-	foreach ( $icons as $id ) { $sprite_js[$id] = str_replace( '<svg', '<svg aria-hidden="true" focusable="false"', $sprite[$id] ); }
-	
-	echo '<script>var sprite = '.json_encode( $sprite_js, JSON_PRETTY_PRINT ).'</script>';
-
-}
-
-
-/*=====  FIN Sprite PHP to JS  =====*/
