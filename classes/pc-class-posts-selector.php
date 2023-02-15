@@ -35,7 +35,7 @@ class PC_Posts_Selector {
 		$posts_list = array();
 		foreach ( $posts as $post ) {
 			if ( isset( $repeater_args['subpages'] ) ) {
-				if ( ( $post->post_parent < 1 && !get_post_meta( $post->ID, 'content-subpages', true ) ) || in_array( $post->ID, $field_value ) ) {
+				if ( $post->post_parent < 1 || in_array( $post->ID, $field_value ) ) {
 					$posts_list[] = array( 
 						'id' => $post->ID,
 						'title' => $post->post_title
