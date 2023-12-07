@@ -9,11 +9,12 @@
 
 class PC_Add_Admin_Page {
 
-	public $title;
-	public $slug;
-	public $optionName;
-	public $content;
-	public $capability;
+	private $title;
+	private $slug;
+	private $optionName;
+	private $content;
+	private $capability;
+	private $sanitize;
 
 
     /*====================================
