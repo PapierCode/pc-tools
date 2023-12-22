@@ -24,7 +24,7 @@ function pc_display_tag_matomo( $id ) {
 
 function pc_display_tag_analytics( $id ) {
 	
-	echo '<script async src="https://www.googletagmanager.com/gtag/js?id='.$id.'"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);} gtag("js", new Date());gtag("config", "'.$id.'");</script>';
+	echo '<script>var _paq=window._paq=window._paq||[];_paq.push(["trackPageView"]),_paq.push(["enableLinkTracking"]),function(){var a="https://analytics.papier-code.fr/";_paq.push(["setTrackerUrl",a+"matomo.php"]),_paq.push(["setSiteId","'.$id.'"]);var e=document,p=e.createElement("script"),t=e.getElementsByTagName("script")[0];p.async=!0,p.src=a+"matomo.js",t.parentNode.insertBefore(p,t)}();</script>';
 
 }
 
